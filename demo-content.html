@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Personality LMS Research Demo</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #17201b;
+      --muted: #647067;
+      --line: #dbe3dc;
+      --paper: #fbfcfa;
+      --panel: #ffffff;
+      --sage: #7da38c;
+      --coral: #dd7d65;
+      --gold: #d7a84f;
+      --blue: #5d82a8;
+      --violet: #806fa8;
+      --teal: #4e9b9a;
+      --radius: 8px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+    }
+
+    header {
+      min-height: 72vh;
+      display: grid;
+      align-items: end;
+      background:
+        linear-gradient(160deg, rgba(23, 32, 27, .82), rgba(23, 32, 27, .34)),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1400' height='900' viewBox='0 0 1400 900'%3E%3Crect fill='%237da38c' width='1400' height='900'/%3E%3Cg opacity='.75'%3E%3Ccircle cx='250' cy='210' r='145' fill='%23f7efe1'/%3E%3Ccircle cx='1030' cy='220' r='95' fill='%23dd7d65'/%3E%3Ccircle cx='690' cy='450' r='260' fill='%235d82a8'/%3E%3Ccircle cx='860' cy='570' r='155' fill='%23d7a84f'/%3E%3Ccircle cx='460' cy='620' r='120' fill='%23806fa8'/%3E%3C/g%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='22' opacity='.42'%3E%3Ccircle cx='700' cy='450' r='310'/%3E%3Ccircle cx='700' cy='450' r='220'/%3E%3Ccircle cx='700' cy='450' r='130'/%3E%3C/g%3E%3C/svg%3E") center/cover;
+      color: white;
+    }
+
+    .hero {
+      width: min(1120px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 0 0 64px;
+    }
+
+    h1 {
+      max-width: 780px;
+      margin: 0;
+      font-size: clamp(42px, 7vw, 82px);
+      line-height: .96;
+      letter-spacing: 0;
+    }
+
+    .hero p {
+      max-width: 720px;
+      margin: 22px 0 0;
+      font-size: clamp(17px, 2vw, 22px);
+      color: rgba(255,255,255,.88);
+    }
+
+    main {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 34px 0 80px;
+    }
+
+    section {
+      padding: 34px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    h2 {
+      margin: 0 0 16px;
+      font-size: clamp(26px, 3vw, 38px);
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      letter-spacing: 0;
+    }
+
+    p { margin: 0 0 14px; color: var(--muted); }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: 0 10px 24px rgba(23, 32, 27, .06);
+    }
+
+    .type-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 12px;
+    }
+
+    .type-card {
+      min-height: 190px;
+      transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+      cursor: pointer;
+    }
+
+    .type-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(93, 130, 168, .65);
+      box-shadow: 0 16px 28px rgba(23, 32, 27, .1);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      height: 26px;
+      padding: 0 9px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 12px;
+      background: #f6f8f5;
+    }
+
+    .ring-row {
+      display: grid;
+      grid-template-columns: 180px minmax(0, 1fr);
+      gap: 24px;
+      align-items: center;
+    }
+
+    .ring {
+      width: 170px;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: conic-gradient(
+        var(--coral) 0 18%,
+        var(--gold) 18% 33%,
+        var(--blue) 33% 49%,
+        var(--violet) 49% 63%,
+        var(--teal) 63% 76%,
+        var(--sage) 76% 100%
+      );
+      position: relative;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.4), 0 18px 38px rgba(23, 32, 27, .14);
+    }
+
+    .ring::after {
+      content: "";
+      position: absolute;
+      inset: 34px;
+      border-radius: 50%;
+      background: var(--paper);
+      border: 1px solid rgba(23, 32, 27, .1);
+    }
+
+    .courses {
+      display: grid;
+      gap: 10px;
+    }
+
+    .course {
+      display: grid;
+      grid-template-columns: 72px minmax(0, 1fr);
+      gap: 14px;
+      align-items: start;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: white;
+    }
+
+    .course strong {
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .pill {
+      height: 34px;
+      display: inline-grid;
+      place-items: center;
+      border-radius: 999px;
+      background: #edf3ef;
+      color: #315241;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .profile {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+    }
+
+    ul {
+      margin: 10px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+
+    a { color: #315f8e; }
+
+    @media (max-width: 700px) {
+      header { min-height: 68vh; }
+      .hero { padding-bottom: 42px; }
+      .ring-row { grid-template-columns: 1fr; }
+      .ring { width: 150px; }
+      .course { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="hero">
+      <h1>Personality LMS Research Demo</h1>
+      <p>A content foundation for a SvelteKit demo where Aephoria-style Enneagram results connect main type, trifix, instincts, team dynamics, and LMS course recommendations.</p>
+    </div>
+  </header>
+
+  <main>
+    <section>
+      <div class="ring-row">
+        <div class="ring" aria-label="Weighted Enneagram result ring"></div>
+        <div>
+          <h2>Product Framing</h2>
+          <p>The recommended model is Aephoria-style but pragmatic: show a main type, an ordered trifix, and optional instinct stack, then connect those signals to practical skill development.</p>
+          <p>This keeps the demo rich and visual without turning the first LMS build into a full subtype encyclopedia.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Recommended Result Model</h2>
+      <div class="grid">
+        <article class="card">
+          <span class="badge">Primary</span>
+          <h3>Main Type</h3>
+          <p>The highest weighted type becomes the user's main pattern and gets the strongest visual treatment in the results view.</p>
+        </article>
+        <article class="card">
+          <span class="badge">Signature</span>
+          <h3>Trifix</h3>
+          <p>The top three scores become an ordered signature such as 3-8-5, showing the user's lead pattern and supporting strategies.</p>
+        </article>
+        <article class="card">
+          <span class="badge">Context</span>
+          <h3>Instinct Stack</h3>
+          <p>Use sp, so, and sx as compact profile context and scenario flavor. Defer full 27-subtype course paths until later.</p>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <h2>Aephoria Type Headings</h2>
+      <div class="type-grid">
+        <article class="card type-card"><span class="badge">Type 1 · Body</span><h3>Meticulous Judge</h3><p>Builds integrity, standards, and quality without perfectionism or criticism.</p></article>
+        <article class="card type-card"><span class="badge">Type 2 · Heart</span><h3>Supportive Cheerleader</h3><p>Builds empathy and care while keeping needs and limits visible.</p></article>
+        <article class="card type-card"><span class="badge">Type 3 · Heart</span><h3>Ambitious Task Master</h3><p>Builds goal focus and momentum without tying identity to performance.</p></article>
+        <article class="card type-card"><span class="badge">Type 4 · Heart</span><h3>Sensitive Maverick</h3><p>Builds depth, authenticity, and creative translation into action.</p></article>
+        <article class="card type-card"><span class="badge">Type 5 · Head</span><h3>Expert Observer</h3><p>Builds expertise and clarity while moving before certainty is perfect.</p></article>
+        <article class="card type-card"><span class="badge">Type 6 · Head</span><h3>Vigilant Questioner</h3><p>Builds preparedness, trust calibration, and confidence under pressure.</p></article>
+        <article class="card type-card"><span class="badge">Type 7 · Head</span><h3>Positive Dreamer</h3><p>Builds option generation, reframing, and completion discipline.</p></article>
+        <article class="card type-card"><span class="badge">Type 8 · Body</span><h3>Tough Protector</h3><p>Builds courage, directness, protection, and calibrated power.</p></article>
+        <article class="card type-card"><span class="badge">Type 9 · Body</span><h3>Adaptive Diplomat</h3><p>Builds mediation, inclusion, steadiness, and productive conflict.</p></article>
+      </div>
+    </section>
+
+    <section>
+      <h2>Course Recommendations</h2>
+      <div class="courses">
+        <div class="course"><span class="pill">T3</span><div><strong>Achievement Without Overidentification</strong><p>For Ambitious Task Master main types or teams that depend heavily on performance. Turns execution into sustainable, value-aligned momentum.</p></div></div>
+        <div class="course"><span class="pill">T8</span><div><strong>Constructive Assertiveness</strong><p>For Tough Protector patterns that need calibration, or users who need stronger boundaries and directness.</p></div></div>
+        <div class="course"><span class="pill">T9</span><div><strong>Perspective Holding and Productive Conflict</strong><p>For Adaptive Diplomat patterns, missing Type 9 capacity, or teams that need to surface tension clearly.</p></div></div>
+        <div class="course"><span class="pill">T6</span><div><strong>Risk Intelligence and Trust Under Pressure</strong><p>For teams that need premortems, contingency planning, and risk language that does not spiral into anxiety.</p></div></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Demo Profiles</h2>
+      <div class="profile">
+        <article class="card">
+          <span class="badge">Maya · Product Lead</span>
+          <h3>Main: Ambitious Task Master</h3>
+          <p>Trifix 3-8-5 · so/sp/sx. Fast, outcome-oriented, and strategically analytical. Recommended pathway: achievement maturity, calibrated assertiveness, mediation.</p>
+        </article>
+        <article class="card">
+          <span class="badge">Theo · Senior Engineer</span>
+          <h3>Main: Expert Observer</h3>
+          <p>Trifix 5-6-1 · sp/so/sx. Rigorous, analytical, and risk-aware. Recommended pathway: analysis to action, trust under pressure, boundaried empathy.</p>
+        </article>
+        <article class="card">
+          <span class="badge">Lindiwe · Customer Success</span>
+          <h3>Main: Supportive Cheerleader</h3>
+          <p>Trifix 2-9-3 · so/sx/sp. Warm, stabilizing, and service-oriented. Recommended pathway: boundaries, productive conflict, constructive assertiveness.</p>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <h2>Research Files</h2>
+      <p>The detailed Markdown files in the <code>research</code> folder include source notes, type maps, course modules, and team data that can be converted into app content later.</p>
+      <ul>
+        <li><a href="research/01-enneagram-research-summary.md">Research summary</a></li>
+        <li><a href="research/02-content-model.md">Content model</a></li>
+        <li><a href="research/03-type-development-map.md">Type development map</a></li>
+        <li><a href="research/04-lms-course-catalog.md">LMS course catalog</a></li>
+        <li><a href="research/05-demo-users-and-teams.md">Demo users and teams</a></li>
+        <li><a href="research/06-aephoria-model-assessment.md">Aephoria model assessment</a></li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>
