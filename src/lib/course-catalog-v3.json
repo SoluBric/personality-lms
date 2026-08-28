@@ -1,0 +1,4003 @@
+{
+  "catalogVersion": "3.0",
+  "status": "canonical-demo-course-data",
+  "principles": [
+    "Each course belongs to exactly one of four pathways: strengths, stress-growth, fortification, or team.",
+    "Category meaning is pathway-specific.",
+    "Type association is a deliberate demo mapping device and is not a claim that a capability belongs exclusively to one Enneagram type.",
+    "Course progress is learner state and must not be stored on the canonical course object.",
+    "Hard prerequisites are used sparingly; most courses are standalone.",
+    "The Enneagram is demo content used to showcase interactive learning structures, not the product architecture itself."
+  ],
+  "pathways": {
+    "strengths": {
+      "label": "Strengths",
+      "purpose": "Develop capabilities associated with the learner's strongest types into more deliberate and advanced professional strengths.",
+      "categories": [
+        "type-1",
+        "type-2",
+        "type-3",
+        "type-4",
+        "type-5",
+        "type-6",
+        "type-7",
+        "type-8",
+        "type-9"
+      ]
+    },
+    "stress-growth": {
+      "label": "Stress & Growth",
+      "purpose": "Recognise pressure patterns, access growth resources and build broadly useful regulation and flexibility.",
+      "categories": [
+        "stress-1",
+        "stress-2",
+        "stress-3",
+        "stress-4",
+        "stress-5",
+        "stress-6",
+        "stress-7",
+        "stress-8",
+        "stress-9",
+        "growth-1",
+        "growth-2",
+        "growth-3",
+        "growth-4",
+        "growth-5",
+        "growth-6",
+        "growth-7",
+        "growth-8",
+        "growth-9",
+        "general"
+      ]
+    },
+    "fortification": {
+      "label": "Fortification",
+      "purpose": "Build useful capabilities associated with types outside the learner's strongest profile to increase behavioural range.",
+      "categories": [
+        "type-1",
+        "type-2",
+        "type-3",
+        "type-4",
+        "type-5",
+        "type-6",
+        "type-7",
+        "type-8",
+        "type-9"
+      ]
+    },
+    "team": {
+      "label": "Team",
+      "purpose": "Improve collaboration with different working styles and build shared team capability.",
+      "categories": [
+        "type-1",
+        "type-2",
+        "type-3",
+        "type-4",
+        "type-5",
+        "type-6",
+        "type-7",
+        "type-8",
+        "type-9",
+        "center-body",
+        "center-heart",
+        "center-head",
+        "general"
+      ]
+    }
+  },
+  "typeSkillTerritories": {
+    "type-1": {
+      "type": 1,
+      "skills": [
+        {
+          "id": "quality_judgement",
+          "name": "Quality Judgement"
+        },
+        {
+          "id": "standards_setting",
+          "name": "Standards Setting"
+        },
+        {
+          "id": "prioritisation",
+          "name": "Prioritisation"
+        },
+        {
+          "id": "continuous_improvement",
+          "name": "Continuous Improvement"
+        },
+        {
+          "id": "constructive_feedback",
+          "name": "Constructive Feedback"
+        }
+      ]
+    },
+    "type-2": {
+      "type": 2,
+      "skills": [
+        {
+          "id": "relational_awareness",
+          "name": "Relational Awareness"
+        },
+        {
+          "id": "supportive_communication",
+          "name": "Supportive Communication"
+        },
+        {
+          "id": "stakeholder_trust",
+          "name": "Stakeholder Trust"
+        },
+        {
+          "id": "mentoring_support",
+          "name": "Mentoring & Support"
+        },
+        {
+          "id": "relational_influence",
+          "name": "Relational Influence"
+        }
+      ]
+    },
+    "type-3": {
+      "type": 3,
+      "skills": [
+        {
+          "id": "goal_clarity",
+          "name": "Goal Clarity"
+        },
+        {
+          "id": "execution_momentum",
+          "name": "Execution Momentum"
+        },
+        {
+          "id": "visible_ownership",
+          "name": "Visible Ownership"
+        },
+        {
+          "id": "performance_learning",
+          "name": "Performance Learning"
+        },
+        {
+          "id": "adaptive_influence",
+          "name": "Adaptive Influence"
+        }
+      ]
+    },
+    "type-4": {
+      "type": 4,
+      "skills": [
+        {
+          "id": "emotional_literacy",
+          "name": "Emotional Literacy"
+        },
+        {
+          "id": "creative_insight",
+          "name": "Creative Insight"
+        },
+        {
+          "id": "authentic_expression",
+          "name": "Authentic Expression"
+        },
+        {
+          "id": "feedback_integration",
+          "name": "Feedback Integration"
+        },
+        {
+          "id": "meaning_making",
+          "name": "Meaning-Making"
+        }
+      ]
+    },
+    "type-5": {
+      "type": 5,
+      "skills": [
+        {
+          "id": "analytical_reasoning",
+          "name": "Analytical Reasoning"
+        },
+        {
+          "id": "systems_thinking",
+          "name": "Systems Thinking"
+        },
+        {
+          "id": "knowledge_synthesis",
+          "name": "Knowledge Synthesis"
+        },
+        {
+          "id": "strategic_communication",
+          "name": "Strategic Communication"
+        },
+        {
+          "id": "research_discipline",
+          "name": "Research Discipline"
+        }
+      ]
+    },
+    "type-6": {
+      "type": 6,
+      "skills": [
+        {
+          "id": "risk_judgement",
+          "name": "Risk Judgement"
+        },
+        {
+          "id": "contingency_planning",
+          "name": "Contingency Planning"
+        },
+        {
+          "id": "trust_calibration",
+          "name": "Trust Calibration"
+        },
+        {
+          "id": "responsible_challenge",
+          "name": "Responsible Challenge"
+        },
+        {
+          "id": "decision_confidence",
+          "name": "Decision Confidence"
+        }
+      ]
+    },
+    "type-7": {
+      "type": 7,
+      "skills": [
+        {
+          "id": "opportunity_framing",
+          "name": "Opportunity Framing"
+        },
+        {
+          "id": "ideation",
+          "name": "Ideation"
+        },
+        {
+          "id": "experimentation",
+          "name": "Experimentation"
+        },
+        {
+          "id": "adaptability",
+          "name": "Adaptability"
+        },
+        {
+          "id": "reframing",
+          "name": "Reframing"
+        }
+      ]
+    },
+    "type-8": {
+      "type": 8,
+      "skills": [
+        {
+          "id": "assertive_communication",
+          "name": "Assertive Communication"
+        },
+        {
+          "id": "boundary_setting",
+          "name": "Boundary Setting"
+        },
+        {
+          "id": "decisive_action",
+          "name": "Decisive Action"
+        },
+        {
+          "id": "negotiation",
+          "name": "Negotiation"
+        },
+        {
+          "id": "courageous_challenge",
+          "name": "Courageous Challenge"
+        },
+        {
+          "id": "delegation",
+          "name": "Delegation"
+        }
+      ]
+    },
+    "type-9": {
+      "type": 9,
+      "skills": [
+        {
+          "id": "active_listening",
+          "name": "Active Listening"
+        },
+        {
+          "id": "mediation",
+          "name": "Mediation"
+        },
+        {
+          "id": "facilitation",
+          "name": "Facilitation"
+        },
+        {
+          "id": "perspective_integration",
+          "name": "Perspective Integration"
+        },
+        {
+          "id": "consensus_building",
+          "name": "Consensus Building"
+        },
+        {
+          "id": "calm_coordination",
+          "name": "Calm Coordination"
+        }
+      ]
+    }
+  },
+  "generalSkills": [
+    {
+      "id": "self_awareness",
+      "name": "Self-Awareness"
+    },
+    {
+      "id": "emotional_regulation",
+      "name": "Emotional Regulation"
+    },
+    {
+      "id": "stress_recovery",
+      "name": "Stress Recovery"
+    },
+    {
+      "id": "attention_management",
+      "name": "Attention Management"
+    },
+    {
+      "id": "decision_making_uncertainty",
+      "name": "Decision-Making Under Uncertainty"
+    },
+    {
+      "id": "behavioural_flexibility",
+      "name": "Behavioural Flexibility"
+    },
+    {
+      "id": "reflection",
+      "name": "Reflective Practice"
+    },
+    {
+      "id": "team_listening",
+      "name": "Team Listening"
+    },
+    {
+      "id": "productive_disagreement",
+      "name": "Productive Disagreement"
+    },
+    {
+      "id": "team_decision_making",
+      "name": "Team Decision-Making"
+    },
+    {
+      "id": "role_clarity",
+      "name": "Role Clarity"
+    },
+    {
+      "id": "team_feedback",
+      "name": "Team Feedback"
+    },
+    {
+      "id": "cross_style_collaboration",
+      "name": "Cross-Style Collaboration"
+    },
+    {
+      "id": "shared_commitment",
+      "name": "Shared Commitment"
+    }
+  ],
+  "stressGrowthConnections": {
+    "1": {
+      "stressType": 4,
+      "growthType": 7
+    },
+    "2": {
+      "stressType": 8,
+      "growthType": 4
+    },
+    "3": {
+      "stressType": 9,
+      "growthType": 6
+    },
+    "4": {
+      "stressType": 2,
+      "growthType": 1
+    },
+    "5": {
+      "stressType": 7,
+      "growthType": 8
+    },
+    "6": {
+      "stressType": 3,
+      "growthType": 9
+    },
+    "7": {
+      "stressType": 1,
+      "growthType": 5
+    },
+    "8": {
+      "stressType": 5,
+      "growthType": 2
+    },
+    "9": {
+      "stressType": 6,
+      "growthType": 3
+    }
+  },
+  "courseDataNotes": {
+    "status": "Not stored here. Use LearnerCourseState.",
+    "recommendationReason": "Course contains generic recommendation context; persona-specific reasons should live in Recommendation records.",
+    "mapPlacement": "Derived from pathway/category/level/chain plus learner/team context. Do not store arbitrary fixed coordinates in the course object."
+  },
+  "courses": [
+    {
+      "id": "S1-01",
+      "name": "Turning Standards Into Clear Judgement",
+      "description": "Sharpen an existing eye for quality into clear, proportionate standards that help work improve without adding unnecessary friction.",
+      "lengthMinutes": 35,
+      "pathway": "strengths",
+      "category": "type-1",
+      "level": "foundation",
+      "courseType": "guided-practice",
+      "audience": "individual",
+      "develops": [
+        "quality_judgement",
+        "standards_setting"
+      ],
+      "learningFocus": [
+        "Distinguish standards from preferences",
+        "Set a useful quality bar",
+        "Explain what better looks like"
+      ],
+      "recommendedWhen": [
+        "Type 1 is in the learner's top three"
+      ],
+      "recommendationContext": "Builds on a natural tendency to notice gaps, standards and opportunities for improvement.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "inner",
+        "placementNote": "Place in Type 1 sector."
+      }
+    },
+    {
+      "id": "S1-02",
+      "name": "Continuous Improvement Without Overcorrection",
+      "description": "Use disciplined improvement cycles to raise quality while protecting pace, morale and proportion.",
+      "lengthMinutes": 50,
+      "pathway": "strengths",
+      "category": "type-1",
+      "level": "intermediate",
+      "courseType": "scenario-lab",
+      "audience": "individual",
+      "develops": [
+        "continuous_improvement",
+        "prioritisation",
+        "constructive_feedback"
+      ],
+      "learningFocus": [
+        "Choose the improvement that matters most",
+        "Avoid polishing low-value details",
+        "Close an improvement loop"
+      ],
+      "recommendedWhen": [
+        "Type 1 is in the learner's top three"
+      ],
+      "recommendationContext": "Develops Type 1-associated improvement energy into a more strategic professional strength.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "middle",
+        "placementNote": "Place in Type 1 sector."
+      }
+    },
+    {
+      "id": "S2-01",
+      "name": "Reading Needs Without Guessing",
+      "description": "Develop natural relational awareness into a deliberate practice for understanding what people need, what they have actually asked for, and what remains uncertain.",
+      "lengthMinutes": 35,
+      "pathway": "strengths",
+      "category": "type-2",
+      "level": "foundation",
+      "courseType": "guided-practice",
+      "audience": "individual",
+      "develops": [
+        "relational_awareness",
+        "stakeholder_trust"
+      ],
+      "learningFocus": [
+        "Separate signals from assumptions",
+        "Ask before helping",
+        "Notice unspoken stakeholder concerns"
+      ],
+      "recommendedWhen": [
+        "Type 2 is in the learner's top three"
+      ],
+      "recommendationContext": "Builds on a naturally people-attentive style while making that awareness more precise.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "inner",
+        "placementNote": "Place in Type 2 sector."
+      }
+    },
+    {
+      "id": "S2-02",
+      "name": "Support That Builds Ownership",
+      "description": "Turn supportive instincts into contribution that strengthens other people's agency instead of quietly carrying their work.",
+      "lengthMinutes": 50,
+      "pathway": "strengths",
+      "category": "type-2",
+      "level": "intermediate",
+      "courseType": "scenario-lab",
+      "audience": "individual",
+      "develops": [
+        "supportive_communication",
+        "mentoring_support",
+        "relational_influence"
+      ],
+      "learningFocus": [
+        "Offer help without taking over",
+        "Coach toward ownership",
+        "Use support to create momentum"
+      ],
+      "recommendedWhen": [
+        "Type 2 is in the learner's top three"
+      ],
+      "recommendationContext": "Extends natural support into sustainable mentoring and relational influence.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "middle",
+        "placementNote": "Place in Type 2 sector."
+      }
+    },
+    {
+      "id": "S3-01",
+      "name": "Goals That Create Momentum",
+      "description": "Refine natural goal orientation into clear outcomes, visible progress and useful measures that mobilise action.",
+      "lengthMinutes": 35,
+      "pathway": "strengths",
+      "category": "type-3",
+      "level": "foundation",
+      "courseType": "micro-course",
+      "audience": "individual",
+      "develops": [
+        "goal_clarity",
+        "execution_momentum"
+      ],
+      "learningFocus": [
+        "Define a meaningful outcome",
+        "Choose visible progress signals",
+        "Create a first commitment"
+      ],
+      "recommendedWhen": [
+        "Type 3 is in the learner's top three"
+      ],
+      "recommendationContext": "Builds on natural achievement energy and converts it into deliberate execution practice.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+        "S3-02"
+      ],
+      "chain": {
+        "id": "strength-3",
+        "sequence": 1
+      },
+      "map": {
+        "radialBand": "inner",
+        "placementNote": "Place in Type 3 sector."
+      }
+    },
+    {
+      "id": "S3-02",
+      "name": "Sustainable High Performance",
+      "description": "Maintain pace and ambition while building review, recovery and learning into the way results are pursued.",
+      "lengthMinutes": 50,
+      "pathway": "strengths",
+      "category": "type-3",
+      "level": "intermediate",
+      "courseType": "scenario-lab",
+      "audience": "individual",
+      "develops": [
+        "execution_momentum",
+        "performance_learning",
+        "visible_ownership"
+      ],
+      "learningFocus": [
+        "Review performance honestly",
+        "Separate pace from urgency",
+        "Protect sustainable delivery"
+      ],
+      "recommendedWhen": [
+        "Type 3 is in the learner's top three"
+      ],
+      "recommendationContext": "Develops achievement strength beyond short-term output toward sustainable performance.",
+      "prerequisites": [
+        "S3-01"
+      ],
+      "unlocks": [
+        "S3-03"
+      ],
+      "chain": {
+        "id": "strength-3",
+        "sequence": 2
+      },
+      "map": {
+        "radialBand": "middle",
+        "placementNote": "Place in Type 3 sector."
+      }
+    },
+    {
+      "id": "S3-03",
+      "name": "Influence Through Visible Progress",
+      "description": "Use outcomes, evidence and progress to create commitment without relying on image or pressure.",
+      "lengthMinutes": 65,
+      "pathway": "strengths",
+      "category": "type-3",
+      "level": "advanced",
+      "courseType": "workshop",
+      "audience": "individual",
+      "develops": [
+        "adaptive_influence",
+        "visible_ownership",
+        "performance_learning"
+      ],
+      "learningFocus": [
+        "Make progress legible",
+        "Invite challenge to the scoreboard",
+        "Turn results into shared ownership"
+      ],
+      "recommendedWhen": [
+        "Type 3 is in the learner's top three"
+      ],
+      "recommendationContext": "Advanced strength development for learners whose natural execution can become a source of credible influence.",
+      "prerequisites": [
+        "S3-02"
+      ],
+      "unlocks": [
+
+      ],
+      "chain": {
+        "id": "strength-3",
+        "sequence": 3
+      },
+      "map": {
+        "radialBand": "outer",
+        "placementNote": "Place in Type 3 sector."
+      }
+    },
+    {
+      "id": "S4-01",
+      "name": "Emotional Signal to Creative Insight",
+      "description": "Use emotional nuance as information for understanding what matters and generating distinctive ideas.",
+      "lengthMinutes": 35,
+      "pathway": "strengths",
+      "category": "type-4",
+      "level": "foundation",
+      "courseType": "reflection-sprint",
+      "audience": "individual",
+      "develops": [
+        "emotional_literacy",
+        "creative_insight",
+        "meaning_making"
+      ],
+      "learningFocus": [
+        "Name the signal precisely",
+        "Separate feeling from interpretation",
+        "Translate meaning into an idea"
+      ],
+      "recommendedWhen": [
+        "Type 4 is in the learner's top three"
+      ],
+      "recommendationContext": "Builds on emotional and creative sensitivity as a professional source of insight.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "inner",
+        "placementNote": "Place in Type 4 sector."
+      }
+    },
+    {
+      "id": "S4-02",
+      "name": "Feedback Into Better Work",
+      "description": "Integrate outside feedback without flattening originality or turning every comment into a threat to the work.",
+      "lengthMinutes": 50,
+      "pathway": "strengths",
+      "category": "type-4",
+      "level": "intermediate",
+      "courseType": "scenario-lab",
+      "audience": "individual",
+      "develops": [
+        "feedback_integration",
+        "creative_insight",
+        "authentic_expression"
+      ],
+      "learningFocus": [
+        "Sort signal from taste",
+        "Choose what to incorporate",
+        "Retain ownership through revision"
+      ],
+      "recommendedWhen": [
+        "Type 4 is in the learner's top three"
+      ],
+      "recommendationContext": "Develops creative identity into a more collaborative and resilient craft.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "middle",
+        "placementNote": "Place in Type 4 sector."
+      }
+    },
+    {
+      "id": "S5-01",
+      "name": "Deep Analysis, Better Questions",
+      "description": "Turn natural curiosity and analysis into questions that expose the assumptions and variables that actually matter.",
+      "lengthMinutes": 35,
+      "pathway": "strengths",
+      "category": "type-5",
+      "level": "foundation",
+      "courseType": "micro-course",
+      "audience": "individual",
+      "develops": [
+        "analytical_reasoning",
+        "research_discipline"
+      ],
+      "learningFocus": [
+        "Define the real question",
+        "Separate evidence from noise",
+        "Set a research boundary"
+      ],
+      "recommendedWhen": [
+        "Type 5 is in the learner's top three"
+      ],
+      "recommendationContext": "Builds on analytical depth while increasing practical focus.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+        "S5-02"
+      ],
+      "chain": {
+        "id": "strength-5",
+        "sequence": 1
+      },
+      "map": {
+        "radialBand": "inner",
+        "placementNote": "Place in Type 5 sector."
+      }
+    },
+    {
+      "id": "S5-02",
+      "name": "Strategic Synthesis",
+      "description": "Combine evidence, models and constraints into a concise point of view that can guide a decision.",
+      "lengthMinutes": 50,
+      "pathway": "strengths",
+      "category": "type-5",
+      "level": "intermediate",
+      "courseType": "scenario-lab",
+      "audience": "individual",
+      "develops": [
+        "knowledge_synthesis",
+        "systems_thinking",
+        "strategic_communication"
+      ],
+      "learningFocus": [
+        "Find the pattern across evidence",
+        "State the implication",
+        "Make a recommendation"
+      ],
+      "recommendedWhen": [
+        "Type 5 is in the learner's top three"
+      ],
+      "recommendationContext": "Moves analysis from collection toward synthesis and organisational value.",
+      "prerequisites": [
+        "S5-01"
+      ],
+      "unlocks": [
+        "S5-03"
+      ],
+      "chain": {
+        "id": "strength-5",
+        "sequence": 2
+      },
+      "map": {
+        "radialBand": "middle",
+        "placementNote": "Place in Type 5 sector."
+      }
+    },
+    {
+      "id": "S5-03",
+      "name": "Expert Communication Under Complexity",
+      "description": "Communicate sophisticated reasoning to people who need the decision, not the entire analysis trail.",
+      "lengthMinutes": 65,
+      "pathway": "strengths",
+      "category": "type-5",
+      "level": "advanced",
+      "courseType": "workshop",
+      "audience": "individual",
+      "develops": [
+        "strategic_communication",
+        "knowledge_synthesis"
+      ],
+      "learningFocus": [
+        "Lead with the decision-relevant point",
+        "Show assumptions clearly",
+        "Answer challenge without overloading"
+      ],
+      "recommendedWhen": [
+        "Type 5 is in the learner's top three"
+      ],
+      "recommendationContext": "Advanced strength mastery for translating expertise into influence.",
+      "prerequisites": [
+        "S5-02"
+      ],
+      "unlocks": [
+
+      ],
+      "chain": {
+        "id": "strength-5",
+        "sequence": 3
+      },
+      "map": {
+        "radialBand": "outer",
+        "placementNote": "Place in Type 5 sector."
+      }
+    },
+    {
+      "id": "S6-01",
+      "name": "Risk Sense and Early Signals",
+      "description": "Refine natural vigilance into a disciplined way of spotting meaningful risk before it becomes noise or anxiety.",
+      "lengthMinutes": 35,
+      "pathway": "strengths",
+      "category": "type-6",
+      "level": "foundation",
+      "courseType": "guided-practice",
+      "audience": "individual",
+      "develops": [
+        "risk_judgement",
+        "responsible_challenge"
+      ],
+      "learningFocus": [
+        "Name the risk clearly",
+        "Separate likelihood from impact",
+        "Raise concerns constructively"
+      ],
+      "recommendedWhen": [
+        "Type 6 is in the learner's top three"
+      ],
+      "recommendationContext": "Builds on preparedness and sceptical intelligence as a practical team asset.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "inner",
+        "placementNote": "Place in Type 6 sector."
+      }
+    },
+    {
+      "id": "S6-02",
+      "name": "Preparedness That Builds Confidence",
+      "description": "Use contingency thinking to create shared confidence, decision thresholds and practical readiness.",
+      "lengthMinutes": 50,
+      "pathway": "strengths",
+      "category": "type-6",
+      "level": "intermediate",
+      "courseType": "scenario-lab",
+      "audience": "individual",
+      "develops": [
+        "contingency_planning",
+        "trust_calibration",
+        "decision_confidence"
+      ],
+      "learningFocus": [
+        "Choose proportionate contingencies",
+        "Define a decision threshold",
+        "Close the planning loop"
+      ],
+      "recommendedWhen": [
+        "Type 6 is in the learner's top three"
+      ],
+      "recommendationContext": "Develops preparedness into confidence rather than endless checking.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "middle",
+        "placementNote": "Place in Type 6 sector."
+      }
+    },
+    {
+      "id": "S7-01",
+      "name": "Possibility Scanning",
+      "description": "Use natural option-generation to identify genuine opportunities rather than simply adding more choices.",
+      "lengthMinutes": 35,
+      "pathway": "strengths",
+      "category": "type-7",
+      "level": "foundation",
+      "courseType": "micro-course",
+      "audience": "individual",
+      "develops": [
+        "opportunity_framing",
+        "ideation"
+      ],
+      "learningFocus": [
+        "Generate useful options",
+        "Spot opportunity patterns",
+        "Distinguish novelty from value"
+      ],
+      "recommendedWhen": [
+        "Type 7 is in the learner's top three"
+      ],
+      "recommendationContext": "Builds on possibility orientation as a structured source of opportunity.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+        "S7-02"
+      ],
+      "chain": {
+        "id": "strength-7",
+        "sequence": 1
+      },
+      "map": {
+        "radialBand": "inner",
+        "placementNote": "Place in Type 7 sector."
+      }
+    },
+    {
+      "id": "S7-02",
+      "name": "Experiment Design for Fast Learning",
+      "description": "Turn ideas into small tests that produce real information before large commitments are made.",
+      "lengthMinutes": 50,
+      "pathway": "strengths",
+      "category": "type-7",
+      "level": "intermediate",
+      "courseType": "scenario-lab",
+      "audience": "individual",
+      "develops": [
+        "experimentation",
+        "adaptability",
+        "opportunity_framing"
+      ],
+      "learningFocus": [
+        "Define a testable assumption",
+        "Choose a small experiment",
+        "Use results to narrow options"
+      ],
+      "recommendedWhen": [
+        "Type 7 is in the learner's top three"
+      ],
+      "recommendationContext": "Develops natural experimentation into disciplined learning through action.",
+      "prerequisites": [
+        "S7-01"
+      ],
+      "unlocks": [
+
+      ],
+      "chain": {
+        "id": "strength-7",
+        "sequence": 2
+      },
+      "map": {
+        "radialBand": "middle",
+        "placementNote": "Place in Type 7 sector."
+      }
+    },
+    {
+      "id": "S8-01",
+      "name": "Clean Directness",
+      "description": "Refine natural directness into clear requests, clear boundaries and challenge that people can actually use.",
+      "lengthMinutes": 35,
+      "pathway": "strengths",
+      "category": "type-8",
+      "level": "foundation",
+      "courseType": "scenario-lab",
+      "audience": "individual",
+      "develops": [
+        "assertive_communication",
+        "boundary_setting",
+        "courageous_challenge"
+      ],
+      "learningFocus": [
+        "State the point directly",
+        "Calibrate intensity",
+        "Protect the boundary without escalating"
+      ],
+      "recommendedWhen": [
+        "Type 8 is in the learner's top three"
+      ],
+      "recommendationContext": "Builds on natural assertiveness while making its impact more deliberate.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+        "S8-02"
+      ],
+      "chain": {
+        "id": "strength-8",
+        "sequence": 1
+      },
+      "map": {
+        "radialBand": "inner",
+        "placementNote": "Place in Type 8 sector."
+      }
+    },
+    {
+      "id": "S8-02",
+      "name": "Decisive Action With Calibration",
+      "description": "Use confidence and speed to create action while checking risk, participation and the cost of forcing closure.",
+      "lengthMinutes": 50,
+      "pathway": "strengths",
+      "category": "type-8",
+      "level": "intermediate",
+      "courseType": "scenario-lab",
+      "audience": "individual",
+      "develops": [
+        "decisive_action",
+        "negotiation",
+        "delegation"
+      ],
+      "learningFocus": [
+        "Choose when to decide",
+        "Create space before closure",
+        "Move without over-controlling"
+      ],
+      "recommendedWhen": [
+        "Type 8 is in the learner's top three"
+      ],
+      "recommendationContext": "Develops decisive energy into calibrated leadership.",
+      "prerequisites": [
+        "S8-01"
+      ],
+      "unlocks": [
+        "S8-03"
+      ],
+      "chain": {
+        "id": "strength-8",
+        "sequence": 2
+      },
+      "map": {
+        "radialBand": "middle",
+        "placementNote": "Place in Type 8 sector."
+      }
+    },
+    {
+      "id": "S8-03",
+      "name": "Protective Leadership Without Overreach",
+      "description": "Use authority and protective instinct to strengthen ownership, challenge and trust across a group.",
+      "lengthMinutes": 70,
+      "pathway": "strengths",
+      "category": "type-8",
+      "level": "advanced",
+      "courseType": "workshop",
+      "audience": "individual",
+      "develops": [
+        "delegation",
+        "courageous_challenge",
+        "negotiation"
+      ],
+      "learningFocus": [
+        "Protect without rescuing",
+        "Delegate real authority",
+        "Challenge while preserving trust"
+      ],
+      "recommendedWhen": [
+        "Type 8 is in the learner's top three"
+      ],
+      "recommendationContext": "Advanced strength mastery for using power as a team resource rather than a personal reflex.",
+      "prerequisites": [
+        "S8-02"
+      ],
+      "unlocks": [
+
+      ],
+      "chain": {
+        "id": "strength-8",
+        "sequence": 3
+      },
+      "map": {
+        "radialBand": "outer",
+        "placementNote": "Place in Type 8 sector."
+      }
+    },
+    {
+      "id": "S9-01",
+      "name": "Listening for the Whole System",
+      "description": "Develop natural perspective-holding into deliberate listening for stakes, unspoken reservations and points of convergence.",
+      "lengthMinutes": 35,
+      "pathway": "strengths",
+      "category": "type-9",
+      "level": "foundation",
+      "courseType": "guided-practice",
+      "audience": "individual",
+      "develops": [
+        "active_listening",
+        "perspective_integration"
+      ],
+      "learningFocus": [
+        "Hear multiple stakes",
+        "Surface quiet information",
+        "Reflect the whole system accurately"
+      ],
+      "recommendedWhen": [
+        "Type 9 is in the learner's top three"
+      ],
+      "recommendationContext": "Builds on natural listening and inclusion as a more deliberate professional capability.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+        "S9-02"
+      ],
+      "chain": {
+        "id": "strength-9",
+        "sequence": 1
+      },
+      "map": {
+        "radialBand": "inner",
+        "placementNote": "Place in Type 9 sector."
+      }
+    },
+    {
+      "id": "S9-02",
+      "name": "Mediation That Surfaces Difference",
+      "description": "Use steadiness and inclusion to make disagreement more visible rather than smoothing it away.",
+      "lengthMinutes": 50,
+      "pathway": "strengths",
+      "category": "type-9",
+      "level": "intermediate",
+      "courseType": "scenario-lab",
+      "audience": "individual",
+      "develops": [
+        "mediation",
+        "perspective_integration",
+        "consensus_building"
+      ],
+      "learningFocus": [
+        "Name the tension",
+        "Hold competing views",
+        "Separate agreement from avoidance"
+      ],
+      "recommendedWhen": [
+        "Type 9 is in the learner's top three"
+      ],
+      "recommendationContext": "Develops mediation beyond harmony maintenance toward productive difference.",
+      "prerequisites": [
+        "S9-01"
+      ],
+      "unlocks": [
+        "S9-03"
+      ],
+      "chain": {
+        "id": "strength-9",
+        "sequence": 2
+      },
+      "map": {
+        "radialBand": "middle",
+        "placementNote": "Place in Type 9 sector."
+      }
+    },
+    {
+      "id": "S9-03",
+      "name": "Facilitative Leadership",
+      "description": "Lead groups through complexity by balancing voices, making priorities explicit and converting perspective into decision.",
+      "lengthMinutes": 70,
+      "pathway": "strengths",
+      "category": "type-9",
+      "level": "advanced",
+      "courseType": "workshop",
+      "audience": "individual",
+      "develops": [
+        "facilitation",
+        "consensus_building",
+        "calm_coordination"
+      ],
+      "learningFocus": [
+        "Set the decision frame",
+        "Balance participation",
+        "Close with clear ownership"
+      ],
+      "recommendedWhen": [
+        "Type 9 is in the learner's top three"
+      ],
+      "recommendationContext": "Advanced strength mastery for turning inclusion into active facilitative leadership.",
+      "prerequisites": [
+        "S9-02"
+      ],
+      "unlocks": [
+
+      ],
+      "chain": {
+        "id": "strength-9",
+        "sequence": 3
+      },
+      "map": {
+        "radialBand": "outer",
+        "placementNote": "Place in Type 9 sector."
+      }
+    },
+    {
+      "id": "SG-S1-01",
+      "name": "When Standards Turn Personal",
+      "description": "Recognise when principled improvement tightens into personal frustration, self-criticism or over-identification with what is wrong.",
+      "lengthMinutes": 40,
+      "pathway": "stress-growth",
+      "category": "stress-1",
+      "level": "foundation",
+      "courseType": "guided-practice",
+      "audience": "individual",
+      "develops": [
+        "self_awareness",
+        "emotional_regulation",
+        "reflection"
+      ],
+      "learningFocus": [
+        "Notice tightening early",
+        "Separate standard from self-worth",
+        "Restore proportion"
+      ],
+      "recommendedWhen": [
+        "Primary type is 1",
+        "Stress-related development is relevant"
+      ],
+      "recommendationContext": "A Type 1 learner is showing stress signals associated with criticism, dissatisfaction or emotional intensity.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "inner",
+        "placementNote": "Place in Type 4 cone while retaining Type 1 as the source/origin."
+      }
+    },
+    {
+      "id": "SG-G1-01",
+      "name": "Experiment Before Perfecting",
+      "description": "Practise possibility, play and low-risk experimentation so standards can guide learning without controlling every step.",
+      "lengthMinutes": 45,
+      "pathway": "stress-growth",
+      "category": "growth-1",
+      "level": "intermediate",
+      "courseType": "scenario-lab",
+      "audience": "individual",
+      "develops": [
+        "experimentation",
+        "adaptability",
+        "behavioural_flexibility"
+      ],
+      "learningFocus": [
+        "Try before optimising",
+        "Use provisional standards",
+        "Learn from imperfect action"
+      ],
+      "recommendedWhen": [
+        "Primary type is 1",
+        "Growth-related development is relevant"
+      ],
+      "recommendationContext": "A Type 1 learner would benefit from more flexibility, experimentation and permission to explore.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "middle",
+        "placementNote": "Place in Type 7 cone while retaining Type 1 as the source/origin."
+      }
+    },
+    {
+      "id": "SG-S2-01",
+      "name": "When Helping Turns Controlling",
+      "description": "Notice when care shifts into urgency, over-involvement or force because support is not being received as hoped.",
+      "lengthMinutes": 40,
+      "pathway": "stress-growth",
+      "category": "stress-2",
+      "level": "foundation",
+      "courseType": "guided-practice",
+      "audience": "individual",
+      "develops": [
+        "self_awareness",
+        "emotional_regulation",
+        "boundary_setting"
+      ],
+      "learningFocus": [
+        "Spot rescue urgency",
+        "Name the hidden expectation",
+        "Return responsibility cleanly"
+      ],
+      "recommendedWhen": [
+        "Primary type is 2",
+        "Stress-related development is relevant"
+      ],
+      "recommendationContext": "A Type 2 learner is under pressure and support is becoming control, resentment or overreach.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "inner",
+        "placementNote": "Place in Type 8 cone while retaining Type 2 as the source/origin."
+      }
+    },
+    {
+      "id": "SG-G2-01",
+      "name": "Name Your Own Experience",
+      "description": "Develop greater access to personal feeling, preference and identity before moving immediately toward other people's needs.",
+      "lengthMinutes": 45,
+      "pathway": "stress-growth",
+      "category": "growth-2",
+      "level": "intermediate",
+      "courseType": "scenario-lab",
+      "audience": "individual",
+      "develops": [
+        "emotional_literacy",
+        "authentic_expression",
+        "self_awareness"
+      ],
+      "learningFocus": [
+        "Pause before helping",
+        "Name your own preference",
+        "Act from genuine choice"
+      ],
+      "recommendedWhen": [
+        "Primary type is 2",
+        "Growth-related development is relevant"
+      ],
+      "recommendationContext": "A Type 2 learner would benefit from more self-reference, emotional honesty and differentiation.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "middle",
+        "placementNote": "Place in Type 4 cone while retaining Type 2 as the source/origin."
+      }
+    },
+    {
+      "id": "SG-S3-01",
+      "name": "When Momentum Goes Flat",
+      "description": "Recognise disengagement, numbness or passive drift that can follow prolonged performance pressure and constant adaptation.",
+      "lengthMinutes": 40,
+      "pathway": "stress-growth",
+      "category": "stress-3",
+      "level": "foundation",
+      "courseType": "guided-practice",
+      "audience": "individual",
+      "develops": [
+        "self_awareness",
+        "stress_recovery",
+        "emotional_regulation"
+      ],
+      "learningFocus": [
+        "Notice shutdown after overdrive",
+        "Reconnect with real priorities",
+        "Restart without performative urgency"
+      ],
+      "recommendedWhen": [
+        "Primary type is 3",
+        "Stress-related development is relevant"
+      ],
+      "recommendationContext": "A Type 3 learner is under sustained pressure and achievement energy is collapsing into disengagement.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "inner",
+        "placementNote": "Place in Type 9 cone while retaining Type 3 as the source/origin."
+      }
+    },
+    {
+      "id": "SG-G3-01",
+      "name": "Pause for Risk and Reality",
+      "description": "Use questioning, preparation and trusted challenge to make achievement more grounded, collaborative and resilient.",
+      "lengthMinutes": 45,
+      "pathway": "stress-growth",
+      "category": "growth-3",
+      "level": "intermediate",
+      "courseType": "scenario-lab",
+      "audience": "individual",
+      "develops": [
+        "risk_judgement",
+        "trust_calibration",
+        "responsible_challenge"
+      ],
+      "learningFocus": [
+        "Invite a sceptical view",
+        "Check hidden risk",
+        "Build shared confidence"
+      ],
+      "recommendedWhen": [
+        "Primary type is 3",
+        "Growth-related development is relevant"
+      ],
+      "recommendationContext": "A Type 3 learner would benefit from slowing enough to include risk, loyalty and collective reality.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "middle",
+        "placementNote": "Place in Type 6 cone while retaining Type 3 as the source/origin."
+      }
+    },
+    {
+      "id": "SG-S4-01",
+      "name": "When Longing Turns to Over-Attunement",
+      "description": "Recognise when emotional intensity shifts into chasing reassurance, approval or connection at the expense of personal grounding.",
+      "lengthMinutes": 40,
+      "pathway": "stress-growth",
+      "category": "stress-4",
+      "level": "foundation",
+      "courseType": "guided-practice",
+      "audience": "individual",
+      "develops": [
+        "self_awareness",
+        "emotional_regulation",
+        "boundary_setting"
+      ],
+      "learningFocus": [
+        "Spot reassurance seeking",
+        "Separate connection from validation",
+        "Return to your own signal"
+      ],
+      "recommendedWhen": [
+        "Primary type is 4",
+        "Stress-related development is relevant"
+      ],
+      "recommendationContext": "A Type 4 learner is under pressure and emotional depth is becoming over-attunement to others.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "inner",
+        "placementNote": "Place in Type 2 cone while retaining Type 4 as the source/origin."
+      }
+    },
+    {
+      "id": "SG-G4-01",
+      "name": "Structure the Creative Signal",
+      "description": "Use standards, routine and disciplined action to turn meaningful insight into finished contribution.",
+      "lengthMinutes": 45,
+      "pathway": "stress-growth",
+      "category": "growth-4",
+      "level": "intermediate",
+      "courseType": "scenario-lab",
+      "audience": "individual",
+      "develops": [
+        "standards_setting",
+        "continuous_improvement",
+        "prioritisation"
+      ],
+      "learningFocus": [
+        "Choose the standard that matters",
+        "Create a repeatable practice",
+        "Finish before re-idealising"
+      ],
+      "recommendedWhen": [
+        "Primary type is 4",
+        "Growth-related development is relevant"
+      ],
+      "recommendationContext": "A Type 4 learner would benefit from more structure, objectivity and disciplined follow-through.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "middle",
+        "placementNote": "Place in Type 1 cone while retaining Type 4 as the source/origin."
+      }
+    },
+    {
+      "id": "SG-S5-01",
+      "name": "When Analysis Scatters",
+      "description": "Recognise when mental load turns into option-hopping, distraction or consuming more information without increasing clarity.",
+      "lengthMinutes": 40,
+      "pathway": "stress-growth",
+      "category": "stress-5",
+      "level": "foundation",
+      "courseType": "guided-practice",
+      "audience": "individual",
+      "develops": [
+        "self_awareness",
+        "attention_management",
+        "research_discipline"
+      ],
+      "learningFocus": [
+        "Notice information escape",
+        "Close unnecessary inputs",
+        "Return to one useful question"
+      ],
+      "recommendedWhen": [
+        "Primary type is 5",
+        "Stress-related development is relevant"
+      ],
+      "recommendationContext": "A Type 5 learner is under pressure and analysis is fragmenting into restless option-seeking.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "inner",
+        "placementNote": "Place in Type 7 cone while retaining Type 5 as the source/origin."
+      }
+    },
+    {
+      "id": "SG-G5-01",
+      "name": "Act Before Certainty",
+      "description": "Practise direct action, embodied commitment and clear decisions before every variable is understood.",
+      "lengthMinutes": 45,
+      "pathway": "stress-growth",
+      "category": "growth-5",
+      "level": "intermediate",
+      "courseType": "scenario-lab",
+      "audience": "individual",
+      "develops": [
+        "decisive_action",
+        "decision_making_uncertainty",
+        "behavioural_flexibility"
+      ],
+      "learningFocus": [
+        "Set an evidence threshold",
+        "Choose a decision",
+        "Act and learn"
+      ],
+      "recommendedWhen": [
+        "Primary type is 5",
+        "Growth-related development is relevant"
+      ],
+      "recommendationContext": "A Type 5 learner would benefit from more decisive engagement and willingness to act with incomplete information.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "middle",
+        "placementNote": "Place in Type 8 cone while retaining Type 5 as the source/origin."
+      }
+    },
+    {
+      "id": "SG-S6-01",
+      "name": "When Preparedness Becomes Performance",
+      "description": "Recognise when uncertainty creates pressure to look certain, move fast or prove competence rather than think clearly.",
+      "lengthMinutes": 40,
+      "pathway": "stress-growth",
+      "category": "stress-6",
+      "level": "foundation",
+      "courseType": "guided-practice",
+      "audience": "individual",
+      "develops": [
+        "self_awareness",
+        "emotional_regulation",
+        "decision_confidence"
+      ],
+      "learningFocus": [
+        "Notice performance pressure",
+        "Name what is actually known",
+        "Choose confidence without pretending certainty"
+      ],
+      "recommendedWhen": [
+        "Primary type is 6",
+        "Stress-related development is relevant"
+      ],
+      "recommendationContext": "A Type 6 learner is under pressure and vigilance is turning into over-performance or image management.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "inner",
+        "placementNote": "Place in Type 3 cone while retaining Type 6 as the source/origin."
+      }
+    },
+    {
+      "id": "SG-G6-01",
+      "name": "Trust the Next Step",
+      "description": "Practise calm, grounded action that does not require every risk to be resolved before commitment.",
+      "lengthMinutes": 45,
+      "pathway": "stress-growth",
+      "category": "growth-6",
+      "level": "intermediate",
+      "courseType": "scenario-lab",
+      "audience": "individual",
+      "develops": [
+        "decision_confidence",
+        "calm_coordination",
+        "behavioural_flexibility"
+      ],
+      "learningFocus": [
+        "Reduce threat scanning",
+        "Choose the next sufficient step",
+        "Stay connected after deciding"
+      ],
+      "recommendedWhen": [
+        "Primary type is 6",
+        "Growth-related development is relevant"
+      ],
+      "recommendationContext": "A Type 6 learner would benefit from greater steadiness, trust and tolerance of unresolved uncertainty.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "middle",
+        "placementNote": "Place in Type 9 cone while retaining Type 6 as the source/origin."
+      }
+    },
+    {
+      "id": "SG-S7-01",
+      "name": "When Options Turn Rigid",
+      "description": "Recognise the paradoxical shift from open possibility into criticism, impatience or tight control when pressure removes choice.",
+      "lengthMinutes": 40,
+      "pathway": "stress-growth",
+      "category": "stress-7",
+      "level": "foundation",
+      "courseType": "guided-practice",
+      "audience": "individual",
+      "develops": [
+        "self_awareness",
+        "emotional_regulation",
+        "adaptability"
+      ],
+      "learningFocus": [
+        "Notice critical tightening",
+        "Separate constraint from threat",
+        "Reopen one useful option"
+      ],
+      "recommendedWhen": [
+        "Primary type is 7",
+        "Stress-related development is relevant"
+      ],
+      "recommendationContext": "A Type 7 learner is under pressure and flexibility is narrowing into rigidity or frustration.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "inner",
+        "placementNote": "Place in Type 1 cone while retaining Type 7 as the source/origin."
+      }
+    },
+    {
+      "id": "SG-G7-01",
+      "name": "Stay With One Question",
+      "description": "Develop depth, concentration and sustained inquiry before moving on to the next possibility.",
+      "lengthMinutes": 45,
+      "pathway": "stress-growth",
+      "category": "growth-7",
+      "level": "intermediate",
+      "courseType": "scenario-lab",
+      "audience": "individual",
+      "develops": [
+        "analytical_reasoning",
+        "attention_management",
+        "research_discipline"
+      ],
+      "learningFocus": [
+        "Choose one question",
+        "Stay past the novelty point",
+        "Build depth before expansion"
+      ],
+      "recommendedWhen": [
+        "Primary type is 7",
+        "Growth-related development is relevant"
+      ],
+      "recommendationContext": "A Type 7 learner would benefit from deeper attention, analysis and tolerance for a narrower field.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "middle",
+        "placementNote": "Place in Type 5 cone while retaining Type 7 as the source/origin."
+      }
+    },
+    {
+      "id": "SG-S8-01",
+      "name": "When Force Withdraws",
+      "description": "Recognise when intense engagement flips into guarded distance, information hoarding or disengagement after challenge.",
+      "lengthMinutes": 40,
+      "pathway": "stress-growth",
+      "category": "stress-8",
+      "level": "foundation",
+      "courseType": "guided-practice",
+      "audience": "individual",
+      "develops": [
+        "self_awareness",
+        "stress_recovery",
+        "relational_awareness"
+      ],
+      "learningFocus": [
+        "Notice defensive withdrawal",
+        "Stay in contact without overexposing",
+        "Re-enter the conversation deliberately"
+      ],
+      "recommendedWhen": [
+        "Primary type is 8",
+        "Stress-related development is relevant"
+      ],
+      "recommendationContext": "A Type 8 learner is under pressure and direct engagement is shifting into defensive distance.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "inner",
+        "placementNote": "Place in Type 5 cone while retaining Type 8 as the source/origin."
+      }
+    },
+    {
+      "id": "SG-G8-01",
+      "name": "Power With Relational Awareness",
+      "description": "Use empathy, support and receptivity as additional forms of strength without surrendering clarity or agency.",
+      "lengthMinutes": 45,
+      "pathway": "stress-growth",
+      "category": "growth-8",
+      "level": "intermediate",
+      "courseType": "scenario-lab",
+      "audience": "individual",
+      "develops": [
+        "relational_awareness",
+        "supportive_communication",
+        "stakeholder_trust"
+      ],
+      "learningFocus": [
+        "Receive before directing",
+        "Notice impact",
+        "Use support as strength"
+      ],
+      "recommendedWhen": [
+        "Primary type is 8",
+        "Growth-related development is relevant"
+      ],
+      "recommendationContext": "A Type 8 learner would benefit from greater relational receptivity and willingness to receive support.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "middle",
+        "placementNote": "Place in Type 2 cone while retaining Type 8 as the source/origin."
+      }
+    },
+    {
+      "id": "SG-S9-01",
+      "name": "When Calm Turns to Worry",
+      "description": "Recognise when apparent steadiness gives way to doubt, reassurance-seeking and scanning for what could go wrong.",
+      "lengthMinutes": 40,
+      "pathway": "stress-growth",
+      "category": "stress-9",
+      "level": "foundation",
+      "courseType": "guided-practice",
+      "audience": "individual",
+      "develops": [
+        "self_awareness",
+        "emotional_regulation",
+        "decision_confidence"
+      ],
+      "learningFocus": [
+        "Notice hidden worry",
+        "Separate concern from indecision",
+        "Move without full reassurance"
+      ],
+      "recommendedWhen": [
+        "Primary type is 9",
+        "Stress-related development is relevant"
+      ],
+      "recommendationContext": "A Type 9 learner is under pressure and calm is shifting into doubt, vigilance or indecision.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "inner",
+        "placementNote": "Place in Type 6 cone while retaining Type 9 as the source/origin."
+      }
+    },
+    {
+      "id": "SG-G9-01",
+      "name": "Make Your Priorities Visible",
+      "description": "Use goal focus, agency and visible commitments to make personal priorities part of the shared picture.",
+      "lengthMinutes": 45,
+      "pathway": "stress-growth",
+      "category": "growth-9",
+      "level": "intermediate",
+      "courseType": "scenario-lab",
+      "audience": "individual",
+      "develops": [
+        "goal_clarity",
+        "visible_ownership",
+        "execution_momentum"
+      ],
+      "learningFocus": [
+        "Name your priority",
+        "Choose a visible commitment",
+        "Act before consensus is complete"
+      ],
+      "recommendedWhen": [
+        "Primary type is 9",
+        "Growth-related development is relevant"
+      ],
+      "recommendationContext": "A Type 9 learner would benefit from greater agency, goal clarity and visible action.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "middle",
+        "placementNote": "Place in Type 3 cone while retaining Type 9 as the source/origin."
+      }
+    },
+    {
+      "id": "SG-S3-02",
+      "name": "Re-engage After Performance Exhaustion",
+      "description": "Rebuild useful momentum after overdrive by reconnecting with values, limits and one concrete next step.",
+      "lengthMinutes": 45,
+      "pathway": "stress-growth",
+      "category": "stress-3",
+      "level": "intermediate",
+      "courseType": "scenario-lab",
+      "audience": "individual",
+      "develops": [
+        "stress_recovery",
+        "reflection",
+        "goal_clarity"
+      ],
+      "learningFocus": [
+        "Recover without pretending",
+        "Reconnect work to value",
+        "Restart with one real commitment"
+      ],
+      "recommendedWhen": [
+        "Primary type is 3",
+        "Additional depth is useful"
+      ],
+      "recommendationContext": "A Type 3 learner has moved from high-output strain into disengagement or flatness.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "middle",
+        "placementNote": "Second course in stress-3; place farther from origin than the foundation course."
+      }
+    },
+    {
+      "id": "SG-G3-02",
+      "name": "Trust Through Shared Preparation",
+      "description": "Use preparation and challenge from others as a source of confidence rather than treating achievement as a solo proof of competence.",
+      "lengthMinutes": 50,
+      "pathway": "stress-growth",
+      "category": "growth-3",
+      "level": "intermediate",
+      "courseType": "scenario-lab",
+      "audience": "individual",
+      "develops": [
+        "contingency_planning",
+        "trust_calibration",
+        "relational_influence"
+      ],
+      "learningFocus": [
+        "Prepare with others",
+        "Invite useful doubt",
+        "Convert challenge into trust"
+      ],
+      "recommendedWhen": [
+        "Primary type is 3",
+        "Additional depth is useful"
+      ],
+      "recommendationContext": "A Type 3 learner is ready to make achievement more collaborative and resilient.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "middle",
+        "placementNote": "Second course in growth-3; place farther from origin than the foundation course."
+      }
+    },
+    {
+      "id": "SG-S4-02",
+      "name": "Stop Chasing Reassurance",
+      "description": "Practise staying with personal emotional information without making another person's response the measure of its validity.",
+      "lengthMinutes": 45,
+      "pathway": "stress-growth",
+      "category": "stress-4",
+      "level": "intermediate",
+      "courseType": "scenario-lab",
+      "audience": "individual",
+      "develops": [
+        "emotional_regulation",
+        "authentic_expression",
+        "boundary_setting"
+      ],
+      "learningFocus": [
+        "Name the reassurance loop",
+        "Validate the signal internally",
+        "Choose a grounded request"
+      ],
+      "recommendedWhen": [
+        "Primary type is 4",
+        "Additional depth is useful"
+      ],
+      "recommendationContext": "A Type 4 learner is seeking repeated confirmation or becoming over-dependent on relational response.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "middle",
+        "placementNote": "Second course in stress-4; place farther from origin than the foundation course."
+      }
+    },
+    {
+      "id": "SG-G4-02",
+      "name": "Discipline Without Flattening Originality",
+      "description": "Build routines, standards and completion practices that protect rather than suppress distinctive work.",
+      "lengthMinutes": 50,
+      "pathway": "stress-growth",
+      "category": "growth-4",
+      "level": "intermediate",
+      "courseType": "scenario-lab",
+      "audience": "individual",
+      "develops": [
+        "continuous_improvement",
+        "prioritisation",
+        "creative_insight"
+      ],
+      "learningFocus": [
+        "Create a creative constraint",
+        "Use a completion rule",
+        "Review without self-erasure"
+      ],
+      "recommendedWhen": [
+        "Primary type is 4",
+        "Additional depth is useful"
+      ],
+      "recommendationContext": "A Type 4 learner wants more structure without losing originality.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "middle",
+        "placementNote": "Second course in growth-4; place farther from origin than the foundation course."
+      }
+    },
+    {
+      "id": "SG-S5-02",
+      "name": "Reduce Option Overload Under Pressure",
+      "description": "Limit inputs and options when stress creates scattered attention, surface-level novelty or compulsive research.",
+      "lengthMinutes": 45,
+      "pathway": "stress-growth",
+      "category": "stress-5",
+      "level": "intermediate",
+      "courseType": "scenario-lab",
+      "audience": "individual",
+      "develops": [
+        "attention_management",
+        "research_discipline",
+        "stress_recovery"
+      ],
+      "learningFocus": [
+        "Close input channels",
+        "Choose one decision question",
+        "Use a stopping rule"
+      ],
+      "recommendedWhen": [
+        "Primary type is 5",
+        "Additional depth is useful"
+      ],
+      "recommendationContext": "A Type 5 learner is responding to pressure by scattering attention across too many inputs.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "middle",
+        "placementNote": "Second course in stress-5; place farther from origin than the foundation course."
+      }
+    },
+    {
+      "id": "SG-G5-02",
+      "name": "Embodied Decisiveness",
+      "description": "Build confidence in making a clear call, taking visible action and staying present to the consequences.",
+      "lengthMinutes": 50,
+      "pathway": "stress-growth",
+      "category": "growth-5",
+      "level": "intermediate",
+      "courseType": "scenario-lab",
+      "audience": "individual",
+      "develops": [
+        "decisive_action",
+        "visible_ownership",
+        "decision_making_uncertainty"
+      ],
+      "learningFocus": [
+        "Make the call",
+        "State ownership",
+        "Review after action"
+      ],
+      "recommendedWhen": [
+        "Primary type is 5",
+        "Additional depth is useful"
+      ],
+      "recommendationContext": "A Type 5 learner is ready to convert insight into more visible authority and action.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "middle",
+        "placementNote": "Second course in growth-5; place farther from origin than the foundation course."
+      }
+    },
+    {
+      "id": "SG-S8-02",
+      "name": "Re-enter After Defensive Distance",
+      "description": "Return to collaboration after withdrawing, hardening or withholding information following challenge.",
+      "lengthMinutes": 45,
+      "pathway": "stress-growth",
+      "category": "stress-8",
+      "level": "intermediate",
+      "courseType": "scenario-lab",
+      "audience": "individual",
+      "develops": [
+        "stress_recovery",
+        "team_listening",
+        "stakeholder_trust"
+      ],
+      "learningFocus": [
+        "Name the withdrawal",
+        "Reopen information",
+        "Re-enter without overcorrecting"
+      ],
+      "recommendedWhen": [
+        "Primary type is 8",
+        "Additional depth is useful"
+      ],
+      "recommendationContext": "A Type 8 learner has pulled back after challenge and needs a clean re-entry into collaboration.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "middle",
+        "placementNote": "Second course in stress-8; place farther from origin than the foundation course."
+      }
+    },
+    {
+      "id": "SG-G8-02",
+      "name": "Receive Support Without Losing Agency",
+      "description": "Practise accepting help, care and relational input while retaining directness and ownership.",
+      "lengthMinutes": 50,
+      "pathway": "stress-growth",
+      "category": "growth-8",
+      "level": "intermediate",
+      "courseType": "scenario-lab",
+      "audience": "individual",
+      "develops": [
+        "supportive_communication",
+        "relational_awareness",
+        "delegation"
+      ],
+      "learningFocus": [
+        "Receive without surrendering control",
+        "Ask for useful support",
+        "Share ownership"
+      ],
+      "recommendedWhen": [
+        "Primary type is 8",
+        "Additional depth is useful"
+      ],
+      "recommendationContext": "A Type 8 learner is ready to widen strength by receiving as well as providing protection.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "middle",
+        "placementNote": "Second course in growth-8; place farther from origin than the foundation course."
+      }
+    },
+    {
+      "id": "SG-S9-02",
+      "name": "Move From Reassurance to Decision",
+      "description": "Use a simple decision threshold to interrupt loops of doubt, checking and deferred commitment.",
+      "lengthMinutes": 45,
+      "pathway": "stress-growth",
+      "category": "stress-9",
+      "level": "intermediate",
+      "courseType": "scenario-lab",
+      "audience": "individual",
+      "develops": [
+        "decision_confidence",
+        "decision_making_uncertainty",
+        "prioritisation"
+      ],
+      "learningFocus": [
+        "Define enough information",
+        "Stop reassurance loops",
+        "Commit and review"
+      ],
+      "recommendedWhen": [
+        "Primary type is 9",
+        "Additional depth is useful"
+      ],
+      "recommendationContext": "A Type 9 learner is delaying action while seeking more certainty or agreement.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "middle",
+        "placementNote": "Second course in stress-9; place farther from origin than the foundation course."
+      }
+    },
+    {
+      "id": "SG-G9-02",
+      "name": "Agency Through Small Commitments",
+      "description": "Build visible agency through a sequence of small decisions, explicit priorities and follow-through.",
+      "lengthMinutes": 50,
+      "pathway": "stress-growth",
+      "category": "growth-9",
+      "level": "intermediate",
+      "courseType": "scenario-lab",
+      "audience": "individual",
+      "develops": [
+        "visible_ownership",
+        "goal_clarity",
+        "execution_momentum"
+      ],
+      "learningFocus": [
+        "Choose one personal priority",
+        "Make it visible",
+        "Complete a commitment"
+      ],
+      "recommendedWhen": [
+        "Primary type is 9",
+        "Additional depth is useful"
+      ],
+      "recommendationContext": "A Type 9 learner is ready to translate growth toward agency into repeatable behaviour.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "middle",
+        "placementNote": "Second course in growth-9; place farther from origin than the foundation course."
+      }
+    },
+    {
+      "id": "SG-GEN-01",
+      "name": "Know Your Stress Signature",
+      "description": "Build a practical personal model of what changes first when pressure begins to alter attention, emotion and behaviour.",
+      "lengthMinutes": 30,
+      "pathway": "stress-growth",
+      "category": "general",
+      "level": "foundation",
+      "courseType": "reflection-sprint",
+      "audience": "individual",
+      "develops": [
+        "self_awareness",
+        "reflection"
+      ],
+      "learningFocus": [
+        "Identify early signals",
+        "Name common triggers",
+        "Choose one observable warning sign"
+      ],
+      "recommendedWhen": [
+        "Useful for every learner"
+      ],
+      "recommendationContext": "A general foundation course for recognising pressure before it becomes a larger behavioural pattern.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+        "SG-GEN-08"
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "inner",
+        "placementNote": "Place in the general resilience tray below the wheel."
+      }
+    },
+    {
+      "id": "SG-GEN-02",
+      "name": "Emotional Regulation Under Pressure",
+      "description": "Practise simple regulation techniques that preserve engagement, choice and communication when intensity rises.",
+      "lengthMinutes": 40,
+      "pathway": "stress-growth",
+      "category": "general",
+      "level": "foundation",
+      "courseType": "guided-practice",
+      "audience": "individual",
+      "develops": [
+        "emotional_regulation",
+        "attention_management"
+      ],
+      "learningFocus": [
+        "Regulate without disengaging",
+        "Create a short pause",
+        "Return to useful participation"
+      ],
+      "recommendedWhen": [
+        "Useful for every learner"
+      ],
+      "recommendationContext": "A general resilience course that supports all type-specific stress work.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+        "SG-GEN-08"
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "inner",
+        "placementNote": "Place in the general resilience tray below the wheel."
+      }
+    },
+    {
+      "id": "SG-GEN-03",
+      "name": "Recovery and Reset",
+      "description": "Build deliberate recovery practices after periods of sustained pressure so the next decision is not made from accumulated strain.",
+      "lengthMinutes": 35,
+      "pathway": "stress-growth",
+      "category": "general",
+      "level": "foundation",
+      "courseType": "guided-practice",
+      "audience": "individual",
+      "develops": [
+        "stress_recovery",
+        "reflection"
+      ],
+      "learningFocus": [
+        "Recognise accumulated strain",
+        "Choose a recovery action",
+        "Return with a reset condition"
+      ],
+      "recommendedWhen": [
+        "Useful for every learner"
+      ],
+      "recommendationContext": "A general recovery course for sustaining flexibility over time.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "inner",
+        "placementNote": "Place in the general resilience tray below the wheel."
+      }
+    },
+    {
+      "id": "SG-GEN-04",
+      "name": "Decisions Under Uncertainty",
+      "description": "Use decision thresholds, reversibility and review points to act when complete certainty is unavailable.",
+      "lengthMinutes": 50,
+      "pathway": "stress-growth",
+      "category": "general",
+      "level": "intermediate",
+      "courseType": "scenario-lab",
+      "audience": "individual",
+      "develops": [
+        "decision_making_uncertainty",
+        "decision_confidence",
+        "risk_judgement"
+      ],
+      "learningFocus": [
+        "Define enough information",
+        "Separate reversible from irreversible choices",
+        "Commit and review"
+      ],
+      "recommendedWhen": [
+        "Useful for every learner; especially relevant under uncertainty"
+      ],
+      "recommendationContext": "A general decision course that can also support several type-specific stress and growth maps.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "middle",
+        "placementNote": "Place in the general resilience tray below the wheel."
+      }
+    },
+    {
+      "id": "SG-GEN-05",
+      "name": "Attention Under Load",
+      "description": "Protect attention when pressure creates scanning, distraction, urgency or repetitive thought.",
+      "lengthMinutes": 35,
+      "pathway": "stress-growth",
+      "category": "general",
+      "level": "foundation",
+      "courseType": "micro-course",
+      "audience": "individual",
+      "develops": [
+        "attention_management",
+        "emotional_regulation"
+      ],
+      "learningFocus": [
+        "Notice attention drift",
+        "Reduce competing inputs",
+        "Return to the task that matters"
+      ],
+      "recommendedWhen": [
+        "Useful for every learner"
+      ],
+      "recommendationContext": "A general attentional resilience course.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "inner",
+        "placementNote": "Place in the general resilience tray below the wheel."
+      }
+    },
+    {
+      "id": "SG-GEN-06",
+      "name": "Working Beyond Your Default",
+      "description": "Practise deliberately choosing a response outside the learner's most familiar operating pattern.",
+      "lengthMinutes": 45,
+      "pathway": "stress-growth",
+      "category": "general",
+      "level": "intermediate",
+      "courseType": "scenario-lab",
+      "audience": "individual",
+      "develops": [
+        "behavioural_flexibility",
+        "self_awareness"
+      ],
+      "learningFocus": [
+        "Name the default",
+        "Choose an alternative response",
+        "Run a behavioural experiment"
+      ],
+      "recommendedWhen": [
+        "Useful for every learner after basic self-awareness"
+      ],
+      "recommendationContext": "A bridge from profile awareness into deliberate behavioural flexibility.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "middle",
+        "placementNote": "Place in the general resilience tray below the wheel."
+      }
+    },
+    {
+      "id": "SG-GEN-07",
+      "name": "Useful Self-Reflection",
+      "description": "Use concise reflection to turn experience into learning without rumination or self-judgement.",
+      "lengthMinutes": 30,
+      "pathway": "stress-growth",
+      "category": "general",
+      "level": "foundation",
+      "courseType": "reflection-sprint",
+      "audience": "individual",
+      "develops": [
+        "reflection",
+        "self_awareness"
+      ],
+      "learningFocus": [
+        "Separate observation from judgement",
+        "Identify one useful lesson",
+        "Choose one adjustment"
+      ],
+      "recommendedWhen": [
+        "Useful for every learner"
+      ],
+      "recommendationContext": "A general reflection tool for all development pathways.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "inner",
+        "placementNote": "Place in the general resilience tray below the wheel."
+      }
+    },
+    {
+      "id": "SG-GEN-08",
+      "name": "Build Your Regulation Plan",
+      "description": "Combine triggers, early signals, regulation options and recovery practices into a simple personal plan.",
+      "lengthMinutes": 55,
+      "pathway": "stress-growth",
+      "category": "general",
+      "level": "intermediate",
+      "courseType": "guided-practice",
+      "audience": "individual",
+      "develops": [
+        "self_awareness",
+        "emotional_regulation",
+        "stress_recovery"
+      ],
+      "learningFocus": [
+        "Map triggers and signals",
+        "Choose regulation options",
+        "Define a recovery plan"
+      ],
+      "recommendedWhen": [
+        "Useful for every learner after introductory stress courses"
+      ],
+      "recommendationContext": "A synthesis course that turns general stress learning into a repeatable personal plan.",
+      "prerequisites": [
+        "SG-GEN-01",
+        "SG-GEN-02"
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "middle",
+        "placementNote": "Place in the general resilience tray below the wheel."
+      }
+    },
+    {
+      "id": "F1-01",
+      "name": "Standards That Clarify",
+      "description": "Borrow the Type 1 territory of standards and disciplined improvement to make expectations clearer and quality easier to judge.",
+      "lengthMinutes": 40,
+      "pathway": "fortification",
+      "category": "type-1",
+      "level": "foundation",
+      "courseType": "guided-practice",
+      "audience": "individual",
+      "develops": [
+        "standards_setting",
+        "quality_judgement"
+      ],
+      "learningFocus": [
+        "Define the standard",
+        "Separate important quality from preference",
+        "Make expectations visible"
+      ],
+      "recommendedWhen": [
+        "Type 1 is not in the learner's top three",
+        "This capability would broaden the learner's range"
+      ],
+      "recommendationContext": "The learner would benefit from clearer standards, structure or quality judgement.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+        "F1-02"
+      ],
+      "chain": {
+        "id": "fort-1",
+        "sequence": 1
+      },
+      "map": {
+        "radialBand": "inner",
+        "placementNote": "Place in Type 1 fortification sector."
+      }
+    },
+    {
+      "id": "F1-02",
+      "name": "Good-Enough Decisions",
+      "description": "Use prioritisation and proportionate standards to decide when work is ready to move rather than staying vague or endlessly open.",
+      "lengthMinutes": 50,
+      "pathway": "fortification",
+      "category": "type-1",
+      "level": "intermediate",
+      "courseType": "scenario-lab",
+      "audience": "individual",
+      "develops": [
+        "prioritisation",
+        "continuous_improvement"
+      ],
+      "learningFocus": [
+        "Set a good-enough threshold",
+        "Choose the next improvement",
+        "Close the loop"
+      ],
+      "recommendedWhen": [
+        "Type 1 is not in the learner's top three",
+        "This capability would broaden the learner's range"
+      ],
+      "recommendationContext": "The learner needs more disciplined closure, prioritisation or improvement logic.",
+      "prerequisites": [
+        "F1-01"
+      ],
+      "unlocks": [
+
+      ],
+      "chain": {
+        "id": "fort-1",
+        "sequence": 2
+      },
+      "map": {
+        "radialBand": "middle",
+        "placementNote": "Place in Type 1 fortification sector."
+      }
+    },
+    {
+      "id": "F2-01",
+      "name": "Relational Initiative",
+      "description": "Borrow the Type 2 territory of interpersonal attention to initiate support, connection and stakeholder care more deliberately.",
+      "lengthMinutes": 40,
+      "pathway": "fortification",
+      "category": "type-2",
+      "level": "foundation",
+      "courseType": "guided-practice",
+      "audience": "individual",
+      "develops": [
+        "relational_awareness",
+        "supportive_communication"
+      ],
+      "learningFocus": [
+        "Notice relational needs",
+        "Initiate a useful check-in",
+        "Offer support without assumption"
+      ],
+      "recommendedWhen": [
+        "Type 2 is not in the learner's top three",
+        "This capability would broaden the learner's range"
+      ],
+      "recommendationContext": "The learner would benefit from more active relational attention or support.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "inner",
+        "placementNote": "Place in Type 2 fortification sector."
+      }
+    },
+    {
+      "id": "F2-02",
+      "name": "Trust Through Support",
+      "description": "Build credibility by combining responsiveness, empathy and dependable follow-through in important relationships.",
+      "lengthMinutes": 50,
+      "pathway": "fortification",
+      "category": "type-2",
+      "level": "intermediate",
+      "courseType": "scenario-lab",
+      "audience": "individual",
+      "develops": [
+        "stakeholder_trust",
+        "relational_influence"
+      ],
+      "learningFocus": [
+        "Understand the other person's stakes",
+        "Make a credible commitment",
+        "Follow through visibly"
+      ],
+      "recommendedWhen": [
+        "Type 2 is not in the learner's top three",
+        "This capability would broaden the learner's range"
+      ],
+      "recommendationContext": "The learner would benefit from stronger trust-building and relational influence.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "middle",
+        "placementNote": "Place in Type 2 fortification sector."
+      }
+    },
+    {
+      "id": "F3-01",
+      "name": "Goal Clarity and Visible Ownership",
+      "description": "Borrow the Type 3 territory of outcomes and agency to make priorities, ownership and progress more visible.",
+      "lengthMinutes": 40,
+      "pathway": "fortification",
+      "category": "type-3",
+      "level": "foundation",
+      "courseType": "guided-practice",
+      "audience": "individual",
+      "develops": [
+        "goal_clarity",
+        "visible_ownership"
+      ],
+      "learningFocus": [
+        "Name the outcome",
+        "State ownership",
+        "Create a visible next step"
+      ],
+      "recommendedWhen": [
+        "Type 3 is not in the learner's top three",
+        "This capability would broaden the learner's range"
+      ],
+      "recommendationContext": "The learner would benefit from more explicit agency, goals or visible ownership.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+        "F3-02"
+      ],
+      "chain": {
+        "id": "fort-3",
+        "sequence": 1
+      },
+      "map": {
+        "radialBand": "inner",
+        "placementNote": "Place in Type 3 fortification sector."
+      }
+    },
+    {
+      "id": "F3-02",
+      "name": "Performance Feedback as Learning",
+      "description": "Use measures and progress reviews as information for adaptation rather than as judgement or image management.",
+      "lengthMinutes": 50,
+      "pathway": "fortification",
+      "category": "type-3",
+      "level": "intermediate",
+      "courseType": "scenario-lab",
+      "audience": "individual",
+      "develops": [
+        "performance_learning",
+        "adaptive_influence",
+        "execution_momentum"
+      ],
+      "learningFocus": [
+        "Choose a useful measure",
+        "Review without defensiveness",
+        "Adjust based on evidence"
+      ],
+      "recommendedWhen": [
+        "Type 3 is not in the learner's top three",
+        "This capability would broaden the learner's range"
+      ],
+      "recommendationContext": "The learner would benefit from greater comfort with goals, performance information and visible progress.",
+      "prerequisites": [
+        "F3-01"
+      ],
+      "unlocks": [
+
+      ],
+      "chain": {
+        "id": "fort-3",
+        "sequence": 2
+      },
+      "map": {
+        "radialBand": "middle",
+        "placementNote": "Place in Type 3 fortification sector."
+      }
+    },
+    {
+      "id": "F4-01",
+      "name": "Emotional Literacy for Better Decisions",
+      "description": "Borrow the Type 4 territory of emotional nuance to notice what feelings are signalling before dismissing or over-rationalising them.",
+      "lengthMinutes": 40,
+      "pathway": "fortification",
+      "category": "type-4",
+      "level": "foundation",
+      "courseType": "reflection-sprint",
+      "audience": "individual",
+      "develops": [
+        "emotional_literacy",
+        "meaning_making"
+      ],
+      "learningFocus": [
+        "Name the emotion precisely",
+        "Identify the underlying stake",
+        "Use the signal without obeying it automatically"
+      ],
+      "recommendedWhen": [
+        "Type 4 is not in the learner's top three",
+        "This capability would broaden the learner's range"
+      ],
+      "recommendationContext": "The learner would benefit from richer emotional information and meaning awareness.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "inner",
+        "placementNote": "Place in Type 4 fortification sector."
+      }
+    },
+    {
+      "id": "F4-02",
+      "name": "Creative Reframing and Meaning",
+      "description": "Use originality and meaning-making to generate a fresh frame when routine analysis or execution has become narrow.",
+      "lengthMinutes": 50,
+      "pathway": "fortification",
+      "category": "type-4",
+      "level": "intermediate",
+      "courseType": "guided-practice",
+      "audience": "individual",
+      "develops": [
+        "creative_insight",
+        "reframing",
+        "authentic_expression"
+      ],
+      "learningFocus": [
+        "Reframe the problem",
+        "Generate a distinctive alternative",
+        "Connect action to meaning"
+      ],
+      "recommendedWhen": [
+        "Type 4 is not in the learner's top three",
+        "This capability would broaden the learner's range"
+      ],
+      "recommendationContext": "The learner would benefit from more creative interpretation, emotional range or distinctive expression.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "middle",
+        "placementNote": "Place in Type 4 fortification sector."
+      }
+    },
+    {
+      "id": "F5-01",
+      "name": "Analytical Distance",
+      "description": "Borrow the Type 5 territory of observation and analysis to step back from urgency and understand a problem before acting.",
+      "lengthMinutes": 40,
+      "pathway": "fortification",
+      "category": "type-5",
+      "level": "foundation",
+      "courseType": "guided-practice",
+      "audience": "individual",
+      "develops": [
+        "analytical_reasoning",
+        "research_discipline"
+      ],
+      "learningFocus": [
+        "Separate observation from reaction",
+        "Define the question",
+        "Collect only useful evidence"
+      ],
+      "recommendedWhen": [
+        "Type 5 is not in the learner's top three",
+        "This capability would broaden the learner's range"
+      ],
+      "recommendationContext": "The learner would benefit from more analytical distance or disciplined inquiry.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+        "F5-02"
+      ],
+      "chain": {
+        "id": "fort-5",
+        "sequence": 1
+      },
+      "map": {
+        "radialBand": "inner",
+        "placementNote": "Place in Type 5 fortification sector."
+      }
+    },
+    {
+      "id": "F5-02",
+      "name": "Strategic Synthesis and Recommendation",
+      "description": "Turn analysis into a concise model, implication and recommendation that others can use.",
+      "lengthMinutes": 55,
+      "pathway": "fortification",
+      "category": "type-5",
+      "level": "intermediate",
+      "courseType": "scenario-lab",
+      "audience": "individual",
+      "develops": [
+        "knowledge_synthesis",
+        "strategic_communication",
+        "systems_thinking"
+      ],
+      "learningFocus": [
+        "Synthesize evidence",
+        "State the implication",
+        "Recommend a next move"
+      ],
+      "recommendedWhen": [
+        "Type 5 is not in the learner's top three",
+        "This capability would broaden the learner's range"
+      ],
+      "recommendationContext": "The learner would benefit from deeper analysis combined with clearer strategic reasoning.",
+      "prerequisites": [
+        "F5-01"
+      ],
+      "unlocks": [
+
+      ],
+      "chain": {
+        "id": "fort-5",
+        "sequence": 2
+      },
+      "map": {
+        "radialBand": "middle",
+        "placementNote": "Place in Type 5 fortification sector."
+      }
+    },
+    {
+      "id": "F6-01",
+      "name": "Risk Intelligence and Premortems",
+      "description": "Borrow the Type 6 territory of preparedness to identify meaningful failure modes before commitment.",
+      "lengthMinutes": 40,
+      "pathway": "fortification",
+      "category": "type-6",
+      "level": "foundation",
+      "courseType": "guided-practice",
+      "audience": "individual",
+      "develops": [
+        "risk_judgement",
+        "contingency_planning"
+      ],
+      "learningFocus": [
+        "Run a simple premortem",
+        "Rank meaningful risks",
+        "Choose proportionate mitigation"
+      ],
+      "recommendedWhen": [
+        "Type 6 is not in the learner's top three",
+        "This capability would broaden the learner's range"
+      ],
+      "recommendationContext": "The learner would benefit from more risk awareness or preparation.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "inner",
+        "placementNote": "Place in Type 6 fortification sector."
+      }
+    },
+    {
+      "id": "F6-02",
+      "name": "Trust Calibration Under Uncertainty",
+      "description": "Use questioning and evidence to calibrate trust without becoming either naive or chronically suspicious.",
+      "lengthMinutes": 50,
+      "pathway": "fortification",
+      "category": "type-6",
+      "level": "intermediate",
+      "courseType": "scenario-lab",
+      "audience": "individual",
+      "develops": [
+        "trust_calibration",
+        "responsible_challenge",
+        "decision_confidence"
+      ],
+      "learningFocus": [
+        "Ask the useful question",
+        "Separate uncertainty from distrust",
+        "Commit with review points"
+      ],
+      "recommendedWhen": [
+        "Type 6 is not in the learner's top three",
+        "This capability would broaden the learner's range"
+      ],
+      "recommendationContext": "The learner would benefit from more calibrated scepticism, preparation or decision confidence.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "middle",
+        "placementNote": "Place in Type 6 fortification sector."
+      }
+    },
+    {
+      "id": "F7-01",
+      "name": "Generate More Options",
+      "description": "Borrow the Type 7 territory of possibility to widen the option set before settling too quickly on one solution.",
+      "lengthMinutes": 35,
+      "pathway": "fortification",
+      "category": "type-7",
+      "level": "foundation",
+      "courseType": "micro-course",
+      "audience": "individual",
+      "develops": [
+        "ideation",
+        "opportunity_framing",
+        "reframing"
+      ],
+      "learningFocus": [
+        "Generate alternatives",
+        "Challenge the default frame",
+        "Keep only useful possibilities"
+      ],
+      "recommendedWhen": [
+        "Type 7 is not in the learner's top three",
+        "This capability would broaden the learner's range"
+      ],
+      "recommendationContext": "The learner would benefit from more possibility, reframing or option generation.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "inner",
+        "placementNote": "Place in Type 7 fortification sector."
+      }
+    },
+    {
+      "id": "F7-02",
+      "name": "Experiment Before You Commit",
+      "description": "Use small experiments to learn before making a large irreversible commitment.",
+      "lengthMinutes": 50,
+      "pathway": "fortification",
+      "category": "type-7",
+      "level": "intermediate",
+      "courseType": "scenario-lab",
+      "audience": "individual",
+      "develops": [
+        "experimentation",
+        "adaptability"
+      ],
+      "learningFocus": [
+        "Name the assumption",
+        "Design a low-cost test",
+        "Use results to update the decision"
+      ],
+      "recommendedWhen": [
+        "Type 7 is not in the learner's top three",
+        "This capability would broaden the learner's range"
+      ],
+      "recommendationContext": "The learner would benefit from more experimentation and adaptive learning.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "middle",
+        "placementNote": "Place in Type 7 fortification sector."
+      }
+    },
+    {
+      "id": "F8-01",
+      "name": "Assertiveness and Clean Boundaries",
+      "description": "Borrow the Type 8 territory of directness to state needs, limits and decisions clearly without unnecessary force.",
+      "lengthMinutes": 40,
+      "pathway": "fortification",
+      "category": "type-8",
+      "level": "foundation",
+      "courseType": "scenario-lab",
+      "audience": "individual",
+      "develops": [
+        "assertive_communication",
+        "boundary_setting"
+      ],
+      "learningFocus": [
+        "Make a direct request",
+        "State a boundary",
+        "Calibrate intensity"
+      ],
+      "recommendedWhen": [
+        "Type 8 is not in the learner's top three",
+        "This capability would broaden the learner's range"
+      ],
+      "recommendationContext": "The learner would benefit from more directness, boundary clarity or willingness to take a position.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+        "F8-02"
+      ],
+      "chain": {
+        "id": "fort-8",
+        "sequence": 1
+      },
+      "map": {
+        "radialBand": "inner",
+        "placementNote": "Place in Type 8 fortification sector."
+      }
+    },
+    {
+      "id": "F8-02",
+      "name": "Difficult Conversations With Directness",
+      "description": "Use clear challenge, listening and negotiation to address tension before it becomes avoidance or resentment.",
+      "lengthMinutes": 55,
+      "pathway": "fortification",
+      "category": "type-8",
+      "level": "intermediate",
+      "courseType": "scenario-lab",
+      "audience": "individual",
+      "develops": [
+        "courageous_challenge",
+        "negotiation",
+        "assertive_communication"
+      ],
+      "learningFocus": [
+        "Open the difficult topic",
+        "Hold a clear position",
+        "Negotiate a workable next step"
+      ],
+      "recommendedWhen": [
+        "Type 8 is not in the learner's top three",
+        "This capability would broaden the learner's range"
+      ],
+      "recommendationContext": "The learner would benefit from greater comfort with confrontation, challenge or decisive conversation.",
+      "prerequisites": [
+        "F8-01"
+      ],
+      "unlocks": [
+
+      ],
+      "chain": {
+        "id": "fort-8",
+        "sequence": 2
+      },
+      "map": {
+        "radialBand": "middle",
+        "placementNote": "Place in Type 8 fortification sector."
+      }
+    },
+    {
+      "id": "F9-01",
+      "name": "Perspective Holding and Mediation",
+      "description": "Borrow the Type 9 territory of integration to understand multiple positions without forcing premature closure.",
+      "lengthMinutes": 40,
+      "pathway": "fortification",
+      "category": "type-9",
+      "level": "foundation",
+      "courseType": "guided-practice",
+      "audience": "individual",
+      "develops": [
+        "active_listening",
+        "perspective_integration",
+        "mediation"
+      ],
+      "learningFocus": [
+        "Hear competing stakes",
+        "Reflect perspectives accurately",
+        "Name shared ground"
+      ],
+      "recommendedWhen": [
+        "Type 9 is not in the learner's top three",
+        "This capability would broaden the learner's range"
+      ],
+      "recommendationContext": "The learner would benefit from more listening, patience or integration of different viewpoints.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+        "F9-02"
+      ],
+      "chain": {
+        "id": "fort-9",
+        "sequence": 1
+      },
+      "map": {
+        "radialBand": "inner",
+        "placementNote": "Place in Type 9 fortification sector."
+      }
+    },
+    {
+      "id": "F9-02",
+      "name": "Consensus Without Disappearing",
+      "description": "Build inclusive agreement while keeping personal priorities, decision criteria and unresolved differences visible.",
+      "lengthMinutes": 55,
+      "pathway": "fortification",
+      "category": "type-9",
+      "level": "intermediate",
+      "courseType": "scenario-lab",
+      "audience": "individual",
+      "develops": [
+        "consensus_building",
+        "facilitation",
+        "calm_coordination"
+      ],
+      "learningFocus": [
+        "Surface unresolved difference",
+        "Build workable consensus",
+        "Keep ownership visible"
+      ],
+      "recommendedWhen": [
+        "Type 9 is not in the learner's top three",
+        "This capability would broaden the learner's range"
+      ],
+      "recommendationContext": "The learner would benefit from more facilitation, mediation or collaborative integration.",
+      "prerequisites": [
+        "F9-01"
+      ],
+      "unlocks": [
+
+      ],
+      "chain": {
+        "id": "fort-9",
+        "sequence": 2
+      },
+      "map": {
+        "radialBand": "middle",
+        "placementNote": "Place in Type 9 fortification sector."
+      }
+    },
+    {
+      "id": "TM-T1-01",
+      "name": "Working With Standards-Driven Colleagues",
+      "description": "Understand how Type 1-associated standards, improvement energy and frustration may show up at work, and collaborate without turning difference into a quality battle.",
+      "lengthMinutes": 40,
+      "pathway": "team",
+      "category": "type-1",
+      "level": "foundation",
+      "courseType": "guided-practice",
+      "audience": "individual",
+      "develops": [
+        "standards_setting",
+        "constructive_feedback",
+        "productive_disagreement"
+      ],
+      "learningFocus": [
+        "Recognise the working-style signal",
+        "Avoid a common misreading",
+        "Use one practical collaboration move"
+      ],
+      "recommendedWhen": [
+        "A teammate has Type 1 in their top three",
+        "The learner wants to collaborate more effectively with this working style"
+      ],
+      "recommendationContext": "Recommended when Type 1-associated behaviour is relevant in a real team relationship.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "inner",
+        "placementNote": "Place in Type 1 team sector, inner ring."
+      }
+    },
+    {
+      "id": "TM-T2-01",
+      "name": "Working With Support-Driven Colleagues",
+      "description": "Understand Type 2-associated support, relational attention and hidden expectations, and collaborate with clearer requests and boundaries.",
+      "lengthMinutes": 40,
+      "pathway": "team",
+      "category": "type-2",
+      "level": "foundation",
+      "courseType": "guided-practice",
+      "audience": "individual",
+      "develops": [
+        "relational_awareness",
+        "supportive_communication",
+        "team_feedback"
+      ],
+      "learningFocus": [
+        "Recognise the working-style signal",
+        "Avoid a common misreading",
+        "Use one practical collaboration move"
+      ],
+      "recommendedWhen": [
+        "A teammate has Type 2 in their top three",
+        "The learner wants to collaborate more effectively with this working style"
+      ],
+      "recommendationContext": "Recommended when Type 2-associated behaviour is relevant in a real team relationship.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "inner",
+        "placementNote": "Place in Type 2 team sector, inner ring."
+      }
+    },
+    {
+      "id": "TM-T3-01",
+      "name": "Working With Achievement-Driven Colleagues",
+      "description": "Understand Type 3-associated momentum, adaptation and performance focus, and collaborate without losing dissent, realism or shared ownership.",
+      "lengthMinutes": 40,
+      "pathway": "team",
+      "category": "type-3",
+      "level": "foundation",
+      "courseType": "guided-practice",
+      "audience": "individual",
+      "develops": [
+        "goal_clarity",
+        "adaptive_influence",
+        "team_listening"
+      ],
+      "learningFocus": [
+        "Recognise the working-style signal",
+        "Avoid a common misreading",
+        "Use one practical collaboration move"
+      ],
+      "recommendedWhen": [
+        "A teammate has Type 3 in their top three",
+        "The learner wants to collaborate more effectively with this working style"
+      ],
+      "recommendationContext": "Recommended when Type 3-associated behaviour is relevant in a real team relationship.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "inner",
+        "placementNote": "Place in Type 3 team sector, inner ring."
+      }
+    },
+    {
+      "id": "TM-T4-01",
+      "name": "Working With Meaning-Driven Colleagues",
+      "description": "Understand Type 4-associated originality, emotional depth and identity in work, and collaborate through feedback without flattening distinctiveness.",
+      "lengthMinutes": 40,
+      "pathway": "team",
+      "category": "type-4",
+      "level": "foundation",
+      "courseType": "guided-practice",
+      "audience": "individual",
+      "develops": [
+        "creative_insight",
+        "feedback_integration",
+        "team_feedback"
+      ],
+      "learningFocus": [
+        "Recognise the working-style signal",
+        "Avoid a common misreading",
+        "Use one practical collaboration move"
+      ],
+      "recommendedWhen": [
+        "A teammate has Type 4 in their top three",
+        "The learner wants to collaborate more effectively with this working style"
+      ],
+      "recommendationContext": "Recommended when Type 4-associated behaviour is relevant in a real team relationship.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "inner",
+        "placementNote": "Place in Type 4 team sector, inner ring."
+      }
+    },
+    {
+      "id": "TM-T5-01",
+      "name": "Working With Analysis-Driven Colleagues",
+      "description": "Understand Type 5-associated autonomy, information needs and analytical depth, and collaborate without confusing processing with disengagement.",
+      "lengthMinutes": 40,
+      "pathway": "team",
+      "category": "type-5",
+      "level": "foundation",
+      "courseType": "guided-practice",
+      "audience": "individual",
+      "develops": [
+        "analytical_reasoning",
+        "strategic_communication",
+        "cross_style_collaboration"
+      ],
+      "learningFocus": [
+        "Recognise the working-style signal",
+        "Avoid a common misreading",
+        "Use one practical collaboration move"
+      ],
+      "recommendedWhen": [
+        "A teammate has Type 5 in their top three",
+        "The learner wants to collaborate more effectively with this working style"
+      ],
+      "recommendationContext": "Recommended when Type 5-associated behaviour is relevant in a real team relationship.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "inner",
+        "placementNote": "Place in Type 5 team sector, inner ring."
+      }
+    },
+    {
+      "id": "TM-T6-01",
+      "name": "Working With Risk-Aware Colleagues",
+      "description": "Understand Type 6-associated questioning, preparation and trust calibration, and collaborate without treating caution as resistance.",
+      "lengthMinutes": 40,
+      "pathway": "team",
+      "category": "type-6",
+      "level": "foundation",
+      "courseType": "guided-practice",
+      "audience": "individual",
+      "develops": [
+        "risk_judgement",
+        "responsible_challenge",
+        "team_decision_making"
+      ],
+      "learningFocus": [
+        "Recognise the working-style signal",
+        "Avoid a common misreading",
+        "Use one practical collaboration move"
+      ],
+      "recommendedWhen": [
+        "A teammate has Type 6 in their top three",
+        "The learner wants to collaborate more effectively with this working style"
+      ],
+      "recommendationContext": "Recommended when Type 6-associated behaviour is relevant in a real team relationship.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "inner",
+        "placementNote": "Place in Type 6 team sector, inner ring."
+      }
+    },
+    {
+      "id": "TM-T7-01",
+      "name": "Working With Possibility-Driven Colleagues",
+      "description": "Understand Type 7-associated options, energy and experimentation, and collaborate while creating useful constraints and decision points.",
+      "lengthMinutes": 40,
+      "pathway": "team",
+      "category": "type-7",
+      "level": "foundation",
+      "courseType": "guided-practice",
+      "audience": "individual",
+      "develops": [
+        "opportunity_framing",
+        "adaptability",
+        "team_decision_making"
+      ],
+      "learningFocus": [
+        "Recognise the working-style signal",
+        "Avoid a common misreading",
+        "Use one practical collaboration move"
+      ],
+      "recommendedWhen": [
+        "A teammate has Type 7 in their top three",
+        "The learner wants to collaborate more effectively with this working style"
+      ],
+      "recommendationContext": "Recommended when Type 7-associated behaviour is relevant in a real team relationship.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "inner",
+        "placementNote": "Place in Type 7 team sector, inner ring."
+      }
+    },
+    {
+      "id": "TM-T8-01",
+      "name": "Working With Direct-Challenge Colleagues",
+      "description": "Understand Type 8-associated directness, autonomy and challenge, and collaborate without confusing intensity with hostility or agreement with commitment.",
+      "lengthMinutes": 40,
+      "pathway": "team",
+      "category": "type-8",
+      "level": "foundation",
+      "courseType": "guided-practice",
+      "audience": "individual",
+      "develops": [
+        "assertive_communication",
+        "productive_disagreement",
+        "cross_style_collaboration"
+      ],
+      "learningFocus": [
+        "Recognise the working-style signal",
+        "Avoid a common misreading",
+        "Use one practical collaboration move"
+      ],
+      "recommendedWhen": [
+        "A teammate has Type 8 in their top three",
+        "The learner wants to collaborate more effectively with this working style"
+      ],
+      "recommendationContext": "Recommended when Type 8-associated behaviour is relevant in a real team relationship.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "inner",
+        "placementNote": "Place in Type 8 team sector, inner ring."
+      }
+    },
+    {
+      "id": "TM-T9-01",
+      "name": "Working With Harmony-Driven Colleagues",
+      "description": "Understand Type 9-associated perspective holding, steadiness and conflict avoidance, and collaborate by making disagreement and ownership easier to state.",
+      "lengthMinutes": 40,
+      "pathway": "team",
+      "category": "type-9",
+      "level": "foundation",
+      "courseType": "guided-practice",
+      "audience": "individual",
+      "develops": [
+        "active_listening",
+        "facilitation",
+        "productive_disagreement"
+      ],
+      "learningFocus": [
+        "Recognise the working-style signal",
+        "Avoid a common misreading",
+        "Use one practical collaboration move"
+      ],
+      "recommendedWhen": [
+        "A teammate has Type 9 in their top three",
+        "The learner wants to collaborate more effectively with this working style"
+      ],
+      "recommendationContext": "Recommended when Type 9-associated behaviour is relevant in a real team relationship.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "inner",
+        "placementNote": "Place in Type 9 team sector, inner ring."
+      }
+    },
+    {
+      "id": "TM-CENTER-BODY-01",
+      "name": "Working Across Body-Center Styles",
+      "description": "Explore how Types 8, 9 and 1 can differ around action, boundaries, control, standards and conflict while still sharing a practical orientation to impact.",
+      "lengthMinutes": 55,
+      "pathway": "team",
+      "category": "center-body",
+      "level": "intermediate",
+      "courseType": "team-workshop",
+      "audience": "team",
+      "develops": [
+        "assertive_communication",
+        "boundary_setting",
+        "standards_setting",
+        "facilitation"
+      ],
+      "learningFocus": [
+        "Compare the three styles",
+        "Name likely misreadings",
+        "Agree one collaboration practice"
+      ],
+      "recommendedWhen": [
+        "The team has multiple members from this center",
+        "Center-level collaboration is relevant"
+      ],
+      "recommendationContext": "Useful when several Body-center patterns are represented or when the team is navigating action, boundaries or standards.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "middle",
+        "placementNote": "Place in center-learning tray or middle ring."
+      }
+    },
+    {
+      "id": "TM-CENTER-HEART-01",
+      "name": "Working Across Heart-Center Styles",
+      "description": "Explore how Types 2, 3 and 4 can differ around relationship, value, image, identity and emotional information while still caring deeply about human response.",
+      "lengthMinutes": 55,
+      "pathway": "team",
+      "category": "center-heart",
+      "level": "intermediate",
+      "courseType": "team-workshop",
+      "audience": "team",
+      "develops": [
+        "relational_awareness",
+        "adaptive_influence",
+        "emotional_literacy",
+        "team_feedback"
+      ],
+      "learningFocus": [
+        "Compare the three styles",
+        "Name likely misreadings",
+        "Agree one collaboration practice"
+      ],
+      "recommendedWhen": [
+        "The team has multiple members from this center",
+        "Center-level collaboration is relevant"
+      ],
+      "recommendationContext": "Useful when several Heart-center patterns are represented or when the team is navigating recognition, relationship or identity.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "middle",
+        "placementNote": "Place in center-learning tray or middle ring."
+      }
+    },
+    {
+      "id": "TM-CENTER-HEAD-01",
+      "name": "Working Across Head-Center Styles",
+      "description": "Explore how Types 5, 6 and 7 can differ around information, uncertainty, risk and possibility while all using thinking to orient toward what comes next.",
+      "lengthMinutes": 55,
+      "pathway": "team",
+      "category": "center-head",
+      "level": "intermediate",
+      "courseType": "team-workshop",
+      "audience": "team",
+      "develops": [
+        "analytical_reasoning",
+        "risk_judgement",
+        "opportunity_framing",
+        "team_decision_making"
+      ],
+      "learningFocus": [
+        "Compare the three styles",
+        "Name likely misreadings",
+        "Agree one collaboration practice"
+      ],
+      "recommendedWhen": [
+        "The team has multiple members from this center",
+        "Center-level collaboration is relevant"
+      ],
+      "recommendationContext": "Useful when several Head-center patterns are represented or when the team is navigating analysis, risk or options.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "middle",
+        "placementNote": "Place in center-learning tray or middle ring."
+      }
+    },
+    {
+      "id": "TM-GEN-01",
+      "name": "Listening Before Leading",
+      "description": "Surface reservations, perspectives and hidden constraints before moving the group toward a solution.",
+      "lengthMinutes": 45,
+      "pathway": "team",
+      "category": "general",
+      "level": "foundation",
+      "courseType": "team-workshop",
+      "audience": "team",
+      "develops": [
+        "team_listening",
+        "active_listening"
+      ],
+      "learningFocus": [
+        "Ask before advocating",
+        "Hear dissent",
+        "Confirm understanding"
+      ],
+      "recommendedWhen": [
+        "Useful for team-wide development"
+      ],
+      "recommendationContext": "Useful when the team moves quickly to solutions or quieter information is being lost.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+        "TM-GEN-02"
+      ],
+      "chain": {
+        "id": "team-decision",
+        "sequence": 1
+      },
+      "map": {
+        "radialBand": "outer",
+        "placementNote": "Place in general/shared team learning area; outer ring if shown on wheel."
+      }
+    },
+    {
+      "id": "TM-GEN-02",
+      "name": "Productive Disagreement",
+      "description": "Turn disagreement into useful information without avoidance, personalisation or domination.",
+      "lengthMinutes": 60,
+      "pathway": "team",
+      "category": "general",
+      "level": "intermediate",
+      "courseType": "team-workshop",
+      "audience": "team",
+      "develops": [
+        "productive_disagreement",
+        "assertive_communication",
+        "facilitation"
+      ],
+      "learningFocus": [
+        "Surface the disagreement",
+        "Separate issue from person",
+        "Move toward a useful decision"
+      ],
+      "recommendedWhen": [
+        "Useful for team-wide development"
+      ],
+      "recommendationContext": "Useful when conflict is hidden, overly forceful or difficult to convert into progress.",
+      "prerequisites": [
+        "TM-GEN-01"
+      ],
+      "unlocks": [
+        "TM-GEN-03"
+      ],
+      "chain": {
+        "id": "team-decision",
+        "sequence": 2
+      },
+      "map": {
+        "radialBand": "outer",
+        "placementNote": "Place in general/shared team learning area; outer ring if shown on wheel."
+      }
+    },
+    {
+      "id": "TM-GEN-03",
+      "name": "Team Decisions That Close",
+      "description": "Create a repeatable process for hearing dissent, choosing a decision rule and closing with visible commitment.",
+      "lengthMinutes": 60,
+      "pathway": "team",
+      "category": "general",
+      "level": "intermediate",
+      "courseType": "team-workshop",
+      "audience": "team",
+      "develops": [
+        "team_decision_making",
+        "responsible_challenge",
+        "shared_commitment"
+      ],
+      "learningFocus": [
+        "Clarify decision roles",
+        "Invite dissent before closure",
+        "Make commitment visible"
+      ],
+      "recommendedWhen": [
+        "Useful for team-wide development"
+      ],
+      "recommendationContext": "Useful when decisions reopen repeatedly or apparent consensus hides uncertainty.",
+      "prerequisites": [
+        "TM-GEN-02"
+      ],
+      "unlocks": [
+        "TM-GEN-07"
+      ],
+      "chain": {
+        "id": "team-decision",
+        "sequence": 3
+      },
+      "map": {
+        "radialBand": "outer",
+        "placementNote": "Place in general/shared team learning area; outer ring if shown on wheel."
+      }
+    },
+    {
+      "id": "TM-GEN-04",
+      "name": "Role Clarity and Ownership",
+      "description": "Clarify decision rights, responsibilities and handoffs so contribution does not depend on assumptions about who will step in.",
+      "lengthMinutes": 50,
+      "pathway": "team",
+      "category": "general",
+      "level": "foundation",
+      "courseType": "team-workshop",
+      "audience": "team",
+      "develops": [
+        "role_clarity",
+        "delegation",
+        "shared_commitment"
+      ],
+      "learningFocus": [
+        "Name ownership",
+        "Clarify boundaries",
+        "Agree handoffs"
+      ],
+      "recommendedWhen": [
+        "Useful for team-wide development"
+      ],
+      "recommendationContext": "Useful when support, authority or responsibility is uneven or ambiguous.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "outer",
+        "placementNote": "Place in general/shared team learning area; outer ring if shown on wheel."
+      }
+    },
+    {
+      "id": "TM-GEN-05",
+      "name": "Feedback That Travels",
+      "description": "Build a team practice where feedback can move across different working styles without being diluted, weaponised or ignored.",
+      "lengthMinutes": 55,
+      "pathway": "team",
+      "category": "general",
+      "level": "intermediate",
+      "courseType": "team-workshop",
+      "audience": "team",
+      "develops": [
+        "team_feedback",
+        "feedback_integration",
+        "cross_style_collaboration"
+      ],
+      "learningFocus": [
+        "Make feedback specific",
+        "Adapt delivery without losing the message",
+        "Close the loop"
+      ],
+      "recommendedWhen": [
+        "Useful for team-wide development"
+      ],
+      "recommendationContext": "Useful when people interpret feedback differently or important messages do not travel across styles.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "outer",
+        "placementNote": "Place in general/shared team learning area; outer ring if shown on wheel."
+      }
+    },
+    {
+      "id": "TM-GEN-06",
+      "name": "Working Across Different Operating Styles",
+      "description": "Use differences in pace, information needs, challenge, support and decision style as design inputs for collaboration.",
+      "lengthMinutes": 50,
+      "pathway": "team",
+      "category": "general",
+      "level": "foundation",
+      "courseType": "team-workshop",
+      "audience": "team",
+      "develops": [
+        "cross_style_collaboration",
+        "team_listening",
+        "role_clarity"
+      ],
+      "learningFocus": [
+        "Name the difference",
+        "Identify the useful contribution",
+        "Design a working agreement"
+      ],
+      "recommendedWhen": [
+        "Useful for team-wide development"
+      ],
+      "recommendationContext": "Useful for every mixed-profile team.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "outer",
+        "placementNote": "Place in general/shared team learning area; outer ring if shown on wheel."
+      }
+    },
+    {
+      "id": "TM-GEN-07",
+      "name": "High-Trust Team Commitments",
+      "description": "Create credible commitments by combining challenge, capacity reality, clear ownership and follow-through.",
+      "lengthMinutes": 70,
+      "pathway": "team",
+      "category": "general",
+      "level": "advanced",
+      "courseType": "team-workshop",
+      "audience": "team",
+      "develops": [
+        "shared_commitment",
+        "team_decision_making",
+        "role_clarity"
+      ],
+      "learningFocus": [
+        "Test the commitment",
+        "Confirm ownership",
+        "Review follow-through"
+      ],
+      "recommendedWhen": [
+        "Useful for team-wide development"
+      ],
+      "recommendationContext": "Useful when the team needs stronger closure and credible execution.",
+      "prerequisites": [
+        "TM-GEN-03"
+      ],
+      "unlocks": [
+
+      ],
+      "chain": {
+        "id": "team-decision",
+        "sequence": 4
+      },
+      "map": {
+        "radialBand": "outer",
+        "placementNote": "Place in general/shared team learning area; outer ring if shown on wheel."
+      }
+    },
+    {
+      "id": "TM-GEN-08",
+      "name": "From Different Perspectives to One Plan",
+      "description": "Integrate multiple viewpoints into a shared plan without erasing the differences that made the input useful.",
+      "lengthMinutes": 70,
+      "pathway": "team",
+      "category": "general",
+      "level": "advanced",
+      "courseType": "team-workshop",
+      "audience": "team",
+      "develops": [
+        "facilitation",
+        "perspective_integration",
+        "team_decision_making"
+      ],
+      "learningFocus": [
+        "Surface perspectives",
+        "Identify decision criteria",
+        "Build one coherent plan"
+      ],
+      "recommendedWhen": [
+        "Useful for team-wide development"
+      ],
+      "recommendationContext": "Useful when a diverse team has rich input but struggles to synthesize it into one direction.",
+      "prerequisites": [
+
+      ],
+      "unlocks": [
+
+      ],
+      "chain": null,
+      "map": {
+        "radialBand": "outer",
+        "placementNote": "Place in general/shared team learning area; outer ring if shown on wheel."
+      }
+    }
+  ]
+}

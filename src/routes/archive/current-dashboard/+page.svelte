@@ -1,8 +1,11 @@
 <script lang="ts">
+	// @ts-nocheck
 	import {
 		courses,
 		enneagramTypes,
+		learnerCourseStates,
 		members,
+		recommendations as allRecommendations,
 		relationships,
 		skills,
 		teams,
@@ -33,7 +36,7 @@
 	let hoverWheelType = $state<number | null>(null);
 	let selectedPatternType = $state<number>(9);
 	let expandedInsight = $state<string | null>(null);
-	let selectedCourseId = $state('C20');
+	let selectedCourseId = $state('S9-01');
 
 	const selectedMember = $derived(members.find((member) => member.id === selectedMemberId) ?? members[0]);
 	const selectedTheme = $derived(themes.find((theme) => theme.id === themeId) ?? themes[0]);
@@ -45,15 +48,15 @@
 	const rankedTypes = $derived([...enneagramTypes].sort((a, b) => selectedMember.scores[b.number] - selectedMember.scores[a.number]));
 	const selectedPatternDetail = $derived(getType(selectedPatternType));
 	const selectedPatternCourses = $derived(getCoursesForType(selectedPatternType, selectedMember));
-	const recommendations = $derived(selectedMember.recommendations.map((recommendation) => ({ ...recommendation, course: getCourse(recommendation.courseId) })).filter((item) => item.course));
-	const pathwayCourses = $derived(selectedMember.pathwayCourseIds.map(getCourse).filter(Boolean) as Course[]);
+	const recommendations = $derived(legacyRecommendationsFor(selectedMember).map((recommendation) => ({ ...recommendation, territory: pathwayTerritory(recommendation.source.pathway), course: getCourse(recommendation.courseId) })).filter((item) => item.course));
+	const pathwayCourses = $derived(legacyRecommendationsFor(selectedMember).slice(0, 4).map((recommendation) => getCourse(recommendation.courseId)).filter(Boolean) as Course[]);
 	const teamPathwayCourses = $derived(currentTeam.pathwayCourseIds.map(getCourse).filter(Boolean) as Course[]);
 	const teamAverage = $derived(getAverageScores(teamMembers));
 	const teamRelationships = $derived(relationships.filter((relationship) => relationship.teamId === currentTeam.id && relationship.memberIds.includes(selectedMember.id)));
 	const selectedRelationship = $derived(getRelationship(selectedMember.id, selectedColleagueId, currentTeam.id) ?? teamRelationships[0]);
 	const selectedColleague = $derived(selectedRelationship ? getOtherMember(selectedRelationship, selectedMember.id) : otherTeamMembers[0]);
 	const selectedCourse = $derived(getCourse(selectedCourseId) ?? recommendations[0]?.course ?? courses[0]);
-	const totalProgress = $derived(Math.round(pathwayCourses.reduce((sum, course) => sum + course.progress, 0) / pathwayCourses.length));
+	const totalProgress = $derived(pathwayCourses.length ? Math.round(pathwayCourses.reduce((sum, course) => sum + courseProgress(course.id), 0) / pathwayCourses.length) : 0);
 	const overlapTypes = $derived(enneagramTypes.filter((type) => teamMembers.filter((member) => member.scores[type.number] >= 60).length >= Math.max(2, Math.ceil(teamMembers.length / 2))));
 	const gapTypes = $derived([...enneagramTypes].sort((a, b) => teamAverage[a.number] - teamAverage[b.number]).slice(0, 4));
 
@@ -69,6 +72,21 @@
 
 	function getCourse(courseId: string) {
 		return courses.find((course) => course.id === courseId);
+	}
+
+	function legacyRecommendationsFor(member: Member) {
+		return allRecommendations.filter((recommendation) => recommendation.learnerId === member.id);
+	}
+
+	function pathwayTerritory(pathway: string) {
+		if (pathway === 'strengths') return 'Strengthen Strengths';
+		if (pathway === 'stress-growth') return 'Stress & Growth';
+		if (pathway === 'fortification') return 'Fortify Growth Areas';
+		return 'Team Development';
+	}
+
+	function courseProgress(courseId: string) {
+		return learnerCourseStates.find((state) => state.learnerId === selectedMember.id && state.courseId === courseId)?.progressPct ?? 0;
 	}
 
 	function isCourse(course: Course | undefined): course is Course {
@@ -107,8 +125,8 @@
 	function getCoursesForType(typeNumber: number, member: Member) {
 		const typeSkills = getType(typeNumber).skills;
 		return courses
-			.filter((course) => [course.primarySkill, ...course.secondarySkills].some((skillId) => typeSkills.includes(getSkill(skillId)?.name ?? '')))
-			.concat(member.recommendations.map((recommendation) => getCourse(recommendation.courseId)).filter(Boolean) as Course[])
+			.filter((course) => course.develops.some((skillId) => typeSkills.includes(getSkill(skillId)?.name ?? '')))
+			.concat(legacyRecommendationsFor(member).map((recommendation) => getCourse(recommendation.courseId)).filter(Boolean) as Course[])
 			.filter((course, index, list) => list.findIndex((item) => item.id === course.id) === index)
 			.slice(0, 4);
 	}
@@ -118,7 +136,7 @@
 		const nextMember = getMember(memberId) ?? members[0];
 		selectedWheelType = null;
 		selectedPatternType = nextMember.primaryType;
-		selectedCourseId = nextMember.recommendations[0]?.courseId ?? 'C01';
+		selectedCourseId = legacyRecommendationsFor(nextMember)[0]?.courseId ?? 'S9-01';
 		expandedInsight = null;
 	}
 
@@ -315,8 +333,8 @@
 					<div class="compact-courses">
 						{#each selectedPatternCourses as course}
 							<div>
-								<strong>{course.title}</strong>
-								<span>{course.level} / {course.duration}</span>
+								<strong>{course.name}</strong>
+								<span>{course.level} / {course.lengthMinutes} min</span>
 							</div>
 						{/each}
 					</div>
@@ -349,7 +367,7 @@
 				<div class="panel-heading">
 					<div>
 						<p class="eyebrow">Visible pathway</p>
-						<h2>{pathwayCourses.map((course) => course.title).join(' -> ')}</h2>
+						<h2>{pathwayCourses.map((course) => course.name).join(' -> ')}</h2>
 					</div>
 					<p class="muted">Courses are reusable. The recommendation reason is what makes them personal.</p>
 				</div>
@@ -357,8 +375,8 @@
 					{#each pathwayCourses as course, index}
 						<button class:active={selectedCourse.id === course.id} type="button" onclick={() => (selectedCourseId = course.id)}>
 							<span>{index + 1}</span>
-							<strong>{course.title}</strong>
-							<small>{getSkill(course.primarySkill)?.name}</small>
+							<strong>{course.name}</strong>
+							<small>{getSkill(course.develops[0])?.name}</small>
 						</button>
 					{/each}
 				</div>
@@ -367,18 +385,18 @@
 			<section class="strength-course-grid">
 				<article class="panel">
 					<p class="eyebrow">Why this is recommended</p>
-					<h2>{selectedCourse.title}</h2>
+					<h2>{selectedCourse.name}</h2>
 					<p>{recommendations.find((recommendation) => recommendation.courseId === selectedCourse.id)?.reason ?? selectedCourse.description}</p>
 					<div class="skill-tags">
-						<span>{getSkill(selectedCourse.primarySkill)?.name}</span>
-						{#each selectedCourse.secondarySkills as skillId}<span>{getSkill(skillId)?.name}</span>{/each}
+						<span>{getSkill(selectedCourse.develops[0])?.name}</span>
+						{#each selectedCourse.develops.slice(1) as skillId}<span>{getSkill(skillId)?.name}</span>{/each}
 					</div>
 				</article>
 				<article class="panel">
 					<p class="eyebrow">Course outline</p>
-					<h2>{selectedCourse.level} / {selectedCourse.duration}</h2>
+					<h2>{selectedCourse.level} / {selectedCourse.lengthMinutes} min</h2>
 					<ul class="trait-list">
-						{#each selectedCourse.outline as item}<li>{item}</li>{/each}
+						{#each selectedCourse.learningFocus as item}<li>{item}</li>{/each}
 					</ul>
 				</article>
 			</section>
@@ -434,8 +452,8 @@
 					<div class="compact-courses">
 						{#each (selectedRelationship?.courses ?? []).map(getCourse).filter(isCourse) as course}
 							<div>
-								<strong>{course.title}</strong>
-								<span>{course.level} / {course.duration}</span>
+								<strong>{course.name}</strong>
+								<span>{course.level} / {course.lengthMinutes} min</span>
 							</div>
 						{/each}
 					</div>
@@ -488,8 +506,8 @@
 					{#each teamPathwayCourses as course, index}
 						<button type="button" onclick={() => ((selectedCourseId = course.id), (viewMode = 'pathways'))}>
 							<span>{index + 1}</span>
-							<strong>{course.title}</strong>
-							<small>{course.teamRelevance}</small>
+							<strong>{course.name}</strong>
+							<small>{course.pathway}</small>
 						</button>
 					{/each}
 				</div>

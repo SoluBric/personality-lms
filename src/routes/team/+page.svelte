@@ -3,6 +3,7 @@
 		courses,
 		enneagramTypes,
 		members,
+		recommendations,
 		relationships,
 		teams,
 		type Course,
@@ -68,34 +69,32 @@
 
 	const watchByTeam: Record<string, CoverageItem[]> = {
 		atlas: [
-			{ label: 'Speed versus deliberation', memberIds: ['james', 'thomas', 'sophie'], description: 'James may want closure while Thomas wants further analysis and Sophie wants further exploration.', courseIds: ['C10', 'C11', 'C13'] },
-			{ label: 'Harmony versus productive disagreement', memberIds: ['emily', 'james'], description: 'Visible conflict can reduce exactly when the team needs useful differences to become explicit.', courseIds: ['C04', 'C06', 'C08', 'C20'] },
-			{ label: 'Exploration versus completion', memberIds: ['sophie', 'thomas', 'james'], description: 'Creative and analytical expansion can delay commitment while delivery pressure increases.', courseIds: ['C12', 'C14', 'C19'] },
-			{ label: 'Unequal airtime', memberIds: ['james', 'emily', 'thomas'], description: 'Fast confidence can unintentionally dominate people who process before speaking.', courseIds: ['C08', 'C20'] },
-			{ label: 'Hidden disagreement', memberIds: ['emily', 'thomas', 'james'], description: 'A meeting can appear more aligned than it actually is.', courseIds: ['C06', 'C22'] }
+			{ label: 'Speed versus deliberation', memberIds: ['james', 'thomas', 'sophie'], description: 'James may want closure while Thomas wants further analysis and Sophie wants further exploration.', courseIds: ['TM-GEN-03', 'TM-T5-01', 'TM-GEN-07'] },
+			{ label: 'Harmony versus productive disagreement', memberIds: ['emily', 'james'], description: 'Visible conflict can reduce exactly when the team needs useful differences to become explicit.', courseIds: ['TM-GEN-01', 'TM-GEN-02', 'TM-T8-01'] },
+			{ label: 'Exploration versus completion', memberIds: ['sophie', 'thomas', 'james'], description: 'Creative and analytical expansion can delay commitment while delivery pressure increases.', courseIds: ['TM-GEN-03', 'TM-GEN-05', 'TM-GEN-08'] },
+			{ label: 'Unequal airtime', memberIds: ['james', 'emily', 'thomas'], description: 'Fast confidence can unintentionally dominate people who process before speaking.', courseIds: ['TM-GEN-01', 'TM-GEN-04'] },
+			{ label: 'Hidden disagreement', memberIds: ['emily', 'thomas', 'james'], description: 'A meeting can appear more aligned than it actually is.', courseIds: ['TM-GEN-02', 'TM-GEN-03'] }
 		],
 		beacon: [
-			{ label: 'Commitment before challenge', memberIds: ['oliver', 'sarah'], description: 'Oliver can create external momentum before Sarah has made reservations visible.', courseIds: ['C08', 'C18'] },
-			{ label: 'Late braking', memberIds: ['sarah', 'oliver'], description: 'Sarah may constrain something Oliver already considers active.', courseIds: ['C04', 'C10'] },
-			{ label: 'Unequal visibility', memberIds: ['oliver', 'sarah'], description: "Oliver's contribution is externally visible while Sarah's may stay hidden until implementation.", courseIds: ['C18', 'C21'] },
-			{ label: 'Expansion versus capacity', memberIds: ['oliver', 'sarah'], description: 'New possibilities can outrun the small team’s actual delivery capacity.', courseIds: ['C12', 'C19'] }
+			{ label: 'Commitment before challenge', memberIds: ['oliver', 'sarah'], description: 'Oliver can create external momentum before Sarah has made reservations visible.', courseIds: ['TM-GEN-01', 'TM-GEN-03'] },
+			{ label: 'Late braking', memberIds: ['sarah', 'oliver'], description: 'Sarah may constrain something Oliver already considers active.', courseIds: ['TM-GEN-02', 'TM-GEN-07'] },
+			{ label: 'Unequal visibility', memberIds: ['oliver', 'sarah'], description: "Oliver's contribution is externally visible while Sarah's may stay hidden until implementation.", courseIds: ['TM-GEN-04', 'TM-T9-01'] },
+			{ label: 'Expansion versus capacity', memberIds: ['oliver', 'sarah'], description: 'New possibilities can outrun the small team’s actual delivery capacity.', courseIds: ['TM-GEN-03', 'TM-GEN-07'] }
 		]
 	};
 
 	const stageCopy: Record<string, Record<string, string>> = {
 		atlas: {
-			C08: 'Create explicit space for reservations, alternative ideas and analytical concerns before moving toward closure.',
-			C06: 'Normalise disagreement as useful information rather than a sign that the team is failing to align.',
-			C10: 'Give the team a common language for deciding when there is enough information to act.',
-			C20: 'Prevent domination or avoidance while synthesising different perspectives.',
-			C22: 'Make dissent visible before closure and commitment explicit afterward.'
+			'TM-GEN-01': 'Create explicit space for reservations, alternative ideas and analytical concerns before moving toward closure.',
+			'TM-GEN-02': 'Normalise disagreement as useful information rather than a sign that the team is failing to align.',
+			'TM-GEN-03': 'Give the team a common language for deciding when there is enough information to act.',
+			'TM-GEN-07': 'Make dissent visible before closure and commitment explicit afterward.'
 		},
 		beacon: {
-			C21: 'Turn persuasion into consultation and clarify the real stakeholder need.',
-			C12: 'Make new opportunities compete explicitly with existing commitments.',
-			C10: 'Create a shared threshold for when an opportunity has been tested enough.',
-			C19: 'Connect ambition to capacity, completion and credibility.',
-			C22: 'Formalise a repeatable rhythm for challenge, decision and commitment.'
+			'TM-GEN-01': 'Turn persuasion into consultation and clarify the real stakeholder need.',
+			'TM-GEN-03': 'Make new opportunities compete explicitly with existing commitments.',
+			'TM-GEN-04': 'Create a shared threshold for when an opportunity has been tested enough.',
+			'TM-GEN-07': 'Connect ambition to capacity, completion and credibility.'
 		}
 	};
 
@@ -382,7 +381,7 @@
 						{#if primarySharedCourse}
 							<div class="context-course">
 								<span>Contextual learning</span>
-								<strong>{primarySharedCourse.title}</strong>
+								<strong>{primarySharedCourse.name}</strong>
 								<p>{primarySharedCourse.description}</p>
 								<small>This appears here because the relationship theme is {selectedRelationship.theme.toLowerCase()}.</small>
 							</div>
@@ -443,7 +442,7 @@
 						<strong>{selectedWatch.description}</strong>
 						<div class="mini-list">
 							{#each selectedWatch.courseIds?.map(getCourse).filter(isCourse) ?? [] as course}
-								<button type="button">{course.title}</button>
+								<button type="button">{course.name}</button>
 							{/each}
 						</div>
 					</div>
@@ -465,10 +464,10 @@
 						<span class="order-square">{index + 1}</span>
 						<div>
 							<small>Stage {index + 1}</small>
-							<h3>{course.title}</h3>
+							<h3>{course.name}</h3>
 							<p>{stageCopy[currentTeam.id]?.[course.id] ?? course.description}</p>
 							<div class="pathway-badges">
-								{#if selectedMember.pathwayCourseIds.includes(course.id)}<span>Personal</span>{/if}
+								{#if recommendations.some((recommendation) => recommendation.learnerId === selectedMember.id && recommendation.courseId === course.id)}<span>Personal</span>{/if}
 								{#if sharedCourses.some((sharedCourse) => sharedCourse.id === course.id)}<span>Relationship</span>{/if}
 								<span>Team</span>
 							</div>

@@ -3,9 +3,11 @@
 		courses,
 		enneagramTypes,
 		members,
+		recommendations,
 		relationships,
 		skills,
 		teams,
+		territoryToPathway,
 		type Center,
 		type Course,
 		type EnneagramType,
@@ -68,7 +70,7 @@
 	};
 
 	const territories = Object.keys(territoryCopy) as Territory[];
-	const priorityRank: Record<Recommendation['priority'], number> = { Core: 0, 'Strength Mastery': 1, Recommended: 2 };
+	const priorityRank: Record<Recommendation['priority'], number> = { primary: 0, supporting: 1, explore: 2 };
 
 	let selectedMemberId = $state('emily');
 	let mode = $state<'dark' | 'light'>('dark');
@@ -165,8 +167,9 @@
 	}
 
 	function getCoursesForTerritory(territory: Territory, member = selectedMember) {
-		const personalised = member.recommendations
-			.filter((recommendation) => recommendation.territory === territory)
+		const pathway = territoryToPathway[territory];
+		const personalised = recommendations
+			.filter((recommendation) => recommendation.learnerId === member.id && recommendation.source.pathway === pathway)
 			.sort((a, b) => priorityRank[a.priority] - priorityRank[b.priority])
 			.map((recommendation) => ({ recommendation, course: getCourse(recommendation.courseId) }))
 			.filter((item): item is { recommendation: Recommendation; course: Course } => Boolean(item.course));
@@ -187,7 +190,7 @@
 	}
 
 	function getSkillsForCourses(courseList: Course[]) {
-		const skillIds = new Set(courseList.flatMap((course) => [course.primarySkill, ...course.secondarySkills]));
+		const skillIds = new Set(courseList.flatMap((course) => course.develops));
 		return [...skillIds].map(getSkill).filter(isSkill).slice(0, 6);
 	}
 
@@ -598,21 +601,21 @@
 									<div class="course-index order-square">{index + 1}</div>
 									<div>
 										<div class="course-row-top">
-											<h4>{item.course.title}</h4>
-											<span>{item.course.level} / {item.course.duration}</span>
+											<h4>{item.course.name}</h4>
+											<span>{item.course.level} / {item.course.lengthMinutes} min</span>
 										</div>
 										<p>{item.course.description}</p>
 										<div class="skill-tags">
-											{#if getSkill(item.course.primarySkill)}
-												<span>{getSkill(item.course.primarySkill)?.name}</span>
+											{#if getSkill(item.course.develops[0])}
+												<span>{getSkill(item.course.develops[0])?.name}</span>
 											{/if}
-											{#each item.course.secondarySkills.map(getSkill).filter(isSkill) as skill}
+											{#each item.course.develops.slice(1).map(getSkill).filter(isSkill) as skill}
 												<span>{skill.name}</span>
 											{/each}
 										</div>
 										<div class="recommendation-reason">
-											<span>{item.recommendation?.priority ?? item.course.teamRelevance}</span>
-											<strong>{item.recommendation?.reason ?? (item.course.teamRelevance === 'Team' ? 'Part of the shared team learning route.' : 'Included because it supports this development territory and pathway.')}</strong>
+											<span>{item.recommendation?.priority ?? item.course.pathway}</span>
+											<strong>{item.recommendation?.reason ?? (item.course.pathway === 'team' ? 'Part of the shared team learning route.' : 'Included because it supports this development territory and pathway.')}</strong>
 										</div>
 									</div>
 								</article>
@@ -630,7 +633,7 @@
 							<p>{territoryCopy[territory].compact}</p>
 							<div>
 								{#each territoryCourses as item}
-									<span>{item.course.title}</span>
+									<span>{item.course.name}</span>
 								{/each}
 							</div>
 							<strong>Explore</strong>

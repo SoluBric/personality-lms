@@ -2,12 +2,18 @@
 	import {
 		courses,
 		enneagramTypes,
+		learnerCourseStates,
 		members,
+		pathwayToTerritory,
 		relationships,
+		recommendations,
 		skills,
 		teams,
+		territoryToPathway,
 		type Course,
+		type CoursePathway,
 		type EnneagramType,
+		type LearnerCourseState,
 		type Member,
 		type Recommendation,
 		type Skill,
@@ -15,7 +21,7 @@
 	} from '$lib/demo-data';
 
 	type FocusMode = 'current' | 'suggested';
-	type FilterMode = 'All' | Territory;
+	type FilterMode = 'All' | CoursePathway;
 	type NodeKind = 'profile' | 'territory' | 'signal' | 'skill' | 'course' | 'pathway' | 'team' | 'person';
 	type RadialBand = 'inner' | 'middle' | 'outer';
 	type MapRole =
@@ -27,6 +33,9 @@
 		| 'Collaboration'
 		| 'Shared Team Learning'
 		| 'Team Member'
+		| 'Core Resilience'
+		| 'Pressure Practice'
+		| 'Center Collaboration'
 		| 'Profile Origin'
 		| 'Territory';
 
@@ -58,15 +67,15 @@
 		{ id: 'slate', name: 'Slate', accent: '#93c5fd', soft: '#172033' }
 	];
 
-	const territoryCopy: Record<Territory, { label: string; short: string }> = {
-		'Strengthen Strengths': { label: 'Strengths', short: 'Extend natural capability into deliberate mastery.' },
-		'Stress & Growth': { label: 'Stress & Growth', short: 'Build flexibility when pressure changes the pattern.' },
-		'Fortify Growth Areas': { label: 'Fortification', short: 'Build capability in less familiar operating territories.' },
-		'Team Development': { label: 'Team', short: 'Connect personal growth to shared collaboration needs.' }
+	const pathwayCopy: Record<CoursePathway, { label: string; short: string }> = {
+		strengths: { label: 'Strengths', short: 'Extend natural capability into deliberate mastery.' },
+		'stress-growth': { label: 'Stress & Growth', short: 'Build flexibility when pressure changes the pattern.' },
+		fortification: { label: 'Fortification', short: 'Build capability in less familiar operating territories.' },
+		team: { label: 'Team', short: 'Connect personal growth to shared collaboration needs.' }
 	};
 
-	const filters: FilterMode[] = ['All', 'Strengthen Strengths', 'Stress & Growth', 'Fortify Growth Areas', 'Team Development'];
-	const territories = Object.keys(territoryCopy) as Territory[];
+	const filters: FilterMode[] = ['All', 'strengths', 'stress-growth', 'fortification', 'team'];
+	const pathways = Object.keys(pathwayCopy) as CoursePathway[];
 	const enneagramOrder = [9, 1, 2, 3, 4, 5, 6, 7, 8];
 	const wheelTypes = enneagramOrder.map(getType);
 	const radialBands: Record<RadialBand, number> = { inner: 28, middle: 38, outer: 47 };
@@ -119,9 +128,12 @@
 	const profileTypes = $derived(selectedMember.profile.map(getType));
 	const stressType = $derived(getType(connectionLines[selectedMember.primaryType].stress));
 	const growthType = $derived(getType(connectionLines[selectedMember.primaryType].growth));
-	const activeCourses = $derived(selectedMember.pathwayCourseIds.map(getCourse).filter(isCourse));
+	const memberRecommendations = $derived(recommendations.filter((recommendation) => recommendation.learnerId === selectedMember.id));
+	const memberCourseStates = $derived(learnerCourseStates.filter((state) => state.learnerId === selectedMember.id));
+	const activeCourseStates = $derived(memberCourseStates.filter((state) => state.status !== 'not-started'));
+	const activeCourses = $derived(activeCourseStates.map((state) => getCourse(state.courseId)).filter(isCourse));
 	const recommendedCourses = $derived(getRecommendedCourses(selectedMember));
-	const suggestedCourses = $derived(recommendedCourses.filter((item) => !selectedMember.pathwayCourseIds.includes(item.course.id)).slice(0, 5));
+	const suggestedCourses = $derived(recommendedCourses.filter((item) => !activeCourseStates.some((state) => state.courseId === item.course.id)).slice(0, 5));
 	const activeSkills = $derived(getSkillsForCourses(activeCourses));
 	const relationshipRoutes = $derived(relationships.filter((relationship) => relationship.teamId === currentTeam.id && relationship.memberIds.includes(selectedMember.id)));
 	const teamCourses = $derived(currentTeam.pathwayCourseIds.map(getCourse).filter(isCourse));
@@ -132,9 +144,9 @@
 	const selectedSkill = $derived(selectedNode?.kind === 'skill' && selectedNode.skillIds?.[0] ? getSkill(selectedNode.skillIds[0]) : undefined);
 	const activeSectorTypes = $derived(getActiveSectorTypes());
 	const showWheel = $derived(selectedArea !== null && selectedArea !== 'All');
-	const completedCourses = $derived(activeCourses.filter((course) => course.progress >= 75));
-	const inProgressCourses = $derived(activeCourses.filter((course) => course.progress > 0 && course.progress < 75));
-	const selectedTerritoryLabel = $derived(selectedArea === null ? 'Profile origin' : selectedArea === 'All' ? 'Development atlas' : territoryCopy[selectedArea].label);
+	const completedCourses = $derived(activeCourseStates.filter((state) => state.status === 'completed'));
+	const inProgressCourses = $derived(activeCourseStates.filter((state) => state.status === 'in-progress'));
+	const selectedTerritoryLabel = $derived(selectedArea === null ? 'Profile origin' : selectedArea === 'All' ? 'Development atlas' : pathwayCopy[selectedArea].label);
 	const areaGuide = $derived(getAreaGuide());
 
 	function getType(typeNumber: number): EnneagramType {
@@ -166,26 +178,31 @@
 	}
 
 	function getRecommendedCourses(member: Member) {
-		return member.recommendations
+		return recommendations
+			.filter((recommendation) => recommendation.learnerId === member.id)
 			.map((recommendation) => ({ recommendation, course: getCourse(recommendation.courseId) }))
 			.filter((item): item is { recommendation: Recommendation; course: Course } => Boolean(item.course));
 	}
 
+	function getCourseState(courseId: string): LearnerCourseState | undefined {
+		return memberCourseStates.find((state) => state.courseId === courseId);
+	}
+
 	function getSkillsForCourses(courseList: Course[]) {
-		const skillIds = new Set(courseList.flatMap((course) => [course.primarySkill, ...course.secondarySkills]));
+		const skillIds = new Set(courseList.flatMap((course) => course.develops));
 		return [...skillIds].map(getSkill).filter(isSkill);
 	}
 
 	function courseSkills(course: Course) {
-		return [course.primarySkill, ...course.secondarySkills].map(getSkill).filter(isSkill);
+		return course.develops.map(getSkill).filter(isSkill);
 	}
 
 	function coursesForSkill(skillId: string) {
-		return courses.filter((course) => course.primarySkill === skillId || course.secondarySkills.includes(skillId));
+		return courses.filter((course) => course.develops.includes(skillId));
 	}
 
 	function recommendationForCourse(courseId: string) {
-		return selectedMember.recommendations.find((recommendation) => recommendation.courseId === courseId);
+		return memberRecommendations.find((recommendation) => recommendation.courseId === courseId);
 	}
 
 	function selectMember(memberId: string) {
@@ -198,9 +215,9 @@
 		if (nodeId === 'profile') {
 			selectedArea = null;
 		}
-		const territoryNode = mapNodes.find((node) => node.id === nodeId && node.kind === 'territory');
-		if (territoryNode?.territory) {
-			selectedArea = territoryNode.territory;
+		const pathwayNode = mapNodes.find((node) => node.id === nodeId && node.kind === 'territory');
+		if (pathwayNode?.territory) {
+			selectedArea = territoryToPathway[pathwayNode.territory];
 			selectedNodeId = null;
 			return;
 		}
@@ -209,7 +226,7 @@
 
 	function focusCourse(mode: FocusMode, courseId: string) {
 		focusMode = mode;
-		selectedArea = courses.find((course) => course.id === courseId)?.territories[0] ?? selectedArea;
+		selectedArea = getCourse(courseId)?.pathway ?? selectedArea;
 		selectedNodeId = `course-${courseId}`;
 	}
 
@@ -226,22 +243,39 @@
 		selectedNodeId = null;
 	}
 
-	function courseState(course: Course) {
-		if (course.progress >= 75) return 'Completed';
-		if (course.progress > 0) return 'In progress';
+	function titleFor(course: Course) {
+		return course.name;
+	}
+
+	function levelLabel(course: Course) {
+		return course.level.replace('-', ' ');
+	}
+
+	function courseMeta(course: Course) {
+		return `${levelLabel(course)} / ${course.lengthMinutes} min`;
+	}
+
+	function courseStateLabel(course: Course) {
+		const state = getCourseState(course.id);
+		if (state?.status === 'completed') return 'Completed';
+		if (state?.status === 'in-progress') return 'In progress';
 		return 'Not started';
 	}
 
+	function progressPct(courseId: string) {
+		return getCourseState(courseId)?.progressPct ?? 0;
+	}
+
 	function getCourseTitles(courseIds: string[] | undefined) {
-		return courseIds?.map(getCourse).filter(isCourse).map((course) => course.title).join(', ') || 'None listed';
+		return courseIds?.map(getCourse).filter(isCourse).map((course) => course.name).join(', ') || 'None listed';
 	}
 
 	function buildMapNodes(): Node[] {
 		if (selectedArea === null) return buildProfileOriginNodes();
 		if (selectedArea === 'All') return buildAtlasNodes();
-		if (selectedArea === 'Strengthen Strengths') return buildStrengthsNodes();
-		if (selectedArea === 'Stress & Growth') return buildStressGrowthNodes();
-		if (selectedArea === 'Fortify Growth Areas') return buildGrowthAreaNodes();
+		if (selectedArea === 'strengths') return buildStrengthsNodes();
+		if (selectedArea === 'stress-growth') return buildStressGrowthNodes();
+		if (selectedArea === 'fortification') return buildGrowthAreaNodes();
 		return buildTeamNodes();
 	}
 
@@ -253,7 +287,7 @@
 				title: `${selectedMember.name.split(' ')[0]} / ${selectedMember.profile.join('-')}`,
 				label: selectedMember.profileName,
 				detail: selectedMember.profileDescription,
-				courseIds: selectedMember.pathwayCourseIds,
+				courseIds: activeCourses.map((course) => course.id),
 				skillIds: activeSkills.map((skill) => skill.id),
 				x: 50,
 				y: 50
@@ -264,7 +298,7 @@
 				title: `${index === 0 ? 'Primary' : index === 1 ? 'Second' : 'Third'}: ${type.number} / ${type.name}`,
 				label: type.center,
 				detail: type.description,
-				skillIds: type.skills.map((name) => skills.find((skill) => skill.name === name)?.id).filter((id): id is string => Boolean(id)),
+				skillIds: skillsForType(type.number).map((skill) => skill.id),
 				x: [50, 70, 30][index] ?? 50,
 				y: [22, 62, 62][index] ?? 50
 			}))
@@ -278,19 +312,19 @@
 			{ x: 28, y: 69 },
 			{ x: 72, y: 69 }
 		];
-		return territories.map((territory, index) => {
-			const territoryCourses = getTerritoryCourses(territory);
-			const activeCount = territoryCourses.filter((course) => selectedMember.pathwayCourseIds.includes(course.id)).length;
+		return pathways.map((pathway, index) => {
+			const pathwayCourses = coursesForPathwayView(pathway);
+			const activeCount = pathwayCourses.filter((course) => activeCourseStates.some((state) => state.courseId === course.id)).length;
 			return {
-				id: `territory-${territory}`,
+				id: `territory-${pathway}`,
 				kind: 'territory' as const,
-				title: territoryCopy[territory].label,
-				label: `${territoryCourses.length} learning objects`,
-				detail: territoryCopy[territory].short,
+				title: pathwayCopy[pathway].label,
+				label: `${pathwayCourses.length} courses`,
+				detail: pathwayCopy[pathway].short,
 				role: 'Territory' as const,
-				territory,
-				courseIds: territoryCourses.map((course) => course.id),
-				meta: `${activeCount} active / ${territoryCourses.slice(0, 2).map((course) => course.title).join(' + ')}`,
+				territory: pathwayToTerritory[pathway],
+				courseIds: pathwayCourses.map((course) => course.id),
+				meta: `${activeCount} active / ${pathwayCourses.slice(0, 2).map((course) => course.name).join(' + ')}`,
 				x: atlasPositions[index].x,
 				y: atlasPositions[index].y
 			};
@@ -299,8 +333,8 @@
 
 	function buildStrengthsNodes(): Node[] {
 		const activeTypes = selectedMember.profile;
-		const strengthSkills = skillsForTypes(activeTypes, false).slice(0, 9);
-		const strengthCourses = coursesForTypes(activeTypes, 'Strengthen Strengths').slice(0, 12);
+		const strengthCourses = coursesForPathwayView('strengths');
+		const strengthSkills = [...new Set(strengthCourses.flatMap((course) => course.develops))].map(getSkill).filter(isSkill).slice(0, 10);
 		return [
 			{ id: 'profile', kind: 'profile', title: selectedMember.profile.join('-'), label: 'Profile origin', detail: selectedMember.profileDescription, role: 'Profile Origin', x: 50, y: 50 },
 			...profileTypes.map((type, index) => ({
@@ -312,78 +346,82 @@
 				role: 'Strength Mastery' as const,
 				typeNumber: type.number,
 				band: 'inner' as const,
-				territory: 'Strengthen Strengths' as Territory,
-				skillIds: type.skills.map((name) => skills.find((skill) => skill.name === name)?.id).filter((id): id is string => Boolean(id)),
+				territory: pathwayToTerritory.strengths,
+				skillIds: skillsForType(type.number).map((skill) => skill.id),
 				...mapPoint(type.number, 'inner', index - 1)
 			})),
 			...strengthSkills.map((skill, index) => {
-				const typeNumber = bestTypeForObject(skill, activeTypes) ?? activeTypes[index % activeTypes.length];
+				const typeNumber = skill.typeNumber && activeTypes.includes(skill.typeNumber) ? skill.typeNumber : activeTypes[index % activeTypes.length];
 				return {
-				id: `skill-${skill.id}`,
-				kind: 'skill' as const,
-				title: skill.name,
-				label: 'Capability',
-				detail: skill.description,
-				role: 'Strength Mastery' as const,
-				typeNumber,
-				band: 'middle' as const,
-				territory: 'Strengthen Strengths' as Territory,
-				skillIds: [skill.id],
-				courseIds: coursesForSkill(skill.id).map((course) => course.id),
-				...mapPoint(typeNumber, 'middle', laneForIndex(index))
+					id: `skill-${skill.id}`,
+					kind: 'skill' as const,
+					title: skill.name,
+					label: 'Capability',
+					detail: skill.description,
+					role: 'Strength Mastery' as const,
+					typeNumber,
+					band: 'middle' as const,
+					territory: pathwayToTerritory.strengths,
+					skillIds: [skill.id],
+					courseIds: coursesForSkill(skill.id).map((course) => course.id),
+					...mapPoint(typeNumber, 'middle', laneForIndex(index))
 				};
 			}),
-			...strengthCourses.map((course, index) => courseNode(course, 'Strength Mastery', bestTypeForObject(course, activeTypes) ?? activeTypes[index % activeTypes.length], course.level === 'Advanced' ? 'outer' : 'middle', laneForIndex(index)))
+			...strengthCourses.map((course, index) => courseNode(course, 'Strength Mastery', categoryType(course) ?? activeTypes[index % activeTypes.length], course.map.radialBand, laneForIndex(index)))
 		];
 	}
 
 	function buildStressGrowthNodes(): Node[] {
-		const activeTypes = [selectedMember.primaryType, stressType.number, growthType.number];
-		const stressSkills = ['SK01', 'SK02', 'SK05', 'SK12', 'SK13', 'SK03', 'SK04', 'SK14'].map(getSkill).filter(isSkill);
-		const stressCourses = ['C01', 'C02', 'C03', 'C10', 'T06', 'C12', 'C13', 'T03'].map(getCourse).filter(isCourse);
+		const stressCategory = currentStressCategory();
+		const growthCategory = currentGrowthCategory();
+		const primaryCourses = courses.filter((course) => course.pathway === 'stress-growth' && [stressCategory, growthCategory].includes(course.category));
+		const generalCourses = courses.filter((course) => course.pathway === 'stress-growth' && course.category === 'general').slice(0, 6);
+		const stressSkills = [...new Set([...primaryCourses, ...generalCourses].flatMap((course) => course.develops))].map(getSkill).filter(isSkill).slice(0, 10);
 		return [
 			{ id: 'profile', kind: 'profile', title: `${selectedMember.primaryType} / ${primaryType.name}`, label: 'Profile origin', detail: primaryType.description, role: 'Profile Origin', typeNumber: primaryType.number, x: 50, y: 50 },
-			{ id: 'signal-stress', kind: 'signal', title: `${stressType.number} / ${stressType.name}`, label: 'Pressure pattern', detail: `Pressure may pull attention toward ${stressType.capacity}.`, role: 'Growth Resource', territory: 'Stress & Growth', typeNumber: stressType.number, band: 'inner', skillIds: ['SK01', 'SK02', 'SK12'], ...mapPoint(stressType.number, 'inner', 0) },
-			{ id: 'signal-growth', kind: 'signal', title: `${growthType.number} / ${growthType.name}`, label: 'Growth resource', detail: `Growth resources point toward ${growthType.capacity}.`, role: 'Growth Resource', territory: 'Stress & Growth', typeNumber: growthType.number, band: 'inner', skillIds: ['SK03', 'SK12', 'SK14'], ...mapPoint(growthType.number, 'inner', 0) },
+			{ id: 'signal-stress', kind: 'signal', title: `${stressType.number} / ${stressType.name}`, label: 'Pressure destination', detail: `The map highlights Type ${stressType.number}, but the curriculum category is ${stressCategory}.`, role: 'Pressure Practice', territory: pathwayToTerritory['stress-growth'], typeNumber: stressType.number, band: 'inner', skillIds: stressSkills.slice(0, 3).map((skill) => skill.id), ...mapPoint(stressType.number, 'inner', 0) },
+			{ id: 'signal-growth', kind: 'signal', title: `${growthType.number} / ${growthType.name}`, label: 'Growth destination', detail: `The map highlights Type ${growthType.number}, but the curriculum category is ${growthCategory}.`, role: 'Growth Resource', territory: pathwayToTerritory['stress-growth'], typeNumber: growthType.number, band: 'inner', skillIds: stressSkills.slice(3, 6).map((skill) => skill.id), ...mapPoint(growthType.number, 'inner', 0) },
 			...stressSkills.map((skill, index) => {
-				const preferred = skill.typeAffinity?.general ? (index < 3 ? primaryType.number : undefined) : undefined;
-				const typeNumber = preferred ?? bestTypeForObject(skill, activeTypes) ?? activeTypes[index % activeTypes.length];
+				const typeNumber = skill.category === 'general' ? selectedMember.primaryType : skill.typeNumber ?? [selectedMember.primaryType, stressType.number, growthType.number][index % 3];
 				return {
-				id: `skill-${skill.id}`,
-				kind: 'skill' as const,
-				title: skill.name,
-				label: skill.typeAffinity?.general ? 'Core resilience' : 'Capability',
-				detail: skill.description,
-				role: 'Growth Resource' as const,
-				typeNumber,
-				band: 'middle' as const,
-				territory: 'Stress & Growth' as Territory,
-				skillIds: [skill.id],
-				courseIds: coursesForSkill(skill.id).map((course) => course.id),
-				...mapPoint(typeNumber, 'middle', laneForIndex(index))
+					id: `skill-${skill.id}`,
+					kind: 'skill' as const,
+					title: skill.name,
+					label: skill.category === 'general' ? 'Core resilience' : 'Capability',
+					detail: skill.description,
+					role: skill.category === 'general' ? 'Core Resilience' as const : 'Growth Resource' as const,
+					typeNumber,
+					band: 'middle' as const,
+					territory: pathwayToTerritory['stress-growth'],
+					skillIds: [skill.id],
+					courseIds: coursesForSkill(skill.id).map((course) => course.id),
+					...mapPoint(typeNumber, 'middle', laneForIndex(index))
 				};
 			}),
-			...stressCourses.map((course, index) => courseNode(course, course.typeAffinity?.general ? 'Foundation' : 'Growth Resource', bestTypeForObject(course, activeTypes) ?? (index < 3 ? primaryType.number : activeTypes[index % activeTypes.length]), course.level === 'Foundation' ? 'inner' : 'outer', laneForIndex(index)))
+			...primaryCourses.map((course, index) => {
+				const typeNumber = course.category === stressCategory ? stressType.number : growthType.number;
+				return courseNode(course, course.category === stressCategory ? 'Pressure Practice' : 'Growth Resource', typeNumber, course.map.radialBand, laneForIndex(index));
+			})
 		];
 	}
 
 	function buildGrowthAreaNodes(): Node[] {
 		const fortificationTypes = enneagramTypes.map((type) => type.number).filter((typeNumber) => !selectedMember.profile.includes(typeNumber));
-		const pathwayCourses = coursesForTypes(fortificationTypes, 'Fortify Growth Areas').filter((course) => course.id.startsWith('T') || selectedMember.pathwayCourseIds.includes(course.id) || selectedMember.recommendations.some((recommendation) => recommendation.courseId === course.id)).slice(0, 13);
+		const pathwayCourses = coursesForPathwayView('fortification').slice(0, 14);
 		return [
-			{ id: 'profile', kind: 'profile', title: `${selectedMember.name.split(' ')[0]} / ${selectedMember.profile.join('-')}`, label: 'Profile origin', detail: selectedMember.growthEdges.join(' / '), role: 'Profile Origin', territory: 'Fortify Growth Areas', x: 50, y: 50 },
-			...pathwayCourses.map((course, index) => courseNode(course, 'Fortification', bestTypeForObject(course, fortificationTypes) ?? fortificationTypes[index % fortificationTypes.length], course.level === 'Foundation' ? 'inner' : course.level === 'Advanced' ? 'outer' : 'middle', laneForIndex(index)))
+			{ id: 'profile', kind: 'profile', title: `${selectedMember.name.split(' ')[0]} / ${selectedMember.profile.join('-')}`, label: 'Profile origin', detail: selectedMember.growthEdges.join(' / '), role: 'Profile Origin', territory: pathwayToTerritory.fortification, x: 50, y: 50 },
+			...pathwayCourses.map((course, index) => courseNode(course, 'Fortification', categoryType(course) ?? fortificationTypes[index % fortificationTypes.length], course.map.radialBand, laneForIndex(index)))
 		];
 	}
 
 	function buildTeamNodes(): Node[] {
 		const teamMembers = currentTeam.memberIds.map(getMember).filter(isMember);
 		const distribution = teamDistribution();
-		const overlapCourses = currentTeam.id === 'atlas' ? ['COL01', 'COL06', 'COL07'] : ['COL03'];
-		const perspectiveCourses = [...distribution.keys()].map((typeNumber) => getCourse(`TP${String(typeNumber).padStart(2, '0')}`)).filter(isCourse);
-		const sharedCourses = teamCourses;
+		const typeCourses = coursesForPathwayView('team').filter((course) => course.category.startsWith('type-'));
+		const centerCourses = coursesForPathwayView('team').filter((course) => course.category.startsWith('center-'));
+		const sharedCourses = teamCourses.length ? teamCourses : coursesForPathwayView('team').filter((course) => course.category === 'general').slice(0, 4);
 		return [
-			{ id: 'profile', kind: 'profile', title: currentTeam.name, label: 'Team atlas', detail: currentTeam.description, role: 'Profile Origin', territory: 'Team Development', courseIds: currentTeam.pathwayCourseIds, x: 50, y: 50 },
+			{ id: 'profile', kind: 'profile', title: currentTeam.name, label: 'Team atlas', detail: currentTeam.description, role: 'Profile Origin', territory: pathwayToTerritory.team, courseIds: currentTeam.pathwayCourseIds, x: 50, y: 50 },
 			...teamMembers.map((member, index) => ({
 				id: `person-${member.id}`,
 				kind: 'person' as const,
@@ -393,16 +431,13 @@
 				role: 'Team Member' as const,
 				typeNumber: member.primaryType,
 				band: 'inner' as const,
-				territory: 'Team Development' as Territory,
+				territory: pathwayToTerritory.team,
 				members: [member.name],
 				...mapPoint(member.primaryType, 'inner', laneForIndex(index))
 			})),
-			...perspectiveCourses.map((course, index) => courseNode(course, 'Type Perspective', course.typeAffinity?.primary ?? 9, 'inner', laneForIndex(index))),
-			...overlapCourses.map(getCourse).filter(isCourse).map((course, index) => {
-				const typeNumber = course.typeAffinity?.primary ?? 9;
-				return courseNode(course, 'Collaboration', typeNumber, 'middle', laneForIndex(index), distribution.get(typeNumber));
-			}),
-			...sharedCourses.map((course, index) => courseNode(course, 'Shared Team Learning', bestTypeForObject(course, [...distribution.keys()]) ?? selectedMember.primaryType, 'outer', laneForIndex(index)))
+			...typeCourses.map((course, index) => courseNode(course, 'Type Perspective', categoryType(course) ?? 9, 'inner', laneForIndex(index), distribution.get(categoryType(course) ?? 9))),
+			...centerCourses.map((course, index) => courseNode(course, 'Center Collaboration', selectedMember.primaryType, 'middle', laneForIndex(index))),
+			...sharedCourses.map((course, index) => courseNode(course, 'Shared Team Learning', categoryType(course) ?? selectedMember.primaryType, 'outer', laneForIndex(index)))
 		];
 	}
 
@@ -411,29 +446,22 @@
 		return {
 			id: `course-${course.id}`,
 			kind: 'course',
-			title: course.title,
+			title: course.name,
 			label: role,
-			detail: course.purpose ?? course.description,
+			detail: course.recommendationContext || course.description,
 			role,
 			typeNumber,
 			band,
-			territory: course.territories[0],
-			skillIds: [course.primarySkill, ...course.secondarySkills],
+			territory: pathwayToTerritory[course.pathway],
+			skillIds: course.develops,
 			courseIds: [course.id],
-			meta: `${course.level} / ${course.duration}`,
-			status: courseState(course),
+			meta: courseMeta(course),
+			status: courseStateLabel(course),
 			members: memberNames,
-			connectedObjectIds: [...(course.prerequisites ?? []), ...(course.recommendedNext ?? [])],
+			connectedObjectIds: [...(course.prerequisites ?? []), ...(course.unlocks ?? [])],
 			x: point.x,
 			y: point.y
 		};
-	}
-
-	function getTerritoryCourses(territory: Territory) {
-		const personalised = recommendedCourses.filter(({ recommendation }) => recommendation.territory === territory).map(({ course }) => course);
-		const profileTypeCourses = coursesForTypes(selectedMember.profile, territory).filter((course) => course.id.startsWith('T'));
-		const teamItems = territory === 'Team Development' ? [...teamCourses, ...courses.filter((course) => ['Type Perspective', 'Collaboration'].includes(course.category ?? ''))] : [];
-		return [...personalised, ...teamItems].filter((course, index, list) => list.findIndex((candidate) => candidate.id === course.id) === index);
 	}
 
 	function typeAngle(typeNumber: number) {
@@ -448,10 +476,10 @@
 	}
 
 	function getActiveSectorTypes() {
-		if (selectedArea === 'Strengthen Strengths') return selectedMember.profile;
-		if (selectedArea === 'Stress & Growth') return [selectedMember.primaryType, stressType.number, growthType.number];
-		if (selectedArea === 'Fortify Growth Areas') return enneagramTypes.map((type) => type.number).filter((typeNumber) => !selectedMember.profile.includes(typeNumber));
-		if (selectedArea === 'Team Development') return [...teamDistribution().keys()];
+		if (selectedArea === 'strengths') return selectedMember.profile;
+		if (selectedArea === 'stress-growth') return [selectedMember.primaryType, stressType.number, growthType.number];
+		if (selectedArea === 'fortification') return enneagramTypes.map((type) => type.number).filter((typeNumber) => !selectedMember.profile.includes(typeNumber));
+		if (selectedArea === 'team') return [...teamDistribution().keys()];
 		return [];
 	}
 
@@ -473,36 +501,47 @@
 		return polar(typeAngle(typeNumber), 22);
 	}
 
-	function sectorMembers(typeNumber: number) {
-		return teamDistribution().get(typeNumber) ?? [];
-	}
-
 	function laneForIndex(index: number) {
 		return [-1, 0, 1, -2, 2, -3, 3, -4, 4][index % 9] ?? 0;
 	}
 
-	function affinityTypes(item: Skill | Course) {
-		const affinity = item.typeAffinity;
-		return [affinity?.primary, ...(affinity?.secondary ?? [])].filter((typeNumber): typeNumber is number => typeof typeNumber === 'number');
+	function coursesForPathwayView(pathway: CoursePathway) {
+		if (pathway === 'strengths') {
+			const categories = selectedMember.profile.map((typeNumber) => `type-${typeNumber}`);
+			return courses.filter((course) => course.pathway === pathway && categories.includes(course.category));
+		}
+		if (pathway === 'stress-growth') {
+			return courses.filter((course) => course.pathway === pathway && [currentStressCategory(), currentGrowthCategory(), 'general'].includes(course.category));
+		}
+		if (pathway === 'fortification') {
+			const categories = enneagramTypes.map((type) => type.number).filter((typeNumber) => !selectedMember.profile.includes(typeNumber)).map((typeNumber) => `type-${typeNumber}`);
+			return courses.filter((course) => course.pathway === pathway && categories.includes(course.category));
+		}
+		return courses.filter((course) => course.pathway === pathway && teamCourseRelevant(course));
 	}
 
-	function bestTypeForObject(item: Skill | Course, candidateTypes: number[]) {
-		return affinityTypes(item).find((typeNumber) => candidateTypes.includes(typeNumber));
+	function currentStressCategory() {
+		return `stress-${selectedMember.primaryType}`;
 	}
 
-	function skillsForTypes(typeNumbers: number[], includeGeneral = true) {
-		return skills.filter((skill) => {
-			if (includeGeneral && skill.typeAffinity?.general) return true;
-			return affinityTypes(skill).some((typeNumber) => typeNumbers.includes(typeNumber));
-		});
+	function currentGrowthCategory() {
+		return `growth-${selectedMember.primaryType}`;
 	}
 
-	function coursesForTypes(typeNumbers: number[], territory?: Territory) {
-		return courses.filter((course) => {
-			if (territory && !course.territories.includes(territory)) return false;
-			if (course.typeAffinity?.general) return false;
-			return affinityTypes(course).some((typeNumber) => typeNumbers.includes(typeNumber));
-		});
+	function categoryType(course: Course) {
+		const match = course.category.match(/(?:type|stress|growth)-(\d+)/);
+		return match ? Number(match[1]) : undefined;
+	}
+
+	function teamCourseRelevant(course: Course) {
+		if (course.category === 'general') return true;
+		if (course.category.startsWith('center-')) return true;
+		const typeNumber = categoryType(course);
+		return typeof typeNumber === 'number' && [...teamDistribution().keys()].includes(typeNumber);
+	}
+
+	function skillsForType(typeNumber: number) {
+		return skills.filter((skill) => skill.typeNumber === typeNumber);
 	}
 
 	function teamDistribution() {
@@ -528,38 +567,38 @@
 			return {
 				eyebrow: 'Development landscape',
 				title: 'Four ways learning can become relevant',
-				body: 'Your recommendations draw on several kinds of development opportunity. The atlas shows the major regions before entering the more specific maps.',
-				items: territories.map((territory) => `${territoryCopy[territory].label}: ${territoryCopy[territory].short}`)
+				body: 'Your recommendations draw on four distinct learning pathways: strengths, stress and growth, fortification, and team development.',
+				items: pathways.map((pathway) => `${pathwayCopy[pathway].label}: ${pathwayCopy[pathway].short}`)
 			};
 		}
-		if (selectedArea === 'Strengthen Strengths') {
+		if (selectedArea === 'strengths') {
 			return {
 				eyebrow: 'Strengths',
 				title: 'From natural capacity to deliberate strength',
-				body: 'This map starts with the strongest profile signals and places capabilities and courses around the patterns they most naturally extend.',
+				body: 'This map starts with the strongest profile signals and places courses around the type territories they most naturally extend.',
 				items: profileTypes.map((type) => `${type.number} / ${type.name}: ${type.healthyExpression}`)
 			};
 		}
-		if (selectedArea === 'Stress & Growth') {
+		if (selectedArea === 'stress-growth') {
 			return {
 				eyebrow: 'Stress & Growth',
 				title: 'Pressure signals, regulation and flexible response',
-				body: `${primaryType.number} / ${primaryType.name} sits between pressure signals from ${stressType.number} / ${stressType.name} and growth resources from ${growthType.number} / ${growthType.name}.`,
+				body: `${primaryType.number} / ${primaryType.name} uses ${currentStressCategory()} and ${currentGrowthCategory()} curriculum categories while visually highlighting Type ${stressType.number} and Type ${growthType.number}.`,
 				items: ['Recognise pressure earlier', 'Regulate without disengaging', 'Access a wider response range']
 			};
 		}
-		if (selectedArea === 'Fortify Growth Areas') {
+		if (selectedArea === 'fortification') {
 			return {
-				eyebrow: 'Growth Areas',
-				title: 'Broaden range where the pattern narrows',
-				body: 'This route connects recurring challenge signals to balancing capabilities, foundation courses and more sophisticated application.',
+				eyebrow: 'Fortification',
+				title: 'Broaden range where the pattern is less practised',
+				body: 'This route connects non-top-three type territories to balancing capabilities without treating them as weaknesses.',
 				items: selectedMember.growthEdges
 			};
 		}
 		return {
-			eyebrow: 'Team Development',
+			eyebrow: 'Team',
 			title: currentTeam.pathwayName,
-			body: 'This territory shows where personal development intersects with colleagues, relationship dynamics and shared team capability.',
+			body: 'This pathway shows where personal development intersects with colleagues, relationship dynamics and shared team capability.',
 			items: currentTeam.priorities
 		};
 	}
@@ -567,30 +606,26 @@
 	function mapModeClass() {
 		if (selectedArea === null) return 'profile-mode';
 		if (selectedArea === 'All') return 'atlas-mode';
-		if (selectedArea === 'Strengthen Strengths') return 'strengths-mode';
-		if (selectedArea === 'Stress & Growth') return 'stress-mode';
-		if (selectedArea === 'Fortify Growth Areas') return 'growth-mode';
+		if (selectedArea === 'strengths') return 'strengths-mode';
+		if (selectedArea === 'stress-growth') return 'stress-mode';
+		if (selectedArea === 'fortification') return 'growth-mode';
 		return 'team-mode';
 	}
 
 	function edgeClass(node: Node) {
-		if (selectedArea === 'Stress & Growth') return 'flow-line';
-		if (selectedArea === 'Fortify Growth Areas') return 'route-line';
-		if (selectedArea === 'Team Development') return 'relationship-line';
+		if (selectedArea === 'stress-growth') return 'flow-line';
+		if (selectedArea === 'fortification') return 'route-line';
+		if (selectedArea === 'team') return 'relationship-line';
 		if (selectedArea === 'All') return 'atlas-line';
 		return node.kind === 'course' ? 'course-line' : 'influence-line';
 	}
 
 	function edgeStart(node: Node) {
-		if (selectedArea === 'Fortify Growth Areas' && node.kind === 'course') return { x: Math.max(12, node.x - 14), y: node.y };
-		if (selectedArea === 'Team Development' && (node.kind === 'person' || node.kind === 'team')) return { x: 25, y: 50 };
+		if (selectedArea === 'fortification' && node.kind === 'course') return { x: Math.max(12, node.x - 14), y: node.y };
+		if (selectedArea === 'team' && (node.kind === 'person' || node.kind === 'team')) return { x: 25, y: 50 };
 		return { x: 50, y: 50 };
 	}
 
-	function inferredTerritoryForSkill(skillId: string): Territory {
-		const recommended = recommendedCourses.find(({ course }) => course.primarySkill === skillId || course.secondarySkills.includes(skillId));
-		return recommended?.recommendation.territory ?? coursesForSkill(skillId)[0]?.territories[0] ?? 'Strengthen Strengths';
-	}
 </script>
 
 <svelte:head>
@@ -683,8 +718,8 @@
 							{#if focusMode === 'current'}
 								<article class:selected={selectedNodeId === `course-${course.id}`} class="learning-card active-course">
 									<div class="course-row-top">
-										<h3>{course.title}</h3>
-										<span>{course.level} / {course.duration}</span>
+										<h3>{titleFor(course)}</h3>
+										<span>{courseMeta(course)}</span>
 									</div>
 									<p>{course.description}</p>
 									<div class="skill-tags compact-tags">
@@ -693,8 +728,8 @@
 										{/each}
 									</div>
 									<div class="split-progress">
-										<span>{course.progress}% complete</span>
-										<div class="progress-track"><i style={`width: ${course.progress}%;`}></i></div>
+										<span>{progressPct(course.id)}% complete</span>
+										<div class="progress-track"><i style={`width: ${progressPct(course.id)}%;`}></i></div>
 									</div>
 									<div class="course-footer">
 										<span>{currentTeam.pathwayName}</span>
@@ -709,15 +744,15 @@
 									onclick={() => focusCourse('current', course.id)}
 								>
 									<div class="course-row-top">
-										<h3>{course.title}</h3>
-										<span>{course.level} / {course.duration}</span>
+										<h3>{titleFor(course)}</h3>
+										<span>{courseMeta(course)}</span>
 									</div>
 									<div class="split-progress compact-progress">
-										<span>{course.progress}%</span>
-										<div class="progress-track"><i style={`width: ${course.progress}%;`}></i></div>
+										<span>{progressPct(course.id)}%</span>
+										<div class="progress-track"><i style={`width: ${progressPct(course.id)}%;`}></i></div>
 									</div>
 									<div class="course-footer compact-footer">
-										<span>{courseState(course)}</span>
+										<span>{courseStateLabel(course)}</span>
 									</div>
 								</button>
 							{/if}
@@ -736,7 +771,7 @@
 							{#if focusMode === 'suggested'}
 								<article class:selected={selectedNodeId === `course-${item.course.id}`} class="learning-card suggested-course">
 									<div class="course-row-top">
-										<h3>{item.course.title}</h3>
+										<h3>{titleFor(item.course)}</h3>
 										<span>{item.recommendation.priority}</span>
 									</div>
 									<div class="recommendation-reason split-reason">
@@ -750,7 +785,7 @@
 										{/each}
 									</div>
 									<div class="course-footer">
-										<span>{territoryCopy[item.recommendation.territory].label}</span>
+										<span>{pathwayCopy[item.recommendation.source.pathway].label}</span>
 										<button type="button" onclick={() => selectNode(`course-${item.course.id}`)}>Inspect</button>
 									</div>
 								</article>
@@ -762,7 +797,7 @@
 									onclick={() => focusCourse('suggested', item.course.id)}
 								>
 									<div class="course-row-top">
-										<h3>{item.course.title}</h3>
+										<h3>{titleFor(item.course)}</h3>
 										<span>{item.recommendation.priority}</span>
 									</div>
 									<div class="skill-tags compact-tags">
@@ -771,7 +806,7 @@
 										{/each}
 									</div>
 									<div class="course-footer compact-footer">
-										<span>{territoryCopy[item.recommendation.territory].label}</span>
+										<span>{pathwayCopy[item.recommendation.source.pathway].label}</span>
 									</div>
 								</button>
 							{/if}
@@ -792,7 +827,7 @@
 						<nav class="map-filter" aria-label="Development map area">
 							{#each filters as filter}
 								<button class:active={selectedArea === filter} type="button" onclick={() => selectArea(filter)}>
-									{filter === 'All' ? 'All' : territoryCopy[filter].label}
+									{filter === 'All' ? 'All' : pathwayCopy[filter].label}
 								</button>
 							{/each}
 						</nav>
@@ -879,13 +914,13 @@
 					{#if selectedNode && selectedSkill}
 						<div class="inspector-block">
 							<span>Why this matters here</span>
-							<strong>{selectedMember.name.split(' ')[0]}'s profile and current recommendations connect this capability to {selectedNode.territory ? territoryCopy[selectedNode.territory].label.toLowerCase() : 'the wider pathway'}.</strong>
+							<strong>{selectedMember.name.split(' ')[0]}'s profile and current recommendations connect this capability to {selectedNode.territory ? pathwayCopy[territoryToPathway[selectedNode.territory]].label.toLowerCase() : 'the wider pathway'}.</strong>
 						</div>
 						<div class="inspector-block">
 							<span>Courses developing it</span>
 							<div class="mini-list">
 								{#each coursesForSkill(selectedSkill.id).slice(0, 5) as course}
-									<button type="button" onclick={() => selectNode(`course-${course.id}`)}>{course.title}</button>
+									<button type="button" onclick={() => selectNode(`course-${course.id}`)}>{titleFor(course)}</button>
 								{/each}
 							</div>
 						</div>
@@ -902,11 +937,11 @@
 						</div>
 						<div class="inspector-grid">
 							<div><span>Map role</span><strong>{selectedNode.role ?? selectedNode.label}</strong></div>
-							<div><span>Status</span><strong>{selectedNode.status ?? courseState(selectedCourse)}</strong></div>
+							<div><span>Status</span><strong>{selectedNode.status ?? courseStateLabel(selectedCourse)}</strong></div>
 						</div>
 						<div class="inspector-grid">
 							<div><span>Prerequisites</span><strong>{getCourseTitles(selectedCourse.prerequisites)}</strong></div>
-							<div><span>Recommended next</span><strong>{getCourseTitles(selectedCourse.recommendedNext)}</strong></div>
+							<div><span>Recommended next</span><strong>{getCourseTitles(selectedCourse.unlocks)}</strong></div>
 						</div>
 						<div class="inspector-block">
 							<span>Recommendation context</span>
@@ -917,7 +952,7 @@
 							<span>Team pathway courses</span>
 							<div class="mini-list">
 								{#each teamCourses as course}
-									<button type="button" onclick={() => selectNode(`course-${course.id}`)}>{course.title}</button>
+									<button type="button" onclick={() => selectNode(`course-${course.id}`)}>{titleFor(course)}</button>
 								{/each}
 							</div>
 						</div>
@@ -941,7 +976,7 @@
 					{/if}
 				</aside>
 			</div>
-			{#if selectedArea === 'Stress & Growth'}
+			{#if selectedArea === 'stress-growth'}
 				<div class="map-lower-tray">
 					<div>
 						<p class="eyebrow">Core resilience skills</p>
@@ -949,25 +984,25 @@
 						<p>These capabilities do not need a fixed type sector. They support awareness, regulation and response flexibility across the whole map.</p>
 					</div>
 					<div class="tray-items">
-						{#each ['C01', 'C02', 'C03'].map(getCourse).filter(isCourse) as course}
+						{#each courses.filter((course) => course.pathway === 'stress-growth' && course.category === 'general').slice(0, 4) as course}
 							<button type="button" onclick={() => selectNode(`course-${course.id}`)}>
-								<span>{course.level} / {course.duration}</span>
-								<strong>{course.title}</strong>
+								<span>{courseMeta(course)}</span>
+								<strong>{titleFor(course)}</strong>
 							</button>
 						{/each}
 					</div>
 				</div>
-			{:else if selectedArea === 'Team Development'}
+			{:else if selectedArea === 'team'}
 				<div class="team-learning-lower">
 					<div>
 						<p class="eyebrow">My team skills</p>
 						<h3>Individual learning for better collaboration</h3>
 						<p>Build capabilities that improve work across several relationships, regardless of one colleague's profile.</p>
 						<div class="tray-items">
-							{#each ['C08', 'C09', 'C06', 'C21'].map(getCourse).filter(isCourse) as course}
+							{#each courses.filter((course) => course.pathway === 'team' && course.category === 'general').slice(0, 4) as course}
 								<button type="button" onclick={() => selectNode(`course-${course.id}`)}>
-									<span>{course.level} / {course.duration}</span>
-									<strong>{course.title}</strong>
+									<span>{courseMeta(course)}</span>
+									<strong>{titleFor(course)}</strong>
 								</button>
 							{/each}
 						</div>
@@ -980,7 +1015,7 @@
 							{#each teamCourses as course, index}
 								<button type="button" onclick={() => selectNode(`course-${course.id}`)}>
 									<span>{index + 1}</span>
-									<strong>{course.title}</strong>
+									<strong>{titleFor(course)}</strong>
 								</button>
 							{/each}
 						</div>
