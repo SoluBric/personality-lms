@@ -20,9 +20,10 @@ tree, card layout, progression mechanic or metaphor described here.
 The underlying content and relationships matter more than any proposed
 presentation.
 
-The research and content files provide the actual demo material. This
-blueprint is intended to help show how that material might connect into
-a coherent development experience.
+The `new-course-approach/` documents provide the current course-system
+architecture. This blueprint is UI inspiration only and must not override
+the v3 rule that one course belongs to one pathway and one
+pathway-specific category.
 
 ------------------------------------------------------------------------
 
@@ -55,13 +56,13 @@ catalogue.
 
 ------------------------------------------------------------------------
 
-# 2. Four Development Territories
+# 2. Four Development Pathways
 
-The content already supports four broad development territories. These
-are useful organising concepts, although they do not necessarily need to
+The current v3 course system uses four canonical pathways. These are
+useful organising concepts, although they do not necessarily need to
 become four literal interface columns or sections.
 
-## Strengthen Strengths
+## Strengths
 
 Build further on capabilities that already come relatively naturally.
 
@@ -94,7 +95,7 @@ This may draw on:
 
 ------------------------------------------------------------------------
 
-## Fortify Growth Areas
+## Fortification
 
 Develop capabilities that may compensate for recurring challenges,
 overuse patterns or blind spots.
@@ -111,7 +112,7 @@ The framing should remain developmental rather than deficit-based.
 
 ------------------------------------------------------------------------
 
-## Team Development
+## Team
 
 Develop capabilities that become particularly relevant through
 collaboration with others.
@@ -124,7 +125,7 @@ These may arise from:
 -   team decision patterns;
 -   shared development goals.
 
-This territory naturally connects the individual Development area with
+This pathway naturally connects the individual Development area with
 the Team area.
 
 ------------------------------------------------------------------------
@@ -136,13 +137,13 @@ Several distinct concepts are available to the Pathways experience.
 Keeping them conceptually separate creates flexibility even if the
 interface later blends them together.
 
-## Development Theme / Territory
+## Development Pathway
 
 A broad reason or context for development.
 
 Example:
 
-**Fortify Growth Areas**
+**Fortification**
 
 ------------------------------------------------------------------------
 
@@ -167,11 +168,11 @@ A skill can be developed through more than one course or experience.
 
 A learning intervention.
 
-Example:
-
-**Finding Your Voice**
-
-A course may develop several skills and may appear in several pathways.
+In v3, each canonical course has exactly one pathway and one
+pathway-specific category. A course can still develop several skills, and
+it can be recommended to different learners for different reasons, but
+that personalisation belongs in Recommendation records rather than in the
+course definition.
 
 ------------------------------------------------------------------------
 
@@ -194,7 +195,8 @@ The personalised explanation for why a particular skill, course or
 pathway may be relevant.
 
 This is especially important because the **same course can be
-recommended to different people for different reasons**.
+recommended to different people for different reasons** while still
+remaining in one canonical pathway.
 
 The intelligence of the demo therefore lies partly in:
 
@@ -229,7 +231,7 @@ Possibilities include:
 -   a professional skill tree;
 -   a constellation or network;
 -   connected pathways;
--   territories or regions;
+-   pathway regions;
 -   a journey;
 -   a subtle forging / capability-building metaphor;
 -   a hybrid of map and conventional interface elements.
@@ -550,14 +552,14 @@ explore the course.
 
 ------------------------------------------------------------------------
 
-# 13. Relationship to Team Development
+# 13. Relationship to the Team Pathway
 
 Individual and team development can intersect.
 
 For example:
 
-**Emily personal pathway**\
-contains **Constructive Conflict**
+**Emily recommendation**\
+points to **TM-GEN-02 Productive Disagreement**
 
 while:
 
@@ -576,7 +578,7 @@ PERSONAL DEVELOPMENT
                       CONSTRUCTIVE CONFLICT
          /
         /
-TEAM DEVELOPMENT
+TEAM
 ```
 
 The eventual interface may choose to make these intersections visible.
@@ -592,7 +594,7 @@ If a skill becomes an explorable object, useful information may include:
 
 -   skill name;
 -   short description;
--   development territory;
+-   related pathway or category;
 -   why it is relevant to this learner;
 -   related profile insights;
 -   contributing courses;
@@ -612,7 +614,7 @@ A pathway may contain:
 -   title;
 -   short purpose;
 -   why it is relevant;
--   associated development territory;
+-   associated pathway;
 -   related skills;
 -   course sequence or network;
 -   optional branches;
@@ -637,8 +639,8 @@ The highest-value ideas are likely to be:
 3.  strengths can be developed as well as growth areas;
 4.  profile insights can lead to trainable skills;
 5.  skills can lead to courses;
-6.  courses can belong to pathways;
-7.  the same course can serve different people and contexts;
+6.  each course belongs to one canonical pathway;
+7.  the same course can be recommended to different people for different reasons;
 8.  personal and team development can intersect;
 9.  the learner has some agency in choosing where to develop;
 10. progress feels meaningful without pretending to measure personality

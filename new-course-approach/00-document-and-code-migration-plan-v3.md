@@ -372,7 +372,7 @@ type LearnerCourseState = {
 
 ## Current multi-territory problem
 
-Courses currently contain arrays such as:
+In the retired v2 model, courses contained arrays such as:
 
 ```ts
 territories: ['Fortify Growth Areas', 'Team Development']

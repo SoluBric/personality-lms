@@ -5,6 +5,8 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite dev",
+		"generate:courses": "node scripts/generate-course-catalog.mjs",
+		"validate:courses": "node scripts/validate-course-system.mjs",
 		"build": "vite build",
 		"build:cloudflare": "WRANGLER_LOG_PATH=.wrangler/logs WRANGLER_WRITE_LOGS=false wrangler types && vite build",
 		"preview": "wrangler pages dev .svelte-kit/cloudflare --port 4173",
@@ -23,6 +25,7 @@
 		"tailwindcss": "^4.3.0",
 		"typescript": "^6.0.3",
 		"vite": "^8.0.16",
-		"wrangler": "^4.97.0"
+		"wrangler": "^4.97.0",
+		"yaml": "^2.9.0"
 	}
 }

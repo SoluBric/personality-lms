@@ -521,9 +521,9 @@ This section broadly answers:
 
 ## Information that may be useful
 
-Potential development directions include the four broad territories already established in the demo content:
+Potential development directions include the four v3 course pathways:
 
-### Strengthen Strengths
+### Strengths
 
 Develop an existing natural capability further.
 
@@ -531,11 +531,11 @@ Develop an existing natural capability further.
 
 Recognise stress patterns and expand more constructive responses.
 
-### Fortify Growth Areas
+### Fortification
 
 Develop skills that compensate for common challenges or blind spots.
 
-### Team Development
+### Team
 
 Apply profile insight to collaboration with other people.
 

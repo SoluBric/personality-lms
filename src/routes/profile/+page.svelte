@@ -43,8 +43,8 @@
 	];
 
 	const territoryCopy: Record<Territory, { label: string; compact: string; question: string; pathway: string }> = {
-		'Strengthen Strengths': {
-			label: 'Strengthen Strengths',
+		Strengths: {
+			label: 'Strengths',
 			compact: 'Build further on capabilities that already come naturally and turn them into more deliberate professional strengths.',
 			question: 'What already works well, and where could mastery look more intentional?',
 			pathway: 'Listening / influence / facilitation progression'
@@ -55,14 +55,14 @@
 			question: 'What happens when pressure increases, and what response would create more range?',
 			pathway: 'Recognition -> regulation -> alternative responses'
 		},
-		'Fortify Growth Areas': {
-			label: 'Fortify Areas of Growth',
+		Fortification: {
+			label: 'Fortification',
 			compact: 'Build capabilities around recurring challenges, overuse patterns and blind spots so more responses are available.',
 			question: 'Where would additional capability give you more range?',
 			pathway: 'From Accommodation to Constructive Assertion'
 		},
-		'Team Development': {
-			label: 'Team Development',
+		Team: {
+			label: 'Team',
 			compact: 'Use profile insight to improve collaboration, navigate differences and develop shared capability with colleagues.',
 			question: 'How can this understanding help you work more effectively with others?',
 			pathway: 'Shared team pathway'
@@ -174,7 +174,7 @@
 			.map((recommendation) => ({ recommendation, course: getCourse(recommendation.courseId) }))
 			.filter((item): item is { recommendation: Recommendation; course: Course } => Boolean(item.course));
 
-		if (territory !== 'Team Development') {
+		if (territory !== 'Team') {
 			return personalised;
 		}
 
@@ -195,13 +195,13 @@
 	}
 
 	function getTerritoryStory(territory: Territory, member = selectedMember) {
-		if (territory === 'Strengthen Strengths') {
+		if (territory === 'Strengths') {
 			return `${member.name.split(' ')[0]}'s profile already shows ${mainType.capacity}. This direction asks what mastery could look like when that natural pattern becomes more deliberate, influential and transferable.`;
 		}
 		if (territory === 'Stress & Growth') {
 			return `${member.name.split(' ')[0]} can use pressure signals from ${stressType.number} / ${stressType.name} and growth resources from ${growthType.number} / ${growthType.name} to practise more flexible responses.`;
 		}
-		if (territory === 'Fortify Growth Areas') {
+		if (territory === 'Fortification') {
 			return `This direction connects recurring challenges such as ${member.growthEdges.slice(0, 2).join(' and ').toLowerCase()} to trainable professional capabilities.`;
 		}
 		return `${member.name.split(' ')[0]}'s team context adds relationship and shared decision patterns, especially through ${currentTeam.name}'s pathway: ${currentTeam.pathwayName}.`;
@@ -575,7 +575,7 @@
 							<div>
 								<span>Why this matters</span>
 								<ul>
-									{#each selectedLearningTerritory === 'Team Development' ? currentTeam.priorities : selectedMember.growthEdges as reason}
+									{#each selectedLearningTerritory === 'Team' ? currentTeam.priorities : selectedMember.growthEdges as reason}
 										<li>{reason}</li>
 									{/each}
 								</ul>
@@ -592,7 +592,7 @@
 
 						<div class="pathway-strip">
 							<span>Pathway / learning route</span>
-							<strong>{selectedLearningTerritory === 'Team Development' ? currentTeam.pathwayName : selectedTerritoryCopy.pathway}</strong>
+							<strong>{selectedLearningTerritory === 'Team' ? currentTeam.pathwayName : selectedTerritoryCopy.pathway}</strong>
 						</div>
 
 						<div class="learning-course-list">
@@ -615,7 +615,7 @@
 										</div>
 										<div class="recommendation-reason">
 											<span>{item.recommendation?.priority ?? item.course.pathway}</span>
-											<strong>{item.recommendation?.reason ?? (item.course.pathway === 'team' ? 'Part of the shared team learning route.' : 'Included because it supports this development territory and pathway.')}</strong>
+											<strong>{item.recommendation?.reason ?? (item.course.pathway === 'team' ? 'Part of the shared team learning route.' : 'Included because it supports this v3 pathway and category.')}</strong>
 										</div>
 									</div>
 								</article>
@@ -706,7 +706,7 @@
 						{#each teamWatchItems as item}<span>{item}</span>{/each}
 					</div>
 				</article>
-				<button type="button" onclick={() => (selectedLearningTerritory = 'Team Development')}>
+				<button type="button" onclick={() => (selectedLearningTerritory = 'Team')}>
 					<span>Explore team development</span>
 					<strong>{currentTeam.pathwayName}</strong>
 				</button>

@@ -445,12 +445,8 @@
         "Type 1 is in the learner's top three"
       ],
       "recommendationContext": "Builds on a natural tendency to notice gaps, standards and opportunities for improvement.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "inner",
@@ -481,12 +477,8 @@
         "Type 1 is in the learner's top three"
       ],
       "recommendationContext": "Develops Type 1-associated improvement energy into a more strategic professional strength.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "middle",
@@ -516,12 +508,8 @@
         "Type 2 is in the learner's top three"
       ],
       "recommendationContext": "Builds on a naturally people-attentive style while making that awareness more precise.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "inner",
@@ -552,12 +540,8 @@
         "Type 2 is in the learner's top three"
       ],
       "recommendationContext": "Extends natural support into sustainable mentoring and relational influence.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "middle",
@@ -587,9 +571,7 @@
         "Type 3 is in the learner's top three"
       ],
       "recommendationContext": "Builds on natural achievement energy and converts it into deliberate execution practice.",
-      "prerequisites": [
-
-      ],
+      "prerequisites": [],
       "unlocks": [
         "S3-02"
       ],
@@ -668,9 +650,7 @@
       "prerequisites": [
         "S3-02"
       ],
-      "unlocks": [
-
-      ],
+      "unlocks": [],
       "chain": {
         "id": "strength-3",
         "sequence": 3
@@ -704,12 +684,8 @@
         "Type 4 is in the learner's top three"
       ],
       "recommendationContext": "Builds on emotional and creative sensitivity as a professional source of insight.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "inner",
@@ -740,12 +716,8 @@
         "Type 4 is in the learner's top three"
       ],
       "recommendationContext": "Develops creative identity into a more collaborative and resilient craft.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "middle",
@@ -775,9 +747,7 @@
         "Type 5 is in the learner's top three"
       ],
       "recommendationContext": "Builds on analytical depth while increasing practical focus.",
-      "prerequisites": [
-
-      ],
+      "prerequisites": [],
       "unlocks": [
         "S5-02"
       ],
@@ -855,9 +825,7 @@
       "prerequisites": [
         "S5-02"
       ],
-      "unlocks": [
-
-      ],
+      "unlocks": [],
       "chain": {
         "id": "strength-5",
         "sequence": 3
@@ -890,12 +858,8 @@
         "Type 6 is in the learner's top three"
       ],
       "recommendationContext": "Builds on preparedness and sceptical intelligence as a practical team asset.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "inner",
@@ -926,12 +890,8 @@
         "Type 6 is in the learner's top three"
       ],
       "recommendationContext": "Develops preparedness into confidence rather than endless checking.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "middle",
@@ -961,9 +921,7 @@
         "Type 7 is in the learner's top three"
       ],
       "recommendationContext": "Builds on possibility orientation as a structured source of opportunity.",
-      "prerequisites": [
-
-      ],
+      "prerequisites": [],
       "unlocks": [
         "S7-02"
       ],
@@ -1003,9 +961,7 @@
       "prerequisites": [
         "S7-01"
       ],
-      "unlocks": [
-
-      ],
+      "unlocks": [],
       "chain": {
         "id": "strength-7",
         "sequence": 2
@@ -1039,9 +995,7 @@
         "Type 8 is in the learner's top three"
       ],
       "recommendationContext": "Builds on natural assertiveness while making its impact more deliberate.",
-      "prerequisites": [
-
-      ],
+      "prerequisites": [],
       "unlocks": [
         "S8-02"
       ],
@@ -1120,9 +1074,7 @@
       "prerequisites": [
         "S8-02"
       ],
-      "unlocks": [
-
-      ],
+      "unlocks": [],
       "chain": {
         "id": "strength-8",
         "sequence": 3
@@ -1155,9 +1107,7 @@
         "Type 9 is in the learner's top three"
       ],
       "recommendationContext": "Builds on natural listening and inclusion as a more deliberate professional capability.",
-      "prerequisites": [
-
-      ],
+      "prerequisites": [],
       "unlocks": [
         "S9-02"
       ],
@@ -1236,9 +1186,7 @@
       "prerequisites": [
         "S9-02"
       ],
-      "unlocks": [
-
-      ],
+      "unlocks": [],
       "chain": {
         "id": "strength-9",
         "sequence": 3
@@ -1273,12 +1221,8 @@
         "Stress-related development is relevant"
       ],
       "recommendationContext": "A Type 1 learner is showing stress signals associated with criticism, dissatisfaction or emotional intensity.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "inner",
@@ -1310,12 +1254,8 @@
         "Growth-related development is relevant"
       ],
       "recommendationContext": "A Type 1 learner would benefit from more flexibility, experimentation and permission to explore.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "middle",
@@ -1347,12 +1287,8 @@
         "Stress-related development is relevant"
       ],
       "recommendationContext": "A Type 2 learner is under pressure and support is becoming control, resentment or overreach.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "inner",
@@ -1384,12 +1320,8 @@
         "Growth-related development is relevant"
       ],
       "recommendationContext": "A Type 2 learner would benefit from more self-reference, emotional honesty and differentiation.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "middle",
@@ -1421,12 +1353,8 @@
         "Stress-related development is relevant"
       ],
       "recommendationContext": "A Type 3 learner is under sustained pressure and achievement energy is collapsing into disengagement.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "inner",
@@ -1458,12 +1386,8 @@
         "Growth-related development is relevant"
       ],
       "recommendationContext": "A Type 3 learner would benefit from slowing enough to include risk, loyalty and collective reality.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "middle",
@@ -1495,12 +1419,8 @@
         "Stress-related development is relevant"
       ],
       "recommendationContext": "A Type 4 learner is under pressure and emotional depth is becoming over-attunement to others.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "inner",
@@ -1532,12 +1452,8 @@
         "Growth-related development is relevant"
       ],
       "recommendationContext": "A Type 4 learner would benefit from more structure, objectivity and disciplined follow-through.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "middle",
@@ -1569,12 +1485,8 @@
         "Stress-related development is relevant"
       ],
       "recommendationContext": "A Type 5 learner is under pressure and analysis is fragmenting into restless option-seeking.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "inner",
@@ -1606,12 +1518,8 @@
         "Growth-related development is relevant"
       ],
       "recommendationContext": "A Type 5 learner would benefit from more decisive engagement and willingness to act with incomplete information.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "middle",
@@ -1643,12 +1551,8 @@
         "Stress-related development is relevant"
       ],
       "recommendationContext": "A Type 6 learner is under pressure and vigilance is turning into over-performance or image management.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "inner",
@@ -1680,12 +1584,8 @@
         "Growth-related development is relevant"
       ],
       "recommendationContext": "A Type 6 learner would benefit from greater steadiness, trust and tolerance of unresolved uncertainty.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "middle",
@@ -1717,12 +1617,8 @@
         "Stress-related development is relevant"
       ],
       "recommendationContext": "A Type 7 learner is under pressure and flexibility is narrowing into rigidity or frustration.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "inner",
@@ -1754,12 +1650,8 @@
         "Growth-related development is relevant"
       ],
       "recommendationContext": "A Type 7 learner would benefit from deeper attention, analysis and tolerance for a narrower field.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "middle",
@@ -1791,12 +1683,8 @@
         "Stress-related development is relevant"
       ],
       "recommendationContext": "A Type 8 learner is under pressure and direct engagement is shifting into defensive distance.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "inner",
@@ -1828,12 +1716,8 @@
         "Growth-related development is relevant"
       ],
       "recommendationContext": "A Type 8 learner would benefit from greater relational receptivity and willingness to receive support.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "middle",
@@ -1865,12 +1749,8 @@
         "Stress-related development is relevant"
       ],
       "recommendationContext": "A Type 9 learner is under pressure and calm is shifting into doubt, vigilance or indecision.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "inner",
@@ -1902,12 +1782,8 @@
         "Growth-related development is relevant"
       ],
       "recommendationContext": "A Type 9 learner would benefit from greater agency, goal clarity and visible action.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "middle",
@@ -1939,12 +1815,8 @@
         "Additional depth is useful"
       ],
       "recommendationContext": "A Type 3 learner has moved from high-output strain into disengagement or flatness.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "middle",
@@ -1976,12 +1848,8 @@
         "Additional depth is useful"
       ],
       "recommendationContext": "A Type 3 learner is ready to make achievement more collaborative and resilient.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "middle",
@@ -2013,12 +1881,8 @@
         "Additional depth is useful"
       ],
       "recommendationContext": "A Type 4 learner is seeking repeated confirmation or becoming over-dependent on relational response.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "middle",
@@ -2050,12 +1914,8 @@
         "Additional depth is useful"
       ],
       "recommendationContext": "A Type 4 learner wants more structure without losing originality.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "middle",
@@ -2087,12 +1947,8 @@
         "Additional depth is useful"
       ],
       "recommendationContext": "A Type 5 learner is responding to pressure by scattering attention across too many inputs.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "middle",
@@ -2124,12 +1980,8 @@
         "Additional depth is useful"
       ],
       "recommendationContext": "A Type 5 learner is ready to convert insight into more visible authority and action.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "middle",
@@ -2161,12 +2013,8 @@
         "Additional depth is useful"
       ],
       "recommendationContext": "A Type 8 learner has pulled back after challenge and needs a clean re-entry into collaboration.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "middle",
@@ -2198,12 +2046,8 @@
         "Additional depth is useful"
       ],
       "recommendationContext": "A Type 8 learner is ready to widen strength by receiving as well as providing protection.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "middle",
@@ -2235,12 +2079,8 @@
         "Additional depth is useful"
       ],
       "recommendationContext": "A Type 9 learner is delaying action while seeking more certainty or agreement.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "middle",
@@ -2272,12 +2112,8 @@
         "Additional depth is useful"
       ],
       "recommendationContext": "A Type 9 learner is ready to translate growth toward agency into repeatable behaviour.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "middle",
@@ -2307,9 +2143,7 @@
         "Useful for every learner"
       ],
       "recommendationContext": "A general foundation course for recognising pressure before it becomes a larger behavioural pattern.",
-      "prerequisites": [
-
-      ],
+      "prerequisites": [],
       "unlocks": [
         "SG-GEN-08"
       ],
@@ -2342,9 +2176,7 @@
         "Useful for every learner"
       ],
       "recommendationContext": "A general resilience course that supports all type-specific stress work.",
-      "prerequisites": [
-
-      ],
+      "prerequisites": [],
       "unlocks": [
         "SG-GEN-08"
       ],
@@ -2377,12 +2209,8 @@
         "Useful for every learner"
       ],
       "recommendationContext": "A general recovery course for sustaining flexibility over time.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "inner",
@@ -2413,12 +2241,8 @@
         "Useful for every learner; especially relevant under uncertainty"
       ],
       "recommendationContext": "A general decision course that can also support several type-specific stress and growth maps.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "middle",
@@ -2448,12 +2272,8 @@
         "Useful for every learner"
       ],
       "recommendationContext": "A general attentional resilience course.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "inner",
@@ -2483,12 +2303,8 @@
         "Useful for every learner after basic self-awareness"
       ],
       "recommendationContext": "A bridge from profile awareness into deliberate behavioural flexibility.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "middle",
@@ -2518,12 +2334,8 @@
         "Useful for every learner"
       ],
       "recommendationContext": "A general reflection tool for all development pathways.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "inner",
@@ -2558,9 +2370,7 @@
         "SG-GEN-01",
         "SG-GEN-02"
       ],
-      "unlocks": [
-
-      ],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "middle",
@@ -2591,9 +2401,7 @@
         "This capability would broaden the learner's range"
       ],
       "recommendationContext": "The learner would benefit from clearer standards, structure or quality judgement.",
-      "prerequisites": [
-
-      ],
+      "prerequisites": [],
       "unlocks": [
         "F1-02"
       ],
@@ -2633,9 +2441,7 @@
       "prerequisites": [
         "F1-01"
       ],
-      "unlocks": [
-
-      ],
+      "unlocks": [],
       "chain": {
         "id": "fort-1",
         "sequence": 2
@@ -2669,12 +2475,8 @@
         "This capability would broaden the learner's range"
       ],
       "recommendationContext": "The learner would benefit from more active relational attention or support.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "inner",
@@ -2705,12 +2507,8 @@
         "This capability would broaden the learner's range"
       ],
       "recommendationContext": "The learner would benefit from stronger trust-building and relational influence.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "middle",
@@ -2741,9 +2539,7 @@
         "This capability would broaden the learner's range"
       ],
       "recommendationContext": "The learner would benefit from more explicit agency, goals or visible ownership.",
-      "prerequisites": [
-
-      ],
+      "prerequisites": [],
       "unlocks": [
         "F3-02"
       ],
@@ -2784,9 +2580,7 @@
       "prerequisites": [
         "F3-01"
       ],
-      "unlocks": [
-
-      ],
+      "unlocks": [],
       "chain": {
         "id": "fort-3",
         "sequence": 2
@@ -2820,12 +2614,8 @@
         "This capability would broaden the learner's range"
       ],
       "recommendationContext": "The learner would benefit from richer emotional information and meaning awareness.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "inner",
@@ -2857,12 +2647,8 @@
         "This capability would broaden the learner's range"
       ],
       "recommendationContext": "The learner would benefit from more creative interpretation, emotional range or distinctive expression.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "middle",
@@ -2893,9 +2679,7 @@
         "This capability would broaden the learner's range"
       ],
       "recommendationContext": "The learner would benefit from more analytical distance or disciplined inquiry.",
-      "prerequisites": [
-
-      ],
+      "prerequisites": [],
       "unlocks": [
         "F5-02"
       ],
@@ -2936,9 +2720,7 @@
       "prerequisites": [
         "F5-01"
       ],
-      "unlocks": [
-
-      ],
+      "unlocks": [],
       "chain": {
         "id": "fort-5",
         "sequence": 2
@@ -2972,12 +2754,8 @@
         "This capability would broaden the learner's range"
       ],
       "recommendationContext": "The learner would benefit from more risk awareness or preparation.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "inner",
@@ -3009,12 +2787,8 @@
         "This capability would broaden the learner's range"
       ],
       "recommendationContext": "The learner would benefit from more calibrated scepticism, preparation or decision confidence.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "middle",
@@ -3046,12 +2820,8 @@
         "This capability would broaden the learner's range"
       ],
       "recommendationContext": "The learner would benefit from more possibility, reframing or option generation.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "inner",
@@ -3082,12 +2852,8 @@
         "This capability would broaden the learner's range"
       ],
       "recommendationContext": "The learner would benefit from more experimentation and adaptive learning.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "middle",
@@ -3118,9 +2884,7 @@
         "This capability would broaden the learner's range"
       ],
       "recommendationContext": "The learner would benefit from more directness, boundary clarity or willingness to take a position.",
-      "prerequisites": [
-
-      ],
+      "prerequisites": [],
       "unlocks": [
         "F8-02"
       ],
@@ -3161,9 +2925,7 @@
       "prerequisites": [
         "F8-01"
       ],
-      "unlocks": [
-
-      ],
+      "unlocks": [],
       "chain": {
         "id": "fort-8",
         "sequence": 2
@@ -3198,9 +2960,7 @@
         "This capability would broaden the learner's range"
       ],
       "recommendationContext": "The learner would benefit from more listening, patience or integration of different viewpoints.",
-      "prerequisites": [
-
-      ],
+      "prerequisites": [],
       "unlocks": [
         "F9-02"
       ],
@@ -3241,9 +3001,7 @@
       "prerequisites": [
         "F9-01"
       ],
-      "unlocks": [
-
-      ],
+      "unlocks": [],
       "chain": {
         "id": "fort-9",
         "sequence": 2
@@ -3278,12 +3036,8 @@
         "The learner wants to collaborate more effectively with this working style"
       ],
       "recommendationContext": "Recommended when Type 1-associated behaviour is relevant in a real team relationship.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "inner",
@@ -3315,12 +3069,8 @@
         "The learner wants to collaborate more effectively with this working style"
       ],
       "recommendationContext": "Recommended when Type 2-associated behaviour is relevant in a real team relationship.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "inner",
@@ -3352,12 +3102,8 @@
         "The learner wants to collaborate more effectively with this working style"
       ],
       "recommendationContext": "Recommended when Type 3-associated behaviour is relevant in a real team relationship.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "inner",
@@ -3389,12 +3135,8 @@
         "The learner wants to collaborate more effectively with this working style"
       ],
       "recommendationContext": "Recommended when Type 4-associated behaviour is relevant in a real team relationship.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "inner",
@@ -3426,12 +3168,8 @@
         "The learner wants to collaborate more effectively with this working style"
       ],
       "recommendationContext": "Recommended when Type 5-associated behaviour is relevant in a real team relationship.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "inner",
@@ -3463,12 +3201,8 @@
         "The learner wants to collaborate more effectively with this working style"
       ],
       "recommendationContext": "Recommended when Type 6-associated behaviour is relevant in a real team relationship.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "inner",
@@ -3500,12 +3234,8 @@
         "The learner wants to collaborate more effectively with this working style"
       ],
       "recommendationContext": "Recommended when Type 7-associated behaviour is relevant in a real team relationship.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "inner",
@@ -3537,12 +3267,8 @@
         "The learner wants to collaborate more effectively with this working style"
       ],
       "recommendationContext": "Recommended when Type 8-associated behaviour is relevant in a real team relationship.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "inner",
@@ -3574,12 +3300,8 @@
         "The learner wants to collaborate more effectively with this working style"
       ],
       "recommendationContext": "Recommended when Type 9-associated behaviour is relevant in a real team relationship.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "inner",
@@ -3612,12 +3334,8 @@
         "Center-level collaboration is relevant"
       ],
       "recommendationContext": "Useful when several Body-center patterns are represented or when the team is navigating action, boundaries or standards.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "middle",
@@ -3650,12 +3368,8 @@
         "Center-level collaboration is relevant"
       ],
       "recommendationContext": "Useful when several Heart-center patterns are represented or when the team is navigating recognition, relationship or identity.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "middle",
@@ -3688,12 +3402,8 @@
         "Center-level collaboration is relevant"
       ],
       "recommendationContext": "Useful when several Head-center patterns are represented or when the team is navigating analysis, risk or options.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "middle",
@@ -3723,9 +3433,7 @@
         "Useful for team-wide development"
       ],
       "recommendationContext": "Useful when the team moves quickly to solutions or quieter information is being lost.",
-      "prerequisites": [
-
-      ],
+      "prerequisites": [],
       "unlocks": [
         "TM-GEN-02"
       ],
@@ -3840,12 +3548,8 @@
         "Useful for team-wide development"
       ],
       "recommendationContext": "Useful when support, authority or responsibility is uneven or ambiguous.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "outer",
@@ -3876,12 +3580,8 @@
         "Useful for team-wide development"
       ],
       "recommendationContext": "Useful when people interpret feedback differently or important messages do not travel across styles.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "outer",
@@ -3912,12 +3612,8 @@
         "Useful for team-wide development"
       ],
       "recommendationContext": "Useful for every mixed-profile team.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "outer",
@@ -3951,9 +3647,7 @@
       "prerequisites": [
         "TM-GEN-03"
       ],
-      "unlocks": [
-
-      ],
+      "unlocks": [],
       "chain": {
         "id": "team-decision",
         "sequence": 4
@@ -3987,12 +3681,8 @@
         "Useful for team-wide development"
       ],
       "recommendationContext": "Useful when a diverse team has rich input but struggles to synthesize it into one direction.",
-      "prerequisites": [
-
-      ],
-      "unlocks": [
-
-      ],
+      "prerequisites": [],
+      "unlocks": [],
       "chain": null,
       "map": {
         "radialBand": "outer",

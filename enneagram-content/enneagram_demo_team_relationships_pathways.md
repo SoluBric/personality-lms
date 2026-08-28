@@ -1,7 +1,7 @@
 # Enneagram Demo LMS — Team Relationships and Team Development Pathways
 
 **Status:** Working demo content architecture  
-**Scope:** Seven actual pair relationships, two team-level profiles, team development themes, team learning pathways, viewer-specific interaction guidance, and selective reuse of the existing 22-course catalogue.  
+**Scope:** Seven actual pair relationships, two team-level profiles, team development themes, team learning pathways, viewer-specific interaction guidance, and use of the v3 Team pathway catalogue.  
 **Purpose:** Add the social/team layer to the demo without expanding into every possible Enneagram pairing.
 
 ---
@@ -145,10 +145,10 @@ Emily may need explicit invitation and sufficient space to disagree before her r
 ### **Productive disagreement without avoidance or domination**
 
 ## Shared courses
-- **C06 — Constructive Conflict**
-- **C08 — Listening Before Leading**
-- **C20 — Facilitating Productive Disagreement**
-- **C22 — High-Trust Team Decisions**
+- **TM-GEN-02 — Productive Disagreement**
+- **TM-GEN-01 — Listening Before Leading**
+- **TM-GEN-02 — Productive Disagreement**
+- **TM-GEN-07 — High-Trust Team Commitments**
 
 ---
 
@@ -203,10 +203,10 @@ Emily may not immediately state that a process is becoming too open-ended; activ
 ### **Creative disagreement with clear commitment**
 
 ## Shared courses
-- **C06 — Constructive Conflict**
-- **C15 — Feedback Without Losing the Work**
-- **C20 — Facilitating Productive Disagreement**
-- **C22 — High-Trust Team Decisions**
+- **TM-GEN-02 — Productive Disagreement**
+- **TM-GEN-05 — Feedback That Travels**
+- **TM-GEN-02 — Productive Disagreement**
+- **TM-GEN-07 — High-Trust Team Commitments**
 
 ---
 
@@ -263,10 +263,10 @@ If he does not make his thinking visible, Emily may continue holding the group o
 ### **Turning thoughtful input into timely shared decisions**
 
 ## Shared courses
-- **C10 — Decisions Without Certainty**
-- **C18 — Strategic Communication**
-- **C22 — High-Trust Team Decisions**
-- **C02 — Staying Effective Under Pressure**
+- **TM-GEN-03 — Team Decisions That Close**
+- **TM-GEN-04 — Role Clarity and Ownership**
+- **TM-GEN-07 — High-Trust Team Commitments**
+- **SG-GEN-02 — Emotional Regulation Under Pressure**
 
 ---
 
@@ -325,10 +325,10 @@ James is more likely to tolerate exploration when the decision point, constraint
 ### **Balancing creative quality with decisive delivery**
 
 ## Shared courses
-- **C14 — From Idea to Delivery**
-- **C15 — Feedback Without Losing the Work**
-- **C12 — Priorities That Hold**
-- **C22 — High-Trust Team Decisions**
+- **TM-GEN-08 — From Different Perspectives to One Plan**
+- **TM-GEN-05 — Feedback That Travels**
+- **TM-GEN-04 — Role Clarity and Ownership**
+- **TM-GEN-07 — High-Trust Team Commitments**
 
 ---
 
@@ -383,11 +383,11 @@ James is more receptive to analysis when it ends with a recommendation rather th
 ### **Fast enough to act; rigorous enough to trust**
 
 ## Shared courses
-- **C10 — Decisions Without Certainty**
-- **C11 — Calibrating Risk**
-- **C13 — From Analysis to Action**
-- **C18 — Strategic Communication**
-- **C22 — High-Trust Team Decisions**
+- **TM-GEN-03 — Team Decisions That Close**
+- **TM-GEN-07 — High-Trust Team Commitments**
+- **TM-T5-01 — Working With Analysis-Driven Colleagues**
+- **TM-GEN-04 — Role Clarity and Ownership**
+- **TM-GEN-07 — High-Trust Team Commitments**
 
 ---
 
@@ -448,11 +448,11 @@ Sophie's intuitive reaction may contain information that needs exploration rathe
 ### **Turning rich exploration into a testable direction**
 
 ## Shared courses
-- **C14 — From Idea to Delivery**
-- **C11 — Calibrating Risk**
-- **C15 — Feedback Without Losing the Work**
-- **C12 — Priorities That Hold**
-- **C22 — High-Trust Team Decisions**
+- **TM-GEN-08 — From Different Perspectives to One Plan**
+- **TM-GEN-07 — High-Trust Team Commitments**
+- **TM-GEN-05 — Feedback That Travels**
+- **TM-GEN-04 — Role Clarity and Ownership**
+- **TM-GEN-07 — High-Trust Team Commitments**
 
 ---
 
@@ -519,11 +519,11 @@ Sarah's concerns are most useful before a promise is made, so he must actively i
 ### **Opportunity with disciplined commitment**
 
 ## Shared courses
-- **C21 — Consultative Stakeholder Conversations**
-- **C12 — Priorities That Hold**
-- **C19 — Sustainable Execution**
-- **C10 — Decisions Without Certainty**
-- **C22 — High-Trust Team Decisions**
+- **TM-GEN-01 — Listening Before Leading**
+- **TM-GEN-04 — Role Clarity and Ownership**
+- **TM-GEN-07 — High-Trust Team Commitments**
+- **TM-GEN-03 — Team Decisions That Close**
+- **TM-GEN-07 — High-Trust Team Commitments**
 
 ---
 
@@ -592,10 +592,10 @@ Relevant skills:
 
 Relevant courses:
 
-- C04 Finding Your Voice
-- C06 Constructive Conflict
-- C08 Listening Before Leading
-- C20 Facilitating Productive Disagreement
+- F8-01 Assertiveness and Clean Boundaries
+- TM-GEN-02 Productive Disagreement
+- TM-GEN-01 Listening Before Leading
+- TM-GEN-02 Productive Disagreement
 
 ---
 
@@ -619,10 +619,10 @@ Relevant skills:
 
 Relevant courses:
 
-- C10 Decisions Without Certainty
-- C11 Calibrating Risk
-- C12 Priorities That Hold
-- C22 High-Trust Team Decisions
+- TM-GEN-03 Team Decisions That Close
+- TM-GEN-07 High-Trust Team Commitments
+- TM-GEN-04 Role Clarity and Ownership
+- TM-GEN-07 High-Trust Team Commitments
 
 ---
 
@@ -645,9 +645,9 @@ Relevant skills:
 
 Relevant courses:
 
-- C14 From Idea to Delivery
-- C15 Feedback Without Losing the Work
-- C19 Sustainable Execution
+- TM-GEN-08 From Different Perspectives to One Plan
+- TM-GEN-05 Feedback That Travels
+- TM-GEN-07 High-Trust Team Commitments
 
 ---
 
@@ -656,38 +656,38 @@ Relevant courses:
 ## Pathway: **From Diverse Perspectives to Confident Decisions**
 
 ### Stage 1 — Hear the Differences
-**C08 — Listening Before Leading**
+**TM-GEN-01 — Listening Before Leading**
 
 Purpose:
 Create explicit space for reservations, alternative ideas and analytical concerns before the team moves toward closure.
 
 ### Stage 2 — Surface the Conflict
-**C06 — Constructive Conflict**
+**TM-GEN-02 — Productive Disagreement**
 
 Purpose:
 Normalise disagreement as useful information rather than a sign that the team is failing to align.
 
 ### Stage 3 — Decide Without Perfect Certainty
-**C10 — Decisions Without Certainty**
+**TM-GEN-03 — Team Decisions That Close**
 
 Purpose:
 Give the team a common language for deciding when there is enough information to act.
 
 ### Stage 4 — Integrate the Room
-**C20 — Facilitating Productive Disagreement**
+**TM-GEN-02 — Productive Disagreement**
 
 Purpose:
 Help the team prevent either domination or avoidance while synthesising different perspectives.
 
 ### Stage 5 — Commit Together
-**C22 — High-Trust Team Decisions**
+**TM-GEN-07 — High-Trust Team Commitments**
 
 Purpose:
 Create a repeatable decision process in which dissent is visible before closure and commitment becomes explicit afterward.
 
 ### Optional side branch — Creative Delivery
-**C14 — From Idea to Delivery**  
-→ **C15 — Feedback Without Losing the Work**
+**TM-GEN-08 — From Different Perspectives to One Plan**  
+→ **TM-GEN-05 — Feedback That Travels**
 
 This branch is particularly relevant to Sophie and James but can be completed by the whole team.
 
@@ -775,9 +775,9 @@ Relevant skills:
 
 Relevant courses:
 
-- C04 Finding Your Voice
-- C08 Listening Before Leading
-- C18 Strategic Communication
+- F8-01 Assertiveness and Clean Boundaries
+- TM-GEN-01 Listening Before Leading
+- TM-GEN-04 Role Clarity and Ownership
 
 ---
 
@@ -797,9 +797,9 @@ Relevant skills:
 
 Relevant courses:
 
-- C12 Priorities That Hold
-- C11 Calibrating Risk
-- C10 Decisions Without Certainty
+- TM-GEN-04 Role Clarity and Ownership
+- TM-GEN-07 High-Trust Team Commitments
+- TM-GEN-03 Team Decisions That Close
 
 ---
 
@@ -813,8 +813,8 @@ Relevant skills:
 
 Relevant courses:
 
-- C21 Consultative Stakeholder Conversations
-- C19 Sustainable Execution
+- TM-GEN-01 Listening Before Leading
+- TM-GEN-07 High-Trust Team Commitments
 
 ---
 
@@ -823,31 +823,31 @@ Relevant courses:
 ## Pathway: **From Opportunity to Credible Commitment**
 
 ### Stage 1 — Discover Before Promising
-**C21 — Consultative Stakeholder Conversations**
+**TM-GEN-01 — Listening Before Leading**
 
 Purpose:
 Help Oliver turn persuasion into consultation and give Sarah better information about the actual stakeholder need.
 
 ### Stage 2 — Make the Trade-Off Visible
-**C12 — Priorities That Hold**
+**TM-GEN-04 — Role Clarity and Ownership**
 
 Purpose:
 Ensure that a new opportunity competes explicitly with existing commitments rather than simply being added.
 
 ### Stage 3 — Decide Together
-**C10 — Decisions Without Certainty**
+**TM-GEN-03 — Team Decisions That Close**
 
 Purpose:
 Give Sarah and Oliver a shared threshold for when an opportunity has been tested enough to commit.
 
 ### Stage 4 — Deliver What Was Promised
-**C19 — Sustainable Execution**
+**TM-GEN-07 — High-Trust Team Commitments**
 
 Purpose:
 Connect ambition to capacity, completion and credibility.
 
 ### Stage 5 — Formalise the Pair's Decision Rhythm
-**C22 — High-Trust Team Decisions**
+**TM-GEN-07 — High-Trust Team Commitments**
 
 Purpose:
 Create a repeatable two-person process for challenge, decision and commitment.
@@ -877,22 +877,22 @@ The existing courses already cover the main needs.
 
 ## Most important cross-team courses
 
-### C06 — Constructive Conflict
+### TM-GEN-02 — Productive Disagreement
 Especially relevant to Team Atlas.
 
-### C08 — Listening Before Leading
+### TM-GEN-01 — Listening Before Leading
 Useful to James and Oliver, and as a team norm around hearing reservations.
 
-### C10 — Decisions Without Certainty
+### TM-GEN-03 — Team Decisions That Close
 Useful across both teams.
 
-### C12 — Priorities That Hold
+### TM-GEN-04 — Role Clarity and Ownership
 Especially useful where creative or commercial opportunities compete with capacity.
 
-### C20 — Facilitating Productive Disagreement
+### TM-GEN-02 — Productive Disagreement
 A higher-level Team Atlas capability.
 
-### C22 — High-Trust Team Decisions
+### TM-GEN-07 — High-Trust Team Commitments
 The strongest shared capstone for both teams.
 
 No additional course is required at this stage.

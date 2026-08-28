@@ -1406,7 +1406,7 @@ The useful question is now:
 
 > **Across these six people, what strengths and development needs recur often enough to justify skills and courses in the demo LMS?**
 
-That analysis can identify a deliberately small skills set and course catalogue whose content is reused intelligently across several pathways.
+That analysis can identify a focused skills set and course catalogue whose recommendations feel personalised while each canonical course remains assigned to one formal pathway.
 
 A likely next workflow is:
 

@@ -453,9 +453,11 @@ For example:
 
 Once the six fictional profiles are populated, these tags can be analysed for overlap.
 
-The actual demo skills taxonomy and course catalogue can then be designed around the needs that genuinely appear across the six characters.
+The current v3 course architecture has now superseded this early planning step. The canonical catalogue is organised as:
 
-This should allow a relatively small course catalogue to appear highly personalised because the same course can be reached through several different developmental pathways.
+> **one course -> one pathway -> one pathway-specific category**
+
+Personalisation happens through separate recommendation records and learner course state, not by assigning the same canonical course to several formal pathways.
 
 ---
 
@@ -483,10 +485,10 @@ The sequence should therefore be:
 >
 > ↓
 >
-> **Design the Demo Skills Taxonomy**
+> **Use the v3 Skills and Course Taxonomy**
 >
 > ↓
 >
-> **Create the Course Catalogue and Learning Pathways**
+> **Maintain the Canonical v3 Course Catalogue and Recommendation Seeds**
 
 This keeps the demo deliberately bounded while ensuring that the eventual interfaces have enough underlying content to appear sophisticated, personalised and interconnected.

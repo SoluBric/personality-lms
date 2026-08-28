@@ -68,11 +68,11 @@ A course may have:
 -   estimated duration;
 -   level or difficulty where useful;
 -   relevant skills;
--   broad development territory;
+-   canonical pathway and pathway-specific category;
 -   short module / section outline;
 -   prerequisites where relevant;
 -   related courses;
--   pathway membership;
+-   optional chain membership;
 -   current progress.
 
 ## Possible presentation ideas
@@ -138,8 +138,8 @@ For example:
 
 ### Collaborative Influence
 
-The same course could be recommended to several demo members for
-different reasons.
+The same canonical course can be recommended to several demo members for
+different reasons, while remaining assigned to one pathway.
 
 One learner may be extending an existing interpersonal strength.
 
@@ -205,7 +205,8 @@ A dedicated Skills page is not required.
 Help the learner understand where the course sits in a larger
 development journey.
 
-A course might belong to one or several pathways.
+In the v3 architecture, a canonical course belongs to exactly one
+pathway and one pathway-specific category.
 
 Example:
 
@@ -233,7 +234,8 @@ It may simply represent a useful learning route.
 
 # 7. Multiple Contexts of Relevance
 
-Some courses may be relevant at more than one level.
+Some courses may be relevant to more than one learner context through
+separate Recommendation records.
 
 For Emily, **Constructive Conflict** might appear as:
 
@@ -250,10 +252,9 @@ Relevant to the Emily ↔ James working dynamic.
 Part of Team Atlas's shared development pathway.
 
 This creates a strong demonstration of the underlying platform
-architecture:
-
-> **One learning experience can connect individual, relationship and
-> team development.**
+architecture: the course definition stays canonical, while the
+recommendation explains why it matters for an individual, relationship or
+team context.
 
 The interface may choose to surface these contexts where they add value.
 
@@ -341,7 +342,7 @@ Possible relationships include:
 -   alternative course;
 -   deeper course;
 -   related skill;
--   another pathway using the same course.
+-   another recommendation that points to a different course.
 
 This can help the learning area feel connected without requiring a
 conventional catalogue.
@@ -355,26 +356,35 @@ The content may conceptually support something like:
 ``` text
 Course
 - id
-- title
+- name
 - description
-- duration
+- lengthMinutes
+- pathway
+- category
 - level
-- development_territories[]
-- skills[]
-- outline[]
+- courseType
+- audience
+- develops[]
+- learningFocus[]
+- recommendedWhen[]
+- recommendationContext
 - prerequisites[]
-- related_courses[]
-- pathway_memberships[]
+- unlocks[]
+- chain?
+- map
 
-LearnerCourseContext
-- learner_id
-- course_id
-- recommendation_reason
-- recommendation_sources[]
-- relevant_goals[]
-- relevant_relationships[]
-- relevant_team_contexts[]
-- progress
+Recommendation
+- learnerId
+- courseId
+- reason
+- priority
+- source
+
+LearnerCourseState
+- learnerId
+- courseId
+- status
+- progressPct
 ```
 
 This is included only to clarify the distinction between:
@@ -402,8 +412,8 @@ The highest-value concepts are likely to be:
 5.  lightweight course outline;
 6.  simple progress;
 7.  related learning;
-8.  the possibility that the same course is relevant in personal,
-    relationship and team contexts;
+8.  the possibility that Recommendation records explain personal,
+    relationship and team relevance;
 9.  a placeholder for actual course content.
 
 There is little benefit at this stage in building extensive

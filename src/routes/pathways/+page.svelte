@@ -70,7 +70,7 @@
 	const pathwayCopy: Record<CoursePathway, { label: string; short: string }> = {
 		strengths: { label: 'Strengths', short: 'Extend natural capability into deliberate mastery.' },
 		'stress-growth': { label: 'Stress & Growth', short: 'Build flexibility when pressure changes the pattern.' },
-		fortification: { label: 'Fortification', short: 'Build capability in less familiar operating territories.' },
+		fortification: { label: 'Fortification', short: 'Build capability in less familiar operating patterns.' },
 		team: { label: 'Team', short: 'Connect personal growth to shared collaboration needs.' }
 	};
 
@@ -575,7 +575,7 @@
 			return {
 				eyebrow: 'Strengths',
 				title: 'From natural capacity to deliberate strength',
-				body: 'This map starts with the strongest profile signals and places courses around the type territories they most naturally extend.',
+				body: 'This map starts with the strongest profile signals and places courses around the type categories they most naturally extend.',
 				items: profileTypes.map((type) => `${type.number} / ${type.name}: ${type.healthyExpression}`)
 			};
 		}
@@ -591,7 +591,7 @@
 			return {
 				eyebrow: 'Fortification',
 				title: 'Broaden range where the pattern is less practised',
-				body: 'This route connects non-top-three type territories to balancing capabilities without treating them as weaknesses.',
+				body: 'This route connects non-top-three type categories to balancing capabilities without treating them as weaknesses.',
 				items: selectedMember.growthEdges
 			};
 		}
@@ -926,7 +926,7 @@
 						</div>
 						<div class="inspector-block">
 							<span>Builds toward / supports</span>
-							<strong>{skillRelations.filter((relation) => relation.from.includes(selectedSkill.id) || relation.to === selectedSkill.id).map((relation) => relation.label).join(' / ') || 'A reusable professional capability across several pathways.'}</strong>
+							<strong>{skillRelations.filter((relation) => relation.from.includes(selectedSkill.id) || relation.to === selectedSkill.id).map((relation) => relation.label).join(' / ') || 'A reusable professional capability that may support several recommendations.'}</strong>
 						</div>
 					{:else if selectedNode && selectedCourse}
 						<div class="inspector-block">
