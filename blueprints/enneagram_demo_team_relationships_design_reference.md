@@ -502,11 +502,6 @@ The existing content contains a shared pathway for each team.
 → **TM-GEN-03 Team Decisions That Close**\
 → **TM-GEN-07 High-Trust Team Commitments**
 
-Optional creative-delivery branch:
-
-**From Idea to Delivery**\
-→ **Feedback Without Losing the Work**
-
 ------------------------------------------------------------------------
 
 ## Team Beacon

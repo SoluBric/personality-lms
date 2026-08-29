@@ -672,12 +672,6 @@ Give the team a common language for deciding when there is enough information to
 Purpose:
 Create a repeatable decision process in which dissent is visible before closure and commitment becomes explicit afterward.
 
-### Optional side branch — Creative Delivery
-**TM-GEN-08 — From Different Perspectives to One Plan**  
-→ **TM-GEN-05 — Feedback That Travels**
-
-This branch is particularly relevant to Sophie and James but can be completed by the whole team.
-
 ---
 
 # 8. Team Atlas Viewer-Specific Examples
@@ -979,27 +973,20 @@ A perspective-switching interaction that explains how the same workplace situati
 ## Team Atlas
 ### **From Diverse Perspectives to Confident Decisions**
 
-**Listening Before Leading**  
-→ **Productive Disagreement**  
-→ **Decisions Without Certainty**  
+**TM-GEN-01 Listening Before Leading**  
 → **TM-GEN-02 Productive Disagreement**  
-→ **High-Trust Team Decisions**
-
-Optional branch:
-
-**From Idea to Delivery**  
-→ **Feedback Without Losing the Work**
+→ **TM-GEN-03 Team Decisions That Close**  
+→ **TM-GEN-07 High-Trust Team Commitments**
 
 ---
 
 ## Team Beacon
 ### **From Opportunity to Credible Commitment**
 
-**Consultative Stakeholder Conversations**  
-→ **Priorities That Hold**  
-→ **Decisions Without Certainty**  
-→ **Sustainable Execution**  
-→ **High-Trust Team Decisions**
+**TM-GEN-01 Listening Before Leading**  
+→ **TM-GEN-03 Team Decisions That Close**  
+→ **TM-GEN-04 Role Clarity and Ownership**  
+→ **TM-GEN-07 High-Trust Team Commitments**
 
 ---
 

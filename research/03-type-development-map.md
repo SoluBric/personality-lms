@@ -34,7 +34,7 @@
 - Underused expression: low drive, difficulty translating ideas into outcomes
 - Blind spots: emotional bypassing, performative productivity, impatience with slower processing
 - Growth practices: values clarification, sustainable pacing, honest status reflection
-- LMS links: Achievement Without Overidentification, Goals That Keep Their Soul, Sustainable Execution
+- LMS links: Achievement Without Overidentification, Goals That Keep Their Soul, Sustainable High Performance
 
 ## Type 4: Sensitive Maverick
 
