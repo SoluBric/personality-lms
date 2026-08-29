@@ -81,6 +81,16 @@
 		blocks: InspectorBlock[];
 		action?: InspectorAction;
 	};
+	type DevelopmentView = 'map' | 'list';
+	type CourseListGroup = {
+		id: string;
+		eyebrow: string;
+		title: string;
+		description: string;
+		context?: string;
+		relevantMembers?: Member[];
+		courses: Course[];
+	};
 
 	const themes = [
 		{ id: 'violet', name: 'Violet', accent: '#a78bfa', soft: '#251d3b' },
@@ -140,6 +150,7 @@
 	let mode = $state<'dark' | 'light'>('dark');
 	let themeId = $state('violet');
 	let focusMode = $state<FocusMode>('current');
+	let developmentView = $state<DevelopmentView>('map');
 	let selectedArea = $state<FilterMode | null>('All');
 	let selectedNodeId = $state<string | null>(null);
 
@@ -171,6 +182,7 @@
 	const selectedTerritoryLabel = $derived(selectedArea === null ? 'Profile origin' : selectedArea === 'All' ? 'Development atlas' : pathwayCopy[selectedArea].label);
 	const areaGuide = $derived(getAreaGuide());
 	const inspectorView = $derived(buildInspectorView());
+	const currentListGroups = $derived(buildCourseListGroups());
 
 	function getType(typeNumber: number): EnneagramType {
 		return enneagramTypes.find((type) => type.number === typeNumber) ?? enneagramTypes[0];
@@ -277,6 +289,10 @@
 		selectedNodeId = null;
 	}
 
+	function selectDevelopmentView(view: DevelopmentView) {
+		developmentView = view;
+	}
+
 	function titleFor(course: Course) {
 		return course.name;
 	}
@@ -360,6 +376,150 @@
 
 	function getCourseTitles(courseIds: string[] | undefined) {
 		return courseIds?.map(getCourse).filter(isCourse).map((course) => course.name).join(', ') || 'None listed';
+	}
+
+	function buildCourseListGroups(): CourseListGroup[] {
+		if (!selectedArea || selectedArea === 'All') return [];
+		if (selectedArea === 'strengths') return buildStrengthsListGroups();
+		if (selectedArea === 'stress-growth') return buildStressGrowthListGroups();
+		if (selectedArea === 'fortification') return buildFortificationListGroups();
+		return buildTeamListGroups();
+	}
+
+	function buildStrengthsListGroups(): CourseListGroup[] {
+		const pathwayCourses = coursesForPathwayView('strengths');
+		return profileTypes.map((type, index) => ({
+			id: `strengths-type-${type.number}`,
+			eyebrow: index === 0 ? 'Primary strength territory' : index === 1 ? 'Secondary strength territory' : 'Tertiary strength territory',
+			title: `Type ${type.number} / ${type.name}`,
+			description: typeTerritories[type.number],
+			context: `${pathwayCourses.filter((course) => course.category === `type-${type.number}`).length} courses connected to ${selectedMember.name.split(' ')[0]}'s profile order.`,
+			courses: sortCoursesForList(pathwayCourses.filter((course) => course.category === `type-${type.number}`))
+		})).filter((group) => group.courses.length);
+	}
+
+	function buildStressGrowthListGroups(): CourseListGroup[] {
+		const pathwayCourses = coursesForPathwayView('stress-growth');
+		const groups = [
+			{
+				id: 'stress',
+				eyebrow: 'Pressure / stress',
+				title: `Type ${selectedMember.primaryType} stress curriculum`,
+				description: `Visually connected with Type ${stressType.number} / ${stressType.name}.`,
+				context: 'Courses for recognising pressure earlier and choosing a steadier response.',
+				courses: pathwayCourses.filter((course) => course.category === currentStressCategory())
+			},
+			{
+				id: 'growth',
+				eyebrow: 'Growth resources',
+				title: `Type ${selectedMember.primaryType} growth curriculum`,
+				description: `Visually connected with Type ${growthType.number} / ${growthType.name}.`,
+				context: 'Courses for broadening the response range beyond the familiar primary pattern.',
+				courses: pathwayCourses.filter((course) => course.category === currentGrowthCategory())
+			},
+			{
+				id: 'general',
+				eyebrow: 'General resilience',
+				title: 'Core resilience',
+				description: 'Useful across all types.',
+				context: 'General courses remain separate from stress and growth type categories.',
+				courses: pathwayCourses.filter((course) => course.category === 'general')
+			}
+		];
+		return groups.map((group) => ({ ...group, courses: sortCoursesForList(group.courses) })).filter((group) => group.courses.length);
+	}
+
+	function buildFortificationListGroups(): CourseListGroup[] {
+		const pathwayCourses = coursesForPathwayView('fortification');
+		return enneagramTypes
+			.map((type) => type.number)
+			.sort((a, b) => a - b)
+			.filter((typeNumber) => !selectedMember.profile.includes(typeNumber))
+			.map((typeNumber) => {
+				const type = getType(typeNumber);
+				return {
+					id: `fortification-type-${type.number}`,
+					eyebrow: 'Fortification territory',
+					title: `Type ${type.number} / ${type.name}`,
+					description: typeTerritories[type.number],
+					context: 'Top-three profile territories are excluded here; this explores less-familiar capability areas.',
+					courses: sortCoursesForList(pathwayCourses.filter((course) => course.category === `type-${type.number}`))
+				};
+			})
+			.filter((group) => group.courses.length);
+	}
+
+	function buildTeamListGroups(): CourseListGroup[] {
+		const pathwayCourses = coursesForPathwayView('team');
+		const teamMembers = currentTeam.memberIds.map(getMember).filter(isMember);
+		const representedTypes = [...teamDistribution().keys()].sort((a, b) => a - b);
+		const typeGroups = representedTypes
+			.map((typeNumber) => {
+				const type = getType(typeNumber);
+				return {
+					id: `team-type-${type.number}`,
+					eyebrow: 'Type perspective',
+					title: `Type ${type.number} / ${type.name}`,
+					description: typeTerritories[type.number],
+					context: 'Perspective learning for working with represented team patterns.',
+					relevantMembers: teamMembers.filter((member) => member.profile.includes(type.number)),
+					courses: sortCoursesForList(pathwayCourses.filter((course) => course.category === `type-${type.number}`))
+				};
+			})
+			.filter((group) => group.courses.length);
+		const centerGroups = ['body', 'heart', 'head'].map((center) => ({
+			id: `team-center-${center}`,
+			eyebrow: 'Center collaboration',
+			title: `${titleCase(center)} center`,
+			description: `${titleCase(center)}-center collaboration courses for the selected team context.`,
+			context: 'Center courses sit separately from type-perspective learning.',
+			courses: sortCoursesForList(pathwayCourses.filter((course) => course.category === `center-${center}`))
+		})).filter((group) => group.courses.length);
+		const generalGroup = {
+			id: 'team-general',
+			eyebrow: 'Shared team learning',
+			title: currentTeam.pathwayName,
+			description: 'Team-wide courses that support shared agreements, decisions and commitments.',
+			context: `${currentTeam.name} shared pathway.`,
+			courses: sortCoursesForList(pathwayCourses.filter((course) => course.category === 'general'))
+		};
+		return [...typeGroups, ...centerGroups, ...(generalGroup.courses.length ? [generalGroup] : [])];
+	}
+
+	function sortCoursesForList(courseList: Course[]) {
+		return [...courseList].sort((a, b) => {
+			const chainA = a.chain?.id ?? '';
+			const chainB = b.chain?.id ?? '';
+			if (chainA !== chainB) return chainA.localeCompare(chainB);
+			if (a.chain && b.chain && a.chain.sequence !== b.chain.sequence) return a.chain.sequence - b.chain.sequence;
+			const levelOrder = { foundation: 1, intermediate: 2, advanced: 3 };
+			if (levelOrder[a.level] !== levelOrder[b.level]) return levelOrder[a.level] - levelOrder[b.level];
+			return a.name.localeCompare(b.name);
+		});
+	}
+
+	function courseListStatusKind(course: Course) {
+		return courseNodeStatusKind({ id: `course-${course.id}`, kind: 'course', title: course.name, label: '', detail: '', courseIds: [course.id], x: 0, y: 0 });
+	}
+
+	function listCourseStatusLabel(course: Course) {
+		const status = courseListStatusKind(course);
+		if (status === 'completed') return 'Completed';
+		if (status === 'in-progress') return `${progressPct(course.id)}%`;
+		if (status === 'locked') return 'Locked';
+		return 'Not started';
+	}
+
+	function listCourseActionLabel(course: Course) {
+		const status = courseListStatusKind(course);
+		if (status === 'completed') return 'Review';
+		if (status === 'in-progress') return 'Continue';
+		if (status === 'locked') return 'View prerequisite';
+		return 'Start';
+	}
+
+	function selectListCourse(course: Course) {
+		selectNode(`course-${course.id}`);
 	}
 
 	function buildMapNodes(): Node[] {
@@ -1209,20 +1369,100 @@
 
 		<section class="development-map panel">
 			<div class="map-layout">
-				<div class={`capability-map ${mapModeClass()}`} aria-label="Interactive development capability map">
+				<div class="map-content-shell">
 					<div class="map-local-heading">
 						<div>
 							<p class="eyebrow">Development map</p>
 							<h2>{selectedTerritoryLabel}</h2>
 						</div>
-						<nav class="map-filter" aria-label="Development map area">
-							{#each filters as filter}
-								<button class:active={selectedArea === filter} type="button" onclick={() => selectArea(filter)}>
-									{filter === 'All' ? 'All' : pathwayCopy[filter].label}
-								</button>
-							{/each}
-						</nav>
+						<div class="map-heading-controls">
+							{#if selectedArea !== 'All' && selectedArea !== null}
+								<div class="view-switch" aria-label="Development presentation">
+									<button class:active={developmentView === 'map'} type="button" onclick={() => selectDevelopmentView('map')}>Map</button>
+									<button class:active={developmentView === 'list'} type="button" onclick={() => selectDevelopmentView('list')}>List</button>
+								</div>
+							{/if}
+							<nav class="map-filter" aria-label="Development map area">
+								{#each filters as filter}
+									<button class:active={selectedArea === filter} type="button" onclick={() => selectArea(filter)}>
+										{filter === 'All' ? 'All' : pathwayCopy[filter].label}
+									</button>
+								{/each}
+							</nav>
+						</div>
 					</div>
+					{#if developmentView === 'list' && selectedArea !== 'All' && selectedArea !== null}
+						<div class="pathway-list-view" aria-label={`${selectedTerritoryLabel} course list`}>
+							{#if selectedArea === 'fortification'}
+								<p class="list-note">Your top-three profile territories ({selectedMember.profile.join('-')}) are excluded here; Fortification explores less-familiar capability areas.</p>
+							{/if}
+							{#each currentListGroups as group}
+								<section class="list-category">
+									<div class="list-category-header">
+										<div>
+											<p class="eyebrow">{group.eyebrow}</p>
+											<h3>{group.title}</h3>
+											<p>{group.description}</p>
+										</div>
+										<div class="list-category-meta">
+											<strong>{group.courses.length}</strong>
+											<span>{group.courses.length === 1 ? 'course' : 'courses'}</span>
+										</div>
+									</div>
+									{#if group.context || group.relevantMembers?.length}
+										<div class="list-category-context">
+											{#if group.context}<span>{group.context}</span>{/if}
+											{#if group.relevantMembers?.length}
+												<div class="team-relevance">
+													{#each group.relevantMembers as member}
+														<strong>{member.name} / {member.profile.join('-')}</strong>
+													{/each}
+												</div>
+											{/if}
+										</div>
+									{/if}
+									<div class="list-course-stack">
+										{#each group.courses as course}
+											<button
+												class:selected={selectedNodeId === `course-${course.id}`}
+												class={`list-course-row status-${courseListStatusKind(course)}`}
+												type="button"
+												aria-label={`${course.name}, ${courseMeta(course)}, ${listCourseStatusLabel(course)}`}
+												onclick={() => selectListCourse(course)}
+											>
+												<div class="list-course-main">
+													<div class="list-course-title">
+														{#if course.chain}
+															<span>{course.chain.sequence}</span>
+														{/if}
+														<strong>{course.name}</strong>
+													</div>
+													<p>{course.learningFocus[0] ?? course.description}</p>
+													<div class="skill-tags compact-tags">
+														{#each courseSkills(course).slice(0, 3) as skill}
+															<span>{skill.name}</span>
+														{/each}
+													</div>
+												</div>
+												<div class="list-course-side">
+													<span>{titleCase(levelLabel(course))} / {course.lengthMinutes} min</span>
+													<div class="list-status">
+														<i class={`course-status-dot ${courseListStatusKind(course)}`} aria-hidden="true"></i>
+														<strong>{listCourseStatusLabel(course)}</strong>
+													</div>
+													{#if courseListStatusKind(course) === 'in-progress'}
+														<div class="list-progress"><span style={`width: ${progressPct(course.id)}%`}></span></div>
+													{/if}
+													<em>{listCourseActionLabel(course)}</em>
+												</div>
+											</button>
+										{/each}
+									</div>
+								</section>
+							{/each}
+						</div>
+					{:else}
+						<div class={`capability-map ${mapModeClass()}`} aria-label="Interactive development capability map">
 					{#if showWheel}
 						<svg class="wheel-geometry" viewBox="0 0 100 100" aria-hidden="true">
 							<circle class="wheel-ring outer" cx="50" cy="50" r="47" />
@@ -1298,6 +1538,8 @@
 							{/if}
 						</button>
 					{/each}
+						</div>
+					{/if}
 				</div>
 
 				<aside class="map-inspector">
@@ -1361,7 +1603,7 @@
 					</div>
 				</aside>
 			</div>
-			{#if selectedArea === 'stress-growth'}
+				{#if developmentView === 'map' && selectedArea === 'stress-growth'}
 				<div class="map-lower-tray">
 					<div>
 						<p class="eyebrow">Core resilience skills</p>
@@ -1377,7 +1619,7 @@
 						{/each}
 					</div>
 				</div>
-			{:else if selectedArea === 'team'}
+				{:else if developmentView === 'map' && selectedArea === 'team'}
 				<div class="team-learning-lower">
 					<div>
 						<p class="eyebrow">My team skills</p>

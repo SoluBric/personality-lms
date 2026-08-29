@@ -2537,6 +2537,23 @@ li {
 	gap: 18px;
 }
 
+.map-content-shell {
+	position: relative;
+	display: grid;
+	align-content: start;
+	min-height: 720px;
+	overflow: hidden;
+	border: 1px solid var(--line);
+	border-radius: 8px;
+	background: color-mix(in srgb, var(--panel-strong) 90%, transparent);
+}
+
+.map-content-shell .capability-map {
+	min-height: 720px;
+	border: 0;
+	border-radius: 0;
+}
+
 .capability-map {
 	position: relative;
 	min-height: 720px;
@@ -2556,7 +2573,7 @@ li {
 	left: 18px;
 	right: 18px;
 	top: 18px;
-	z-index: 5;
+	z-index: 20;
 	display: flex;
 	align-items: flex-start;
 	justify-content: space-between;
@@ -2570,6 +2587,271 @@ li {
 
 .map-local-heading .map-filter {
 	max-width: 540px;
+}
+
+.map-heading-controls {
+	display: grid;
+	justify-items: end;
+	gap: 8px;
+}
+
+.view-switch {
+	display: inline-flex;
+	gap: 4px;
+	padding: 4px;
+	border: 1px solid var(--line);
+	border-radius: 8px;
+	background: color-mix(in srgb, var(--bg) 76%, transparent);
+}
+
+.view-switch button {
+	padding: 8px 12px;
+	border: 0;
+	border-radius: 6px;
+	background: transparent;
+	color: var(--muted);
+	font-size: 12px;
+	font-weight: 900;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+}
+
+.view-switch button.active {
+	background: var(--accent);
+	color: #101413;
+}
+
+.pathway-list-view {
+	display: grid;
+	gap: 14px;
+	max-height: 720px;
+	overflow-y: auto;
+	padding: 128px 18px 18px;
+	background:
+		linear-gradient(145deg, color-mix(in srgb, var(--accent-soft) 28%, transparent), transparent),
+		color-mix(in srgb, var(--panel-strong) 90%, transparent);
+}
+
+.pathway-list-view::-webkit-scrollbar {
+	width: 6px;
+}
+
+.pathway-list-view::-webkit-scrollbar-thumb {
+	border-radius: 999px;
+	background: color-mix(in srgb, var(--accent) 42%, transparent);
+}
+
+.list-note,
+.list-category {
+	border: 1px solid var(--line);
+	border-radius: 8px;
+	background: color-mix(in srgb, var(--bg-soft) 82%, transparent);
+}
+
+.list-note {
+	margin: 0;
+	padding: 13px 15px;
+	font-size: 14px;
+	line-height: 1.4;
+}
+
+.list-category {
+	display: grid;
+	gap: 12px;
+	padding: 16px;
+}
+
+.list-category-header {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) auto;
+	gap: 14px;
+	align-items: start;
+}
+
+.list-category-header h3 {
+	margin-bottom: 6px;
+	font-size: 20px;
+}
+
+.list-category-header p:not(.eyebrow) {
+	margin-bottom: 0;
+	font-size: 14px;
+	line-height: 1.4;
+}
+
+.list-category-meta {
+	display: grid;
+	place-items: center;
+	min-width: 76px;
+	padding: 10px;
+	border: 1px solid var(--line);
+	border-radius: 8px;
+	background: color-mix(in srgb, var(--panel-strong) 80%, transparent);
+}
+
+.list-category-meta strong {
+	color: var(--text);
+	font-size: 26px;
+	line-height: 1;
+}
+
+.list-category-meta span,
+.list-category-context span {
+	color: var(--muted);
+	font-size: 12px;
+	font-weight: 800;
+}
+
+.list-category-context {
+	display: grid;
+	gap: 8px;
+	padding: 10px 12px;
+	border: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
+	border-radius: 8px;
+	background: color-mix(in srgb, var(--panel-strong) 58%, transparent);
+}
+
+.team-relevance {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+
+.team-relevance strong {
+	padding: 7px 9px;
+	border: 1px solid var(--line);
+	border-radius: 999px;
+	color: var(--text);
+	font-size: 12px;
+}
+
+.list-course-stack {
+	display: grid;
+	gap: 8px;
+}
+
+.list-course-row {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(145px, 0.28fr);
+	gap: 14px;
+	align-items: stretch;
+	padding: 13px;
+	border: 1px solid var(--line);
+	border-radius: 8px;
+	background: color-mix(in srgb, var(--panel-strong) 62%, transparent);
+	color: var(--text);
+	text-align: left;
+	transition:
+		border-color 180ms ease,
+		background 180ms ease,
+		box-shadow 180ms ease,
+		transform 180ms ease;
+}
+
+.list-course-row:hover,
+.list-course-row:focus-visible,
+.list-course-row.selected {
+	border-color: var(--accent);
+	background:
+		linear-gradient(145deg, color-mix(in srgb, var(--accent-soft) 45%, transparent), transparent),
+		color-mix(in srgb, var(--panel-strong) 78%, transparent);
+	box-shadow: 0 14px 28px rgba(0, 0, 0, 0.2);
+	transform: translateY(-1px);
+}
+
+.list-course-row.status-locked {
+	border-style: dashed;
+	opacity: 0.72;
+}
+
+.list-course-row.status-locked:hover,
+.list-course-row.status-locked.selected {
+	opacity: 0.94;
+}
+
+.list-course-main,
+.list-course-side {
+	display: grid;
+	gap: 9px;
+	align-content: start;
+}
+
+.list-course-title {
+	display: flex;
+	align-items: center;
+	gap: 9px;
+}
+
+.list-course-title > span {
+	display: grid;
+	width: 24px;
+	height: 24px;
+	flex: 0 0 auto;
+	place-items: center;
+	border: 1px solid color-mix(in srgb, var(--accent) 44%, var(--line));
+	border-radius: 6px;
+	background: color-mix(in srgb, var(--accent-soft) 50%, transparent);
+	color: var(--accent);
+	font-size: 12px;
+	font-weight: 950;
+}
+
+.list-course-title strong {
+	color: var(--text);
+	font-size: 17px;
+	line-height: 1.2;
+}
+
+.list-course-main p {
+	margin-bottom: 0;
+	font-size: 14px;
+	line-height: 1.4;
+}
+
+.list-course-side {
+	justify-items: end;
+	text-align: right;
+}
+
+.list-course-side > span,
+.list-status strong {
+	color: var(--muted);
+	font-size: 11px;
+	font-weight: 900;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+}
+
+.list-status {
+	display: inline-flex;
+	align-items: center;
+	gap: 7px;
+}
+
+.list-progress {
+	width: min(100%, 136px);
+	height: 5px;
+	overflow: hidden;
+	border-radius: 999px;
+	background: color-mix(in srgb, var(--text) 10%, transparent);
+}
+
+.list-progress span {
+	display: block;
+	height: 100%;
+	border-radius: inherit;
+	background: var(--accent);
+}
+
+.list-course-side em {
+	align-self: end;
+	padding: 8px 10px;
+	border: 1px solid color-mix(in srgb, var(--accent) 44%, var(--line));
+	border-radius: 8px;
+	color: var(--text);
+	font-size: 13px;
+	font-style: normal;
+	font-weight: 900;
 }
 
 .capability-map.atlas-mode {
@@ -4030,6 +4312,26 @@ li {
 		display: grid;
 		gap: 10px;
 		padding: 14px;
+	}
+
+	.map-content-shell {
+		min-height: auto;
+		overflow: visible;
+	}
+
+	.pathway-list-view {
+		max-height: none;
+		padding-inline: 14px;
+	}
+
+	.list-category-header,
+	.list-course-row {
+		grid-template-columns: 1fr;
+	}
+
+	.list-course-side {
+		justify-items: start;
+		text-align: left;
 	}
 
 	.capability-map::before,
