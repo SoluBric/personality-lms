@@ -518,6 +518,19 @@
 		return 'Start';
 	}
 
+	function isRecommendedCourse(course: Course) {
+		return memberRecommendations.some((recommendation) => recommendation.courseId === course.id);
+	}
+
+	function listCourseClasses(course: Course) {
+		return [
+			'list-course-row',
+			`status-${courseListStatusKind(course)}`,
+			course.chain ? 'chain-course' : '',
+			isRecommendedCourse(course) ? 'recommended-course' : ''
+		].filter(Boolean).join(' ');
+	}
+
 	function selectListCourse(course: Course) {
 		selectNode(`course-${course.id}`);
 	}
@@ -1425,7 +1438,7 @@
 										{#each group.courses as course}
 											<button
 												class:selected={selectedNodeId === `course-${course.id}`}
-												class={`list-course-row status-${courseListStatusKind(course)}`}
+												class={listCourseClasses(course)}
 												type="button"
 												aria-label={`${course.name}, ${courseMeta(course)}, ${listCourseStatusLabel(course)}`}
 												onclick={() => selectListCourse(course)}
@@ -1445,6 +1458,9 @@
 													</div>
 												</div>
 												<div class="list-course-side">
+													{#if isRecommendedCourse(course)}
+														<mark>Recommended</mark>
+													{/if}
 													<span>{titleCase(levelLabel(course))} / {course.lengthMinutes} min</span>
 													<div class="list-status">
 														<i class={`course-status-dot ${courseListStatusKind(course)}`} aria-hidden="true"></i>
