@@ -60,6 +60,28 @@
 		y: number;
 	};
 
+	type InspectorMeta = { label: string; value: string };
+	type InspectorAction = { label: string; courseId?: string };
+	type InspectorBlock = {
+		id: string;
+		label: string;
+		kind: 'text' | 'chips' | 'courses' | 'meta' | 'status' | 'progression';
+		text?: string;
+		items?: string[];
+		skills?: Skill[];
+		courses?: Course[];
+		meta?: InspectorMeta[];
+		action?: InspectorAction;
+	};
+	type InspectorView = {
+		eyebrow: string;
+		title: string;
+		description: string;
+		badge?: string;
+		blocks: InspectorBlock[];
+		action?: InspectorAction;
+	};
+
 	const themes = [
 		{ id: 'violet', name: 'Violet', accent: '#a78bfa', soft: '#251d3b' },
 		{ id: 'teal', name: 'Teal', accent: '#2dd4bf', soft: '#102f2c' },
@@ -148,6 +170,7 @@
 	const inProgressCourses = $derived(activeCourseStates.filter((state) => state.status === 'in-progress'));
 	const selectedTerritoryLabel = $derived(selectedArea === null ? 'Profile origin' : selectedArea === 'All' ? 'Development atlas' : pathwayCopy[selectedArea].label);
 	const areaGuide = $derived(getAreaGuide());
+	const inspectorView = $derived(buildInspectorView());
 
 	function getType(typeNumber: number): EnneagramType {
 		return enneagramTypes.find((type) => type.number === typeNumber) ?? enneagramTypes[0];
@@ -626,6 +649,305 @@
 		return { x: 50, y: 50 };
 	}
 
+	function buildInspectorView(): InspectorView {
+		if (!selectedNode) return buildPathwayOverviewInspector();
+		if (selectedCourse) return buildCourseInspector(selectedCourse, selectedNode);
+		if (selectedSkill) return buildSkillInspector(selectedSkill, selectedNode);
+		if (selectedNode.kind === 'person') return buildTeamMemberInspector(selectedNode);
+		if (selectedNode.kind === 'profile' && selectedArea === 'team') return buildTeamAnchorInspector();
+		if (selectedNode.kind === 'profile') return buildProfileOriginInspector();
+		if (selectedNode.kind === 'signal' && selectedArea === 'stress-growth') return buildStressGrowthSignalInspector(selectedNode);
+		if (selectedNode.typeNumber) return buildTypeTerritoryInspector(selectedNode);
+		return buildNodeInspector(selectedNode);
+	}
+
+	function buildPathwayOverviewInspector(): InspectorView {
+		if (selectedArea === null) return buildProfileOriginInspector();
+		return {
+			eyebrow: areaGuide.eyebrow,
+			title: areaGuide.title,
+			description: areaGuide.body,
+			badge: selectedArea === 'All' ? 'Pathway overview' : pathwayCopy[selectedArea].label,
+			blocks: [
+				{ id: 'in-view', label: 'In this view', kind: 'chips', items: areaGuide.items },
+				{
+					id: 'active-learning',
+					label: 'Active learning',
+					kind: 'meta',
+					meta: [
+						{ label: 'Active', value: `${activeCourses.length} courses` },
+						{ label: 'Suggested', value: `${suggestedCourses.length} next` },
+						{ label: 'Completed', value: `${completedCourses.length} courses` },
+						{ label: 'Skills', value: `${activeSkills.length} in view` }
+					]
+				}
+			]
+		};
+	}
+
+	function buildProfileOriginInspector(): InspectorView {
+		return {
+			eyebrow: 'Profile origin',
+			title: `${selectedMember.name.split(' ')[0]} / ${selectedMember.profile.join('-')}`,
+			description: selectedMember.profileDescription,
+			badge: selectedMember.profileName,
+			blocks: [
+				{
+					id: 'patterns',
+					label: 'Primary pattern',
+					kind: 'text',
+					text: `${primaryType.number} / ${primaryType.name}: ${primaryType.capacity}`
+				},
+				{
+					id: 'supporting-patterns',
+					label: 'Supporting patterns',
+					kind: 'chips',
+					items: profileTypes.slice(1).map((type) => `${type.number} / ${type.name}: ${type.capacity}`)
+				},
+				{
+					id: 'development-context',
+					label: 'Development context',
+					kind: 'text',
+					text: `${selectedMember.name.split(' ')[0]}'s courses connect the profile blend to strengths, pressure response, balancing capacity and team contribution.`
+				},
+				{
+					id: 'capabilities',
+					label: 'Capabilities in view',
+					kind: 'chips',
+					skills: activeSkills.slice(0, 7)
+				}
+			]
+		};
+	}
+
+	function buildCourseInspector(course: Course, node: Node): InspectorView {
+		const state = getCourseState(course.id);
+		const recommendedBecause = whyCourseIsHere(course, node);
+		const progressionMeta = courseProgressionMeta(course);
+		return {
+			eyebrow: courseRoleLabel(course, node),
+			title: course.name,
+			description: course.description,
+			badge: courseStateLabel(course),
+			blocks: [
+				{ id: 'why', label: 'Why this is here', kind: 'text', text: recommendedBecause },
+				{ id: 'develops', label: 'Develops', kind: 'chips', skills: courseSkills(course) },
+				{
+					id: 'details',
+					label: 'Learning details',
+					kind: 'meta',
+					meta: [
+						{ label: 'Level', value: titleCase(levelLabel(course)) },
+						{ label: 'Length', value: `${course.lengthMinutes} min` },
+						{ label: 'Format', value: formatToken(course.courseType) },
+						{ label: 'Audience', value: titleCase(course.audience) }
+					]
+				},
+				...(progressionMeta.length ? [{ id: 'progression', label: 'Progression', kind: 'progression' as const, meta: progressionMeta }] : []),
+				{
+					id: 'status',
+					label: 'Status',
+					kind: 'status',
+					text: courseStatusText(course, state),
+					meta: [{ label: 'Progress', value: `${progressPct(course.id)}%` }]
+				}
+			],
+			action: courseAction(course)
+		};
+	}
+
+	function buildSkillInspector(skill: Skill, node: Node): InspectorView {
+		const relatedCourses = coursesForSkill(skill.id).filter((course) => selectedArea === 'All' || selectedArea === null || course.pathway === selectedArea).slice(0, 5);
+		const relations = skillRelations.filter((relation) => relation.from.includes(skill.id) || relation.to === skill.id).map((relation) => relation.label);
+		return {
+			eyebrow: node.role ?? 'Connected capability',
+			title: skill.name,
+			description: skill.description,
+			badge: skill.typeNumber ? `Type ${skill.typeNumber}` : 'General',
+			blocks: [
+				{
+					id: 'why',
+					label: 'Why this matters here',
+					kind: 'text',
+					text: `${selectedMember.name.split(' ')[0]}'s active recommendations connect this capability to ${node.territory ? pathwayCopy[territoryToPathway[node.territory]].label.toLowerCase() : 'the wider development map'}.`
+				},
+				{ id: 'courses', label: 'Courses developing it', kind: 'courses', courses: relatedCourses },
+				{ id: 'builds', label: 'Builds toward / supports', kind: 'chips', items: relations.length ? relations : ['Reusable professional capability across several recommendations'] }
+			]
+		};
+	}
+
+	function buildTypeTerritoryInspector(node: Node): InspectorView {
+		const type = getType(node.typeNumber ?? selectedMember.primaryType);
+		const relatedSkills = node.skillIds?.map(getSkill).filter(isSkill) ?? skillsForType(type.number).slice(0, 5);
+		const relatedCourses = relatedCoursesForNode(node).slice(0, 5);
+		return {
+			eyebrow: node.role ?? 'Type territory',
+			title: `${type.number} / ${type.name}`,
+			description: type.description,
+			badge: node.territory ? pathwayCopy[territoryToPathway[node.territory]].label : type.center,
+			blocks: [
+				{ id: 'why', label: 'Why this territory is active', kind: 'text', text: whyTypeIsActive(type, node) },
+				{ id: 'capabilities', label: 'Connected capabilities', kind: 'chips', skills: relatedSkills },
+				...(relatedCourses.length ? [{ id: 'courses', label: 'Related courses', kind: 'courses' as const, courses: relatedCourses }] : [])
+			]
+		};
+	}
+
+	function buildStressGrowthSignalInspector(node: Node): InspectorView {
+		const type = getType(node.typeNumber ?? selectedMember.primaryType);
+		const isPressure = node.id === 'signal-stress';
+		const relatedCourses = coursesForPathwayView('stress-growth').filter((course) => course.category === (isPressure ? currentStressCategory() : currentGrowthCategory())).slice(0, 4);
+		return {
+			eyebrow: isPressure ? 'Pressure direction' : 'Growth resource',
+			title: `${type.number} / ${type.name}`,
+			description: isPressure
+				? `Under pressure, ${primaryType.number} / ${primaryType.name} can borrow some ${type.number} / ${type.name} signals. The aim is earlier recognition and steadier choice, not labelling the pressure type as bad.`
+				: `${type.number} / ${type.name} marks a growth direction for ${selectedMember.name.split(' ')[0]}'s primary pattern: a wider response range when the familiar strategy is too narrow.`,
+			badge: isPressure ? 'Pressure practice' : 'Growth resource',
+			blocks: [
+				{ id: 'relationship', label: 'Relationship to primary type', kind: 'text', text: `${selectedMember.name.split(' ')[0]}'s primary pattern is ${primaryType.number} / ${primaryType.name}; this signal shows how movement under stress or growth can become learnable behaviour.` },
+				{ id: 'capabilities', label: 'Capabilities', kind: 'chips', skills: node.skillIds?.map(getSkill).filter(isSkill) ?? [] },
+				{ id: 'courses', label: 'Related courses', kind: 'courses', courses: relatedCourses }
+			]
+		};
+	}
+
+	function buildTeamMemberInspector(node: Node): InspectorView {
+		const memberId = node.id.replace('person-', '');
+		const member = getMember(memberId);
+		if (!member) return buildNodeInspector(node);
+		const relationship = relationshipRoutes.find((route) => route.memberIds.includes(member.id));
+		const relatedCourses = [...new Set([...(relationship?.courses ?? []), ...currentTeam.pathwayCourseIds])].map(getCourse).filter(isCourse).slice(0, 5);
+		return {
+			eyebrow: 'Team member',
+			title: `${member.name} / ${member.profile.join('-')}`,
+			description: member.summary,
+			badge: member.profileName,
+			blocks: [
+				{ id: 'contribution', label: 'Contribution summary', kind: 'text', text: member.profileDescription },
+				{ id: 'relationship', label: `How this relates to ${selectedMember.name.split(' ')[0]}`, kind: 'text', text: relationship ? `${relationship.complementarity} ${relationship.viewerNotes[selectedMember.id] ?? relationship.friction}` : 'This colleague contributes a different profile pattern to the team system.' },
+				{ id: 'learning', label: 'Relevant team learning', kind: 'courses', courses: relatedCourses }
+			]
+		};
+	}
+
+	function buildTeamAnchorInspector(): InspectorView {
+		return {
+			eyebrow: 'Team',
+			title: currentTeam.name,
+			description: currentTeam.description,
+			badge: currentTeam.pathwayName,
+			blocks: [
+				{ id: 'priorities', label: 'Current team priorities', kind: 'chips', items: currentTeam.priorities },
+				{ id: 'pathway', label: 'Shared pathway', kind: 'courses', courses: teamCourses },
+				{ id: 'relationships', label: 'Relationship routes', kind: 'chips', items: relationshipRoutes.map((route) => route.theme) }
+			]
+		};
+	}
+
+	function buildNodeInspector(node: Node): InspectorView {
+		return {
+			eyebrow: node.label,
+			title: node.title,
+			description: node.detail,
+			badge: node.role,
+			blocks: [
+				{ id: 'connected-skills', label: 'Connected skills', kind: 'chips', skills: node.skillIds?.map(getSkill).filter(isSkill) ?? [] },
+				{ id: 'profile-context', label: 'Profile context', kind: 'text', text: `${primaryType.number} / ${primaryType.name} with supporting ${profileTypes.slice(1).map((type) => `${type.number} / ${type.name}`).join(' and ')}.` }
+			]
+		};
+	}
+
+	function relatedCoursesForNode(node: Node) {
+		if (node.courseIds?.length) return node.courseIds.map(getCourse).filter(isCourse);
+		if (!node.typeNumber) return [];
+		if (selectedArea === 'strengths') return coursesForPathwayView('strengths').filter((course) => categoryType(course) === node.typeNumber);
+		if (selectedArea === 'fortification') return coursesForPathwayView('fortification').filter((course) => categoryType(course) === node.typeNumber);
+		if (selectedArea === 'team') return coursesForPathwayView('team').filter((course) => categoryType(course) === node.typeNumber || course.category === 'general');
+		return [];
+	}
+
+	function whyTypeIsActive(type: EnneagramType, node: Node) {
+		if (selectedArea === 'strengths') return `${type.number} / ${type.name} is part of ${selectedMember.name.split(' ')[0]}'s profile blend, so this area extends an already visible capacity into more deliberate skill.`;
+		if (selectedArea === 'fortification') return `${type.number} / ${type.name} is outside the top-three profile, so this territory broadens range without treating the pattern as a deficit.`;
+		if (selectedArea === 'team') return `${type.number} / ${type.name} appears in the team distribution, so the map connects that perspective to shared collaboration habits.`;
+		if (node.territory) return `This territory is active because it contributes to the ${pathwayCopy[territoryToPathway[node.territory]].label.toLowerCase()} pathway.`;
+		return `${type.number} / ${type.name} is connected to the current map selection.`;
+	}
+
+	function whyCourseIsHere(course: Course, node: Node) {
+		const recommendation = recommendationForCourse(course.id);
+		if (recommendation?.reason) return recommendation.reason;
+		if (course.recommendationContext) return course.recommendationContext;
+		const typeNumber = categoryType(course);
+		if (course.pathway === 'strengths' && typeNumber) return `This course extends a strong Type ${typeNumber} profile signal into a practised capability.`;
+		if (course.pathway === 'stress-growth') return `This course supports steadier response when ${primaryType.number} / ${primaryType.name} is under pressure or ready for a wider growth move.`;
+		if (course.pathway === 'fortification' && typeNumber) return `This course develops a useful Type ${typeNumber} capacity outside the strongest profile patterns.`;
+		if (course.pathway === 'team') return currentTeam.pathwayCourseIds.includes(course.id) ? `Part of ${currentTeam.name}'s shared pathway.` : `Relevant to ${currentTeam.name}'s collaboration and relationship map.`;
+		return node.detail;
+	}
+
+	function courseRoleLabel(course: Course, node: Node) {
+		if (node.role) return node.role;
+		if (course.pathway === 'strengths' && course.level === 'advanced') return 'Strength Mastery';
+		if (course.pathway === 'strengths') return 'Strength';
+		if (course.pathway === 'stress-growth' && course.category.startsWith('stress-')) return 'Pressure Practice';
+		if (course.pathway === 'stress-growth' && course.category.startsWith('growth-')) return 'Growth Resource';
+		if (course.pathway === 'stress-growth') return 'Core Resilience';
+		if (course.pathway === 'fortification') return 'Fortification';
+		if (course.pathway === 'team' && course.category.startsWith('type-')) return 'Type Perspective';
+		if (course.pathway === 'team' && course.category.startsWith('center-')) return 'Center Collaboration';
+		if (course.pathway === 'team') return 'Shared Team Capability';
+		return node.label || 'Course';
+	}
+
+	function courseListRole(course: Course) {
+		return courseRoleLabel(course, { id: '', kind: 'course', title: '', label: '', detail: '', x: 0, y: 0 });
+	}
+
+	function courseProgressionMeta(course: Course): InspectorMeta[] {
+		const meta: InspectorMeta[] = [];
+		if (course.prerequisites.length) meta.push({ label: 'Prerequisites', value: getCourseTitles(course.prerequisites) });
+		if (course.unlocks.length) meta.push({ label: 'Unlocks', value: getCourseTitles(course.unlocks) });
+		if (course.chain) meta.push({ label: 'Chain', value: chainPosition(course) });
+		return meta;
+	}
+
+	function chainPosition(course: Course) {
+		if (!course.chain) return 'Standalone';
+		const total = courses.filter((item) => item.chain?.id === course.chain?.id).length;
+		return `${course.chain.sequence} of ${total} in ${formatToken(course.chain.id)}`;
+	}
+
+	function courseAction(course: Course): InspectorAction {
+		const unmetPrerequisite = course.prerequisites.find((courseId) => getCourseState(courseId)?.status !== 'completed');
+		if (unmetPrerequisite) return { label: `View prerequisite: ${getCourse(unmetPrerequisite)?.name ?? unmetPrerequisite}`, courseId: unmetPrerequisite };
+		const state = getCourseState(course.id);
+		if (state?.status === 'completed') return { label: 'View course', courseId: course.id };
+		if (state?.status === 'in-progress') return { label: 'Continue course', courseId: course.id };
+		return { label: 'Start course', courseId: course.id };
+	}
+
+	function courseStatusText(course: Course, state: LearnerCourseState | undefined) {
+		if (state?.status === 'completed') return 'Completed and available to revisit.';
+		if (state?.status === 'in-progress') return 'In progress. Continue from the current saved point.';
+		if (course.prerequisites.some((courseId) => getCourseState(courseId)?.status !== 'completed')) return 'Locked until the prerequisite course is complete.';
+		return 'Ready to start when this pathway becomes the next focus.';
+	}
+
+	function inspectorAction(action: InspectorAction) {
+		if (action.courseId) selectNode(`course-${action.courseId}`);
+	}
+
+	function formatToken(value: string) {
+		return titleCase(value.replace(/[-_]/g, ' '));
+	}
+
+	function titleCase(value: string) {
+		return value.replace(/\b\w/g, (letter) => letter.toUpperCase());
+	}
+
 </script>
 
 <svelte:head>
@@ -893,87 +1215,64 @@
 				</div>
 
 				<aside class="map-inspector">
-					{#if selectedNode}
-						<p class="eyebrow">{selectedNode.label}</p>
-						<h2>{selectedNode.title}</h2>
-						<p>{selectedNode.detail}</p>
-					{:else}
-						<p class="eyebrow">{areaGuide.eyebrow}</p>
-						<h2>{areaGuide.title}</h2>
-						<p>{areaGuide.body}</p>
-						<div class="inspector-block">
-							<span>In this view</span>
-							<div class="guide-list">
-								{#each areaGuide.items as item}
-									<strong>{item}</strong>
-								{/each}
-							</div>
+					<div class="inspector-scroll">
+						<div class="inspector-header">
+							<p class="eyebrow">{inspectorView.eyebrow}</p>
+							{#if inspectorView.badge}
+								<span>{inspectorView.badge}</span>
+							{/if}
 						</div>
-					{/if}
+						<h2>{inspectorView.title}</h2>
+						<p>{inspectorView.description}</p>
 
-					{#if selectedNode && selectedSkill}
-						<div class="inspector-block">
-							<span>Why this matters here</span>
-							<strong>{selectedMember.name.split(' ')[0]}'s profile and current recommendations connect this capability to {selectedNode.territory ? pathwayCopy[territoryToPathway[selectedNode.territory]].label.toLowerCase() : 'the wider pathway'}.</strong>
+						<div class="inspector-sections">
+							{#each inspectorView.blocks as block}
+								<section class={`inspector-block inspector-${block.kind}`}>
+									<span>{block.label}</span>
+
+									{#if block.kind === 'chips'}
+										<div class="skill-tags">
+											{#each block.skills ?? [] as skill}
+												<button type="button" onclick={() => selectNode(`skill-${skill.id}`)}>{skill.name}</button>
+											{/each}
+											{#each block.items ?? [] as item}
+												<strong>{item}</strong>
+											{/each}
+										</div>
+									{:else if block.kind === 'courses'}
+										<div class="mini-list">
+											{#each block.courses ?? [] as course}
+												<button type="button" onclick={() => selectNode(`course-${course.id}`)}>
+													<small>{courseListRole(course)}</small>
+													<strong>{titleFor(course)}</strong>
+												</button>
+											{/each}
+										</div>
+									{:else if block.kind === 'meta' || block.kind === 'progression'}
+										<div class="inspector-grid">
+											{#each block.meta ?? [] as item}
+												<div><span>{item.label}</span><strong>{item.value}</strong></div>
+											{/each}
+										</div>
+									{:else if block.kind === 'status'}
+										<strong>{block.text}</strong>
+										<div class="inspector-progress">
+											<div><span style={`width: ${block.meta?.[0]?.value ?? '0%'}`}></span></div>
+											<strong>{block.meta?.[0]?.value ?? '0%'}</strong>
+										</div>
+									{:else}
+										<strong>{block.text}</strong>
+									{/if}
+								</section>
+							{/each}
 						</div>
-						<div class="inspector-block">
-							<span>Courses developing it</span>
-							<div class="mini-list">
-								{#each coursesForSkill(selectedSkill.id).slice(0, 5) as course}
-									<button type="button" onclick={() => selectNode(`course-${course.id}`)}>{titleFor(course)}</button>
-								{/each}
-							</div>
-						</div>
-						<div class="inspector-block">
-							<span>Builds toward / supports</span>
-							<strong>{skillRelations.filter((relation) => relation.from.includes(selectedSkill.id) || relation.to === selectedSkill.id).map((relation) => relation.label).join(' / ') || 'A reusable professional capability that may support several recommendations.'}</strong>
-						</div>
-					{:else if selectedNode && selectedCourse}
-						<div class="inspector-block">
-							<span>Develops</span>
-							<div class="skill-tags">
-								{#each courseSkills(selectedCourse) as skill}<button type="button" onclick={() => selectNode(`skill-${skill.id}`)}>{skill.name}</button>{/each}
-							</div>
-						</div>
-						<div class="inspector-grid">
-							<div><span>Map role</span><strong>{selectedNode.role ?? selectedNode.label}</strong></div>
-							<div><span>Status</span><strong>{selectedNode.status ?? courseStateLabel(selectedCourse)}</strong></div>
-						</div>
-						<div class="inspector-grid">
-							<div><span>Prerequisites</span><strong>{getCourseTitles(selectedCourse.prerequisites)}</strong></div>
-							<div><span>Recommended next</span><strong>{getCourseTitles(selectedCourse.unlocks)}</strong></div>
-						</div>
-						<div class="inspector-block">
-							<span>Recommendation context</span>
-							<strong>{recommendationForCourse(selectedCourse.id)?.reason ?? (currentTeam.pathwayCourseIds.includes(selectedCourse.id) ? `Part of ${currentTeam.name}'s shared pathway.` : 'Useful where this capability appears in the development map.')}</strong>
-						</div>
-					{:else if selectedNode?.kind === 'team'}
-						<div class="inspector-block">
-							<span>Team pathway courses</span>
-							<div class="mini-list">
-								{#each teamCourses as course}
-									<button type="button" onclick={() => selectNode(`course-${course.id}`)}>{titleFor(course)}</button>
-								{/each}
-							</div>
-						</div>
-						<div class="inspector-block">
-							<span>Relationship routes</span>
-							<strong>{relationshipRoutes.map((route) => route.theme).join(' / ')}</strong>
-						</div>
-					{:else if selectedNode}
-						<div class="inspector-block">
-							<span>Connected skills</span>
-							<div class="skill-tags">
-								{#each selectedNode.skillIds?.map(getSkill).filter(isSkill) ?? [] as skill}
-									<button type="button" onclick={() => selectNode(`skill-${skill.id}`)}>{skill.name}</button>
-								{/each}
-							</div>
-						</div>
-						<div class="inspector-block">
-							<span>Profile context</span>
-							<strong>{primaryType.number} / {primaryType.name} with supporting {profileTypes.slice(1).map((type) => `${type.number} / ${type.name}`).join(' and ')}.</strong>
-						</div>
-					{/if}
+
+						{#if inspectorView.action}
+							<button class="inspector-primary-action" type="button" onclick={() => inspectorAction(inspectorView.action!)}>
+								{inspectorView.action.label}
+							</button>
+						{/if}
+					</div>
 				</aside>
 			</div>
 			{#if selectedArea === 'stress-growth'}
