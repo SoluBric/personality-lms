@@ -20,7 +20,6 @@ export type EnneagramType = {
 	developmentLevels: DevelopmentLevel[];
 	strengths: string[];
 	weaknesses: string[];
-	skills: string[];
 	color: string;
 };
 
@@ -155,7 +154,6 @@ export const enneagramTypes: EnneagramType[] = [
 		developmentLevels: developmentLevels('capacity for principled improvement', 'rigidity, criticism and chronic dissatisfaction', 'self-compassion and values-based prioritisation'),
 		strengths: ['Raises quality bars', 'Spots gaps in standards', 'Turns values into discipline'],
 		weaknesses: ['Can become critical', 'May overcorrect small flaws', 'Can struggle to relax standards'],
-		skills: ['Feedback Integration', 'Prioritisation', 'Iterative Execution'],
 		color: '#eac95f'
 	},
 	{
@@ -174,7 +172,6 @@ export const enneagramTypes: EnneagramType[] = [
 		developmentLevels: developmentLevels('capacity for empathy and boundaried support', 'people-pleasing, rescue behaviour and indirect need expression', 'boundary setting and asking directly'),
 		strengths: ['Builds trust quickly', 'Reads relational needs', 'Creates visible support'],
 		weaknesses: ['Can over-help', 'May hide personal needs', 'Can carry unspoken resentment'],
-		skills: ['Stakeholder Empathy & Trust', 'Boundary Setting', 'Active & Consultative Listening'],
 		color: '#2fbf86'
 	},
 	{
@@ -193,7 +190,6 @@ export const enneagramTypes: EnneagramType[] = [
 		developmentLevels: developmentLevels('capacity for goal focus and adaptive execution', 'image management, burnout and worth tied to results', 'values clarification and sustainable pacing'),
 		strengths: ['Creates momentum', 'Clarifies outcomes', 'Adapts to what works'],
 		weaknesses: ['Can over-identify with results', 'May bypass emotion', 'Can make image too central'],
-		skills: ['Collaborative Influence', 'Strategic Communication', 'Focus & Follow-Through'],
 		color: '#86c99a'
 	},
 	{
@@ -212,7 +208,6 @@ export const enneagramTypes: EnneagramType[] = [
 		developmentLevels: developmentLevels('capacity for emotional literacy and creative meaning', 'comparison, mood identification and feeling misunderstood', 'emotional regulation and disciplined creative output'),
 		strengths: ['Names emotional nuance', 'Creates distinctive ideas', 'Protects authenticity'],
 		weaknesses: ['Can amplify what is missing', 'May withdraw under comparison', 'Can over-identify with mood'],
-		skills: ['Emotional Regulation', 'Feedback Integration', 'Adaptability'],
 		color: '#bad9c2'
 	},
 	{
@@ -231,7 +226,6 @@ export const enneagramTypes: EnneagramType[] = [
 		developmentLevels: developmentLevels('capacity for analysis and conceptual clarity', 'detachment, hoarding time or energy and analysis paralysis', 'embodied action and concise communication'),
 		strengths: ['Builds strong mental models', 'Finds signal in complexity', 'Protects deep work'],
 		weaknesses: ['Can delay action', 'May withhold useful thinking', 'Can detach from people'],
-		skills: ['Strategic Communication', 'Decision-Making Under Uncertainty', 'Iterative Execution'],
 		color: '#3864b0'
 	},
 	{
@@ -250,7 +244,6 @@ export const enneagramTypes: EnneagramType[] = [
 		developmentLevels: developmentLevels('capacity for preparedness and trust calibration', 'suspicion, anxiety loops and excessive checking', 'trust calibration and premortems with closure'),
 		strengths: ['Sees risk early', 'Builds contingency plans', 'Tests trust carefully'],
 		weaknesses: ['Can over-check', 'May spiral in uncertainty', 'Can outsource authority'],
-		skills: ['Risk Judgement', 'Decision-Making Under Uncertainty', 'Emotional Regulation'],
 		color: '#8f99c5'
 	},
 	{
@@ -269,7 +262,6 @@ export const enneagramTypes: EnneagramType[] = [
 		developmentLevels: developmentLevels('capacity for possibility and focused experimentation', 'distraction, avoidance of pain and overcommitment', 'focus, completion rituals and staying with hard emotions'),
 		strengths: ['Generates options', 'Reframes constraints', 'Energizes exploration'],
 		weaknesses: ['Can scatter focus', 'May avoid discomfort', 'Can leave loops open'],
-		skills: ['Prioritisation', 'Focus & Follow-Through', 'Adaptability'],
 		color: '#c9cce5'
 	},
 	{
@@ -288,7 +280,6 @@ export const enneagramTypes: EnneagramType[] = [
 		developmentLevels: developmentLevels('capacity for courage and calibrated power', 'domination, intensity and dismissing vulnerability', 'calibrated assertiveness and power sharing'),
 		strengths: ['Takes charge under pressure', 'Protects boundaries', 'Names hard truths'],
 		weaknesses: ['Can overpower', 'May distrust vulnerability', 'Can move faster than consent'],
-		skills: ['Assertive Communication', 'Delegation & Empowerment', 'Constructive Conflict'],
 		color: '#f2b84b'
 	},
 	{
@@ -307,7 +298,6 @@ export const enneagramTypes: EnneagramType[] = [
 		developmentLevels: developmentLevels('capacity for mediation and inclusive steadiness', 'conflict avoidance, inertia and self-forgetting', 'priority setting and clear preference expression'),
 		strengths: ['Holds multiple views', 'Creates calm', 'Builds shared ground'],
 		weaknesses: ['Can avoid conflict', 'May lose personal priority', 'Can delay decisions'],
-		skills: ['Facilitation & Perspective Integration', 'Active & Consultative Listening', 'Assertive Communication'],
 		color: '#f6d77a'
 	}
 ];

@@ -103,7 +103,7 @@ with no explanation, the system can show why the recommendation exists.
 
 ## Example
 
-### Finding Your Voice
+### F8-01 Assertiveness and Clean Boundaries
 
 A learner such as Emily might see:
 
@@ -136,7 +136,7 @@ while its **developmental relevance changes by learner and context**.
 
 For example:
 
-### Collaborative Influence
+### Relational Influence
 
 The same canonical course can be recommended to several demo members for
 different reasons, while remaining assigned to one pathway.
@@ -147,7 +147,7 @@ Another may be learning to influence without relying on authority.
 
 Another may be developing better listening before advocating a position.
 
-The course itself does not need six versions.
+The course itself stays canonical; Recommendation records carry the learner-specific explanation.
 
 The surrounding system provides the personalisation.
 
@@ -167,18 +167,18 @@ A course may contribute to one or more skills.
 
 For example:
 
-### Finding Your Voice
+### F8-01 Assertiveness and Clean Boundaries
 
 May contribute toward:
 
 -   Assertive Communication;
 -   Boundary Setting.
 
-### Constructive Conflict
+### TM-GEN-02 Productive Disagreement
 
 May contribute toward:
 
--   Constructive Conflict;
+-   Productive Disagreement;
 -   Assertive Communication;
 -   Active Listening.
 
@@ -212,10 +212,8 @@ Example:
 
 ### From Accommodation to Constructive Assertion
 
-**Healthy Boundaries**\
-→ **Finding Your Voice**\
-→ **Constructive Conflict**\
-→ **Difficult Conversations**
+**F8-01 Assertiveness and Clean Boundaries**\
+→ **F8-02 Difficult Conversations With Directness**
 
 The learner may be able to see:
 
@@ -234,22 +232,24 @@ It may simply represent a useful learning route.
 
 # 7. Multiple Contexts of Relevance
 
-Some courses may be relevant to more than one learner context through
-separate Recommendation records.
+The same capability or theme may be relevant in more than one learner
+context, while the course remains assigned to one canonical pathway.
 
-For Emily, **Constructive Conflict** might appear as:
+For Emily, **Productive Disagreement** might appear as:
 
 ### Personal
 
-Supports more direct expression of disagreement.
+The capability supports more direct expression of disagreement.
 
 ### Relationship
 
-Relevant to the Emily ↔ James working dynamic.
+The Emily ↔ James working dynamic creates a reason for a Team-pathway
+recommendation.
 
 ### Team
 
-Part of Team Atlas's shared development pathway.
+Team Atlas's shared pathway can include **TM-GEN-02 Productive
+Disagreement**.
 
 This creates a strong demonstration of the underlying platform
 architecture: the course definition stays canonical, while the
@@ -271,7 +271,7 @@ A lightweight outline may be enough.
 
 Example:
 
-### Finding Your Voice
+### F8-01 Assertiveness and Clean Boundaries
 
 1.  Passive, assertive and aggressive communication
 2.  Stating a position clearly

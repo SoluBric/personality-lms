@@ -468,10 +468,9 @@ Joint development theme:
 
 Relevant learning includes:
 
--   Constructive Conflict;
--   Listening Before Leading;
--   Facilitating Productive Disagreement;
--   High-Trust Team Decisions.
+-   TM-GEN-02 Productive Disagreement;
+-   TM-GEN-01 Listening Before Leading;
+-   TM-GEN-07 High-Trust Team Commitments.
 
 ### Sarah ↔ Oliver
 
@@ -481,15 +480,12 @@ Joint development theme:
 
 Relevant learning includes:
 
--   Consultative Stakeholder Conversations;
--   Priorities That Hold;
--   Sustainable Execution;
--   Decisions Without Certainty;
--   High-Trust Team Decisions.
+-   TM-GEN-01 Listening Before Leading;
+-   TM-GEN-03 Team Decisions That Close;
+-   TM-GEN-04 Role Clarity and Ownership;
+-   TM-GEN-07 High-Trust Team Commitments.
 
-The course catalogue itself remains reusable.
-
-The relationship supplies another reason for the recommendation.
+The Team pathway catalogue remains canonical. Relationship context supplies another reason for a Team recommendation.
 
 ------------------------------------------------------------------------
 
@@ -501,11 +497,10 @@ The existing content contains a shared pathway for each team.
 
 ### From Diverse Perspectives to Confident Decisions
 
-**Listening Before Leading**\
-→ **Constructive Conflict**\
-→ **Decisions Without Certainty**\
-→ **Facilitating Productive Disagreement**\
-→ **High-Trust Team Decisions**
+**TM-GEN-01 Listening Before Leading**\
+→ **TM-GEN-02 Productive Disagreement**\
+→ **TM-GEN-03 Team Decisions That Close**\
+→ **TM-GEN-07 High-Trust Team Commitments**
 
 Optional creative-delivery branch:
 
@@ -518,11 +513,10 @@ Optional creative-delivery branch:
 
 ### From Opportunity to Credible Commitment
 
-**Consultative Stakeholder Conversations**\
-→ **Priorities That Hold**\
-→ **Decisions Without Certainty**\
-→ **Sustainable Execution**\
-→ **High-Trust Team Decisions**
+**TM-GEN-01 Listening Before Leading**\
+→ **TM-GEN-03 Team Decisions That Close**\
+→ **TM-GEN-04 Role Clarity and Ownership**\
+→ **TM-GEN-07 High-Trust Team Commitments**
 
 ------------------------------------------------------------------------
 
@@ -543,12 +537,11 @@ It might show:
 
 # 15. Individual + Relationship + Team Intersections
 
-A particularly important concept is that one learning object may appear
-at several levels.
+A particularly important concept is that the same capability or theme may matter at several levels, while each course remains assigned to one canonical pathway.
 
 For example:
 
-### Constructive Conflict
+### Productive Disagreement
 
 **Emily's personal development**\
 because she may delay visible disagreement;
@@ -564,7 +557,7 @@ This is a strong example of the platform connecting:
 
 **individual insight + relationship dynamics + team learning**
 
-without creating separate course content for each context.
+without returning to the old multi-pathway course model.
 
 ------------------------------------------------------------------------
 
@@ -716,9 +709,9 @@ A practical suggestion appears:
 
 The relationship links to:
 
-**Constructive Conflict**
+**TM-GEN-02 Productive Disagreement**
 
-The learner can then see that the same course is also part of:
+The learner can then see that the same capability also matters for:
 
 **Emily's personal development**
 
@@ -726,8 +719,9 @@ and:
 
 **Team Atlas --- From Diverse Perspectives to Confident Decisions**
 
-This one journey demonstrates much of the platform's team-development
-concept without requiring a large amount of interface or content.
+This journey demonstrates how individual insight, relationship context
+and Team-pathway learning can connect while each course keeps its
+canonical v3 pathway assignment.
 
 ------------------------------------------------------------------------
 
@@ -752,9 +746,10 @@ Insight leads toward behaviour.
 
 The group becomes a meaningful development context.
 
-### "Learning connects across levels."
+### "Capabilities connect across levels."
 
-Personal, relationship and team learning can intersect.
+Personal, relationship and team needs can intersect, while courses keep
+their canonical v3 pathway assignment.
 
 ------------------------------------------------------------------------
 

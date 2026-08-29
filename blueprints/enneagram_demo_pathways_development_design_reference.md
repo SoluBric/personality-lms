@@ -79,7 +79,7 @@ The message is:
 
 ------------------------------------------------------------------------
 
-## Optimise Stress Management & Growth
+## Stress & Growth
 
 Explore how a learner operates under pressure and how they can increase
 flexibility.
@@ -158,7 +158,7 @@ Examples:
 -   Facilitation
 -   Risk Judgement
 -   Prioritisation
--   Collaborative Influence
+-   Relational Influence
 
 A skill can be developed through more than one course or experience.
 
@@ -258,7 +258,7 @@ A recommendation might be generated from several kinds of insight.
 
 This could connect toward:
 
-**Assertive Communication → Finding Your Voice**
+**Assertive Communication → F8-01 Assertiveness and Clean Boundaries**
 
 ### Strength-based
 
@@ -273,7 +273,7 @@ This could connect toward:
 
 This might connect toward:
 
-**Constructive Conflict**
+**Productive Disagreement**
 
 ### Stress / growth based
 
@@ -322,16 +322,14 @@ A possible Emily pathway:
 
 ### From Accommodation to Constructive Assertion
 
-**Healthy Boundaries**\
-→ **Finding Your Voice**\
-→ **Constructive Conflict**\
-→ **Difficult Conversations**
+**F8-01 Assertiveness and Clean Boundaries**\
+→ **F8-02 Difficult Conversations With Directness**
 
 Another pathway could build on an existing strength:
 
 **Active Listening**\
-→ **Collaborative Influence**\
-→ **Facilitating Productive Disagreement**
+→ **Relational Influence**\
+→ **TM-GEN-02 Productive Disagreement**
 
 These routes demonstrate two different forms of development:
 
@@ -358,14 +356,14 @@ The exact amount shown at once can remain flexible.
 
 # 7. Overlap and Reuse
 
-One of the strongest concepts in the demo is that learning objects are
-reusable.
+One of the strongest concepts in the demo is that capabilities are
+reusable and courses are canonical.
 
-A course does not belong exclusively to one type or pathway.
+A canonical course belongs to one pathway and one pathway-specific category. It may still be recommended to several learners for different reasons.
 
 For example:
 
-**Constructive Conflict**
+**Productive Disagreement**
 
 might appear because of:
 
@@ -373,7 +371,11 @@ might appear because of:
 -   the Emily ↔ James relationship;
 -   Team Atlas's shared development needs.
 
-Similarly, **Collaborative Influence** can be relevant to several
+Those contexts may point to different v3 courses or to a Team-pathway
+course such as **TM-GEN-02 Productive Disagreement**. The course's
+canonical v3 assignment remains unchanged.
+
+Similarly, **Relational Influence** can be relevant to several
 learners for different reasons.
 
 This is useful to make visible somewhere in the experience because it
@@ -564,18 +566,18 @@ points to **TM-GEN-02 Productive Disagreement**
 while:
 
 **Emily ↔ James relationship development**\
-also recommends **Constructive Conflict**
+also points toward the Productive Disagreement capability
 
 and:
 
 **Team Atlas pathway**\
-contains **Constructive Conflict**
+contains **TM-GEN-02 Productive Disagreement**
 
 This creates an interesting intersection:
 
 ``` text
 PERSONAL DEVELOPMENT
-                      CONSTRUCTIVE CONFLICT
+                      PRODUCTIVE DISAGREEMENT
          /
         /
 TEAM
@@ -662,17 +664,17 @@ That can lead in one direction toward:
 
 At the same time, the possible overuse of accommodation can lead toward:
 
-**Assertive Communication → Finding Your Voice → Constructive Conflict**
+**Assertive Communication → F8-01 Assertiveness and Clean Boundaries → F8-02 Difficult Conversations With Directness**
 
 Her relationship with James independently creates another reason for:
 
-**Constructive Conflict**
+**TM-GEN-02 Productive Disagreement**
 
-Team Atlas also includes that course within:
+Team Atlas includes that Team-pathway course within:
 
 ### From Diverse Perspectives to Confident Decisions
 
-The learner can therefore discover that one learning experience has
+The learner can therefore discover that one capability theme can create
 several layers of relevance:
 
 > **For me**\

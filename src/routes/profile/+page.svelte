@@ -50,7 +50,7 @@
 			pathway: 'Listening / influence / facilitation progression'
 		},
 		'Stress & Growth': {
-			label: 'Optimise Stress Management & Growth',
+			label: 'Stress & Growth',
 			compact: 'Recognise how your patterns shift under pressure and practise alternative responses that increase flexibility.',
 			question: 'What happens when pressure increases, and what response would create more range?',
 			pathway: 'Recognition -> regulation -> alternative responses'
@@ -164,6 +164,10 @@
 
 	function isSkill(skill: Skill | undefined): skill is Skill {
 		return Boolean(skill);
+	}
+
+	function skillsForType(typeNumber: number) {
+		return skills.filter((skill) => skill.typeNumber === typeNumber);
 	}
 
 	function getCoursesForTerritory(territory: Territory, member = selectedMember) {
@@ -536,7 +540,7 @@
 				<h3>Useful capacities</h3>
 				<div class="chip-list">
 					<span>{selectedPatternDetail.capacity}</span>
-					{#each selectedPatternDetail.skills as skill}<span>{skill}</span>{/each}
+					{#each skillsForType(selectedPatternDetail.number) as skill}<span>{skill.name}</span>{/each}
 				</div>
 				<h3>Watch for</h3>
 				<ul class="trait-list">

@@ -456,7 +456,7 @@
 					<p class="eyebrow">Shared team development</p>
 					<h2>{currentTeam.pathwayName}</h2>
 				</div>
-				<p class="muted">The same course can matter personally, relationally and at team level. This section keeps the reason tied to the team pathway.</p>
+				<p class="muted">The same capability can matter personally, relationally and at team level. These courses stay tied to the Team pathway.</p>
 			</div>
 			<div class="team-pathway-line">
 				{#each teamPathwayCourses as course, index}

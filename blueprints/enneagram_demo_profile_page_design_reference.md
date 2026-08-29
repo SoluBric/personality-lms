@@ -292,7 +292,7 @@ For example:
 This relationship could eventually continue into learning:
 
 **Assertive Communication**  
-→ **Finding Your Voice**
+→ **F8-01 Assertiveness and Clean Boundaries**
 
 The exact presentation is open.
 
@@ -527,7 +527,7 @@ Potential development directions include the four v3 course pathways:
 
 Develop an existing natural capability further.
 
-### Optimise Stress Management & Growth
+### Stress & Growth
 
 Recognise stress patterns and expand more constructive responses.
 

@@ -116,7 +116,7 @@ A course currently in progress.
 
 Example:
 
-**Finding Your Voice**
+**F8-01 Assertiveness and Clean Boundaries**
 
 with simple progress information.
 
@@ -236,7 +236,7 @@ development system rather than several independent modules.
 Because the same object can appear in several contexts, it may
 occasionally be useful to help the learner understand where they are.
 
-For example, **Constructive Conflict** could be reached from:
+For example, **Productive Disagreement** could be reached from:
 
 -   Emily's personal pathway;
 -   the Emily ↔ James relationship;
@@ -277,7 +277,7 @@ For example:
 
 ### Course
 
-> Finding Your Voice
+> F8-01 Assertiveness and Clean Boundaries
 
 ↓
 
@@ -318,7 +318,7 @@ The Dashboard could surface one or a few useful next actions.
 
 Examples:
 
--   Continue **Finding Your Voice**
+-   Continue **F8-01 Assertiveness and Clean Boundaries**
 -   Explore your **Type 3 growth resources**
 -   Continue **From Accommodation to Constructive Assertion**
 -   Review your working dynamic with **James**
@@ -367,11 +367,11 @@ From Accommodation to Constructive Assertion
 View Pathway →
 
 CONTINUE LEARNING
-Finding Your Voice
+F8-01 Assertiveness and Clean Boundaries
 Continue →
 
 RECOMMENDED NEXT
-Constructive Conflict
+Productive Disagreement
 See why →
 
 TEAM ATLAS
@@ -426,8 +426,8 @@ The highest-value application-orientation ideas are likely to be:
 3.  a clear current development focus;
 4.  easy continuation of learning;
 5.  contextual links between the main areas;
-6.  preservation of context where the same course or skill appears in
-    several places;
+6.  preservation of context where the same capability is relevant in
+    several places, while courses keep their v3 pathway assignment;
 7.  freedom to explore rather than a forced linear journey.
 
 ------------------------------------------------------------------------

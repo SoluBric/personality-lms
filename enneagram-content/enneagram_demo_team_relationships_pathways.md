@@ -145,7 +145,6 @@ Emily may need explicit invitation and sufficient space to disagree before her r
 ### **Productive disagreement without avoidance or domination**
 
 ## Shared courses
-- **TM-GEN-02 — Productive Disagreement**
 - **TM-GEN-01 — Listening Before Leading**
 - **TM-GEN-02 — Productive Disagreement**
 - **TM-GEN-07 — High-Trust Team Commitments**
@@ -205,7 +204,6 @@ Emily may not immediately state that a process is becoming too open-ended; activ
 ## Shared courses
 - **TM-GEN-02 — Productive Disagreement**
 - **TM-GEN-05 — Feedback That Travels**
-- **TM-GEN-02 — Productive Disagreement**
 - **TM-GEN-07 — High-Trust Team Commitments**
 
 ---
@@ -383,9 +381,8 @@ James is more receptive to analysis when it ends with a recommendation rather th
 ### **Fast enough to act; rigorous enough to trust**
 
 ## Shared courses
-- **TM-GEN-03 — Team Decisions That Close**
-- **TM-GEN-07 — High-Trust Team Commitments**
 - **TM-T5-01 — Working With Analysis-Driven Colleagues**
+- **TM-GEN-03 — Team Decisions That Close**
 - **TM-GEN-04 — Role Clarity and Ownership**
 - **TM-GEN-07 — High-Trust Team Commitments**
 
@@ -449,7 +446,6 @@ Sophie's intuitive reaction may contain information that needs exploration rathe
 
 ## Shared courses
 - **TM-GEN-08 — From Different Perspectives to One Plan**
-- **TM-GEN-07 — High-Trust Team Commitments**
 - **TM-GEN-05 — Feedback That Travels**
 - **TM-GEN-04 — Role Clarity and Ownership**
 - **TM-GEN-07 — High-Trust Team Commitments**
@@ -520,9 +516,8 @@ Sarah's concerns are most useful before a promise is made, so he must actively i
 
 ## Shared courses
 - **TM-GEN-01 — Listening Before Leading**
-- **TM-GEN-04 — Role Clarity and Ownership**
-- **TM-GEN-07 — High-Trust Team Commitments**
 - **TM-GEN-03 — Team Decisions That Close**
+- **TM-GEN-04 — Role Clarity and Ownership**
 - **TM-GEN-07 — High-Trust Team Commitments**
 
 ---
@@ -587,13 +582,12 @@ Relevant skills:
 
 - Assertive Communication
 - Active Listening
-- Constructive Conflict
+- Productive Disagreement
 - Facilitation
 
 Relevant courses:
 
 - F8-01 Assertiveness and Clean Boundaries
-- TM-GEN-02 Productive Disagreement
 - TM-GEN-01 Listening Before Leading
 - TM-GEN-02 Productive Disagreement
 
@@ -620,7 +614,6 @@ Relevant skills:
 Relevant courses:
 
 - TM-GEN-03 Team Decisions That Close
-- TM-GEN-07 High-Trust Team Commitments
 - TM-GEN-04 Role Clarity and Ownership
 - TM-GEN-07 High-Trust Team Commitments
 
@@ -673,13 +666,7 @@ Normalise disagreement as useful information rather than a sign that the team is
 Purpose:
 Give the team a common language for deciding when there is enough information to act.
 
-### Stage 4 — Integrate the Room
-**TM-GEN-02 — Productive Disagreement**
-
-Purpose:
-Help the team prevent either domination or avoidance while synthesising different perspectives.
-
-### Stage 5 — Commit Together
+### Stage 4 — Commit Together
 **TM-GEN-07 — High-Trust Team Commitments**
 
 Purpose:
@@ -828,29 +815,23 @@ Relevant courses:
 Purpose:
 Help Oliver turn persuasion into consultation and give Sarah better information about the actual stakeholder need.
 
-### Stage 2 — Make the Trade-Off Visible
-**TM-GEN-04 — Role Clarity and Ownership**
-
-Purpose:
-Ensure that a new opportunity competes explicitly with existing commitments rather than simply being added.
-
-### Stage 3 — Decide Together
+### Stage 2 — Decide Together
 **TM-GEN-03 — Team Decisions That Close**
 
 Purpose:
 Give Sarah and Oliver a shared threshold for when an opportunity has been tested enough to commit.
 
+### Stage 3 — Make Ownership Visible
+**TM-GEN-04 — Role Clarity and Ownership**
+
+Purpose:
+Ensure that a new opportunity competes explicitly with existing commitments rather than simply being added.
+
 ### Stage 4 — Deliver What Was Promised
 **TM-GEN-07 — High-Trust Team Commitments**
 
 Purpose:
-Connect ambition to capacity, completion and credibility.
-
-### Stage 5 — Formalise the Pair's Decision Rhythm
-**TM-GEN-07 — High-Trust Team Commitments**
-
-Purpose:
-Create a repeatable two-person process for challenge, decision and commitment.
+Connect ambition to capacity, completion and credibility through a repeatable decision rhythm.
 
 ---
 
@@ -888,9 +869,6 @@ Useful across both teams.
 
 ### TM-GEN-04 — Role Clarity and Ownership
 Especially useful where creative or commercial opportunities compete with capacity.
-
-### TM-GEN-02 — Productive Disagreement
-A higher-level Team Atlas capability.
 
 ### TM-GEN-07 — High-Trust Team Commitments
 The strongest shared capstone for both teams.
@@ -1002,9 +980,9 @@ A perspective-switching interaction that explains how the same workplace situati
 ### **From Diverse Perspectives to Confident Decisions**
 
 **Listening Before Leading**  
-→ **Constructive Conflict**  
+→ **Productive Disagreement**  
 → **Decisions Without Certainty**  
-→ **Facilitating Productive Disagreement**  
+→ **TM-GEN-02 Productive Disagreement**  
 → **High-Trust Team Decisions**
 
 Optional branch:

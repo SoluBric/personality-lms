@@ -94,7 +94,7 @@
 - Underused expression: conflict avoidance, weak boundaries, difficulty taking charge
 - Blind spots: impact of force, impatience, distrust of softness
 - Growth practices: calibrated assertiveness, vulnerability, power sharing
-- LMS links: Constructive Assertiveness, Power With Calibration, Difficult Conversations
+- LMS links: Constructive Assertiveness, Power With Calibration, Difficult Conversations With Directness
 
 ## Type 9: Adaptive Diplomat
 
