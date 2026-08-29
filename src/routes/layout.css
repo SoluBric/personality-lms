@@ -2575,6 +2575,20 @@ li {
 		color-mix(in srgb, var(--panel-strong) 90%, transparent);
 }
 
+.map-coordinate-plane {
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+}
+
+.strengths-mode .map-coordinate-plane {
+	left: 50%;
+	top: 50%;
+	width: min(calc(100% - 56px), calc(var(--pathways-map-height) - 48px));
+	height: min(calc(100% - 56px), calc(var(--pathways-map-height) - 48px));
+	transform: translate(-50%, -50%);
+}
+
 .map-local-heading {
 	position: relative;
 	z-index: 20;
@@ -2967,10 +2981,17 @@ li {
 .wheel-geometry {
 	position: absolute;
 	inset: 24px 30px 30px;
-	z-index: 0;
+	z-index: 1;
 	width: calc(100% - 60px);
 	height: calc(100% - 54px);
 	overflow: visible;
+}
+
+.strengths-mode .wheel-geometry {
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
 }
 
 .wheel-ring {
@@ -2998,6 +3019,8 @@ li {
 	stroke-width: 0.22;
 	vector-effect: non-scaling-stroke;
 	opacity: 0.34;
+	cursor: pointer;
+	pointer-events: auto;
 	transition:
 		fill 180ms ease,
 		opacity 180ms ease,
@@ -3009,8 +3032,29 @@ li {
 	opacity: 0.88;
 }
 
+.strengths-mode .wheel-sector.active {
+	fill: color-mix(in srgb, var(--sector-color) 32%, transparent);
+	stroke: color-mix(in srgb, var(--sector-color) 58%, var(--line));
+	opacity: 0.9;
+}
+
 .wheel-sector.muted {
 	opacity: 0.14;
+}
+
+.strengths-mode .wheel-sector.muted {
+	fill: color-mix(in srgb, var(--sector-color) 7%, transparent);
+	opacity: 0.18;
+}
+
+.strengths-mode .wheel-sector.selected-sector {
+	fill: color-mix(in srgb, var(--sector-color) 42%, transparent);
+	stroke: color-mix(in srgb, var(--sector-color) 72%, #fff);
+	opacity: 1;
+}
+
+.strengths-mode .wheel-sector.off-selected-sector.active {
+	opacity: 0.42;
 }
 
 .type-marker {
@@ -3038,6 +3082,7 @@ li {
 .map-lines {
 	position: absolute;
 	inset: 0;
+	z-index: 1;
 	width: 100%;
 	height: 100%;
 	pointer-events: none;
@@ -3084,6 +3129,29 @@ li {
 	stroke-dasharray: 0.8 1.2;
 }
 
+.map-lines line.strength-course-line {
+	stroke: color-mix(in srgb, var(--accent) 42%, var(--line));
+	stroke-dasharray: 0.7 1.4;
+	opacity: 0.34;
+}
+
+.map-lines line.strength-anchor-line {
+	stroke: color-mix(in srgb, var(--line) 62%, transparent);
+	opacity: 0.24;
+}
+
+.map-lines line.strength-chain-line {
+	stroke: color-mix(in srgb, var(--accent) 76%, #fff);
+	stroke-width: 0.38;
+	stroke-linecap: round;
+	opacity: 0.46;
+}
+
+.map-lines line.strength-chain-line.selected {
+	stroke-width: 0.5;
+	opacity: 0.86;
+}
+
 .map-lines line.selected {
 	stroke: var(--accent);
 	stroke-width: 0.32;
@@ -3093,7 +3161,7 @@ li {
 .map-clear-target {
 	position: absolute;
 	inset: 0;
-	z-index: 1;
+	z-index: 0;
 	border: 0;
 	border-radius: inherit;
 	background: transparent;
@@ -3504,7 +3572,6 @@ li {
 	border-color: color-mix(in srgb, var(--accent) 46%, var(--line));
 }
 
-.strengths-mode .node-signal,
 .growth-mode .node-signal {
 	width: 110px;
 	min-height: 74px;
@@ -3514,6 +3581,58 @@ li {
 		radial-gradient(circle at 35% 25%, rgba(255, 255, 255, 0.16), transparent 30%),
 		color-mix(in srgb, var(--accent-soft) 38%, var(--bg-soft));
 	text-align: center;
+}
+
+.strengths-mode .node-signal {
+	z-index: 5;
+	width: 44px;
+	min-height: 44px;
+	place-items: center;
+	padding: 0;
+	border-radius: 50%;
+	background:
+		radial-gradient(circle at 35% 25%, rgba(255, 255, 255, 0.18), transparent 34%),
+		color-mix(in srgb, var(--bg-soft) 80%, transparent);
+	box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
+	text-align: center;
+}
+
+.strengths-mode .node-signal span,
+.strengths-mode .node-signal small {
+	display: none;
+}
+
+.strengths-mode .node-signal strong {
+	color: var(--muted);
+	font-size: 18px;
+	line-height: 1;
+}
+
+.strengths-mode .node-signal.active-type-node {
+	border-color: color-mix(in srgb, var(--accent) 74%, var(--line));
+	background:
+		radial-gradient(circle at 35% 25%, rgba(255, 255, 255, 0.2), transparent 34%),
+		color-mix(in srgb, var(--accent-soft) 48%, var(--bg-soft));
+	box-shadow:
+		0 12px 26px rgba(0, 0, 0, 0.24),
+		0 0 0 3px color-mix(in srgb, var(--accent) 14%, transparent);
+}
+
+.strengths-mode .node-signal.primary-type-node {
+	width: 50px;
+	min-height: 50px;
+}
+
+.strengths-mode .node-signal.primary-type-node strong {
+	font-size: 21px;
+}
+
+.strengths-mode .node-signal.inactive-type-node {
+	opacity: 0.5;
+}
+
+.strengths-mode .map-node.off-selected-type {
+	opacity: 0.44;
 }
 
 .stress-mode .node-signal {
@@ -4432,6 +4551,20 @@ li {
 	.capability-map::before,
 	.capability-map::after,
 	.map-lines {
+		display: none;
+	}
+
+	.map-coordinate-plane,
+	.strengths-mode .map-coordinate-plane {
+		position: static;
+		display: grid;
+		width: auto;
+		height: auto;
+		transform: none;
+		gap: 10px;
+	}
+
+	.wheel-geometry {
 		display: none;
 	}
 

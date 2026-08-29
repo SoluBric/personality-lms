@@ -24,6 +24,8 @@
 	type FilterMode = 'All' | CoursePathway;
 	type NodeKind = 'profile' | 'territory' | 'signal' | 'skill' | 'course' | 'pathway' | 'team' | 'person';
 	type RadialBand = 'inner' | 'middle' | 'outer';
+	type MapPoint = { x: number; y: number };
+	type ChainSegment = { id: string; from: MapPoint; to: MapPoint; selected: boolean };
 	type MapRole =
 		| 'Foundation'
 		| 'Strength Mastery'
@@ -111,6 +113,9 @@
 	const enneagramOrder = [9, 1, 2, 3, 4, 5, 6, 7, 8];
 	const wheelTypes = enneagramOrder.map(getType);
 	const radialBands: Record<RadialBand, number> = { inner: 28, middle: 38, outer: 47 };
+	const strengthRadialBands: Record<RadialBand, number> = { inner: 31, middle: 40, outer: 48 };
+	const strengthTypeAnchorRadius = 21;
+	const strengthCourseLaneAngles = [-6.5, 6.5, -12, 12, 0];
 	const typeTerritories: Record<number, string> = {
 		1: 'Standards & disciplined improvement',
 		2: 'Support & relational influence',
@@ -177,6 +182,7 @@
 	const selectedSkill = $derived(selectedNode?.kind === 'skill' && selectedNode.skillIds?.[0] ? getSkill(selectedNode.skillIds[0]) : undefined);
 	const activeSectorTypes = $derived(getActiveSectorTypes());
 	const showWheel = $derived(selectedArea !== null && selectedArea !== 'All');
+	const strengthChainSegments = $derived(buildStrengthChainSegments());
 	const completedCourses = $derived(activeCourseStates.filter((state) => state.status === 'completed'));
 	const inProgressCourses = $derived(activeCourseStates.filter((state) => state.status === 'in-progress'));
 	const selectedTerritoryLabel = $derived(selectedArea === null ? 'Profile origin' : selectedArea === 'All' ? 'Development atlas' : pathwayCopy[selectedArea].label);
@@ -277,6 +283,14 @@
 		const classes = ['map-node', `node-${node.kind}`];
 		if (node.kind === 'course') {
 			classes.push(`course-${courseNodeStatusKind(node)}`);
+		}
+		if (selectedArea === 'strengths' && node.typeNumber) {
+			const rank = selectedMember.profile.indexOf(node.typeNumber);
+			classes.push(rank >= 0 ? 'active-type-node' : 'inactive-type-node');
+			if (rank === 0) classes.push('primary-type-node');
+			if (rank === 1) classes.push('secondary-type-node');
+			if (rank === 2) classes.push('tertiary-type-node');
+			if (selectedNode?.kind === 'signal' && selectedNode.typeNumber !== node.typeNumber) classes.push('off-selected-type');
 		}
 		if (node.kind === 'course' || node.kind === 'skill') {
 			if (node.x < 24) classes.push('expand-right');
@@ -601,40 +615,36 @@
 	function buildStrengthsNodes(): Node[] {
 		const activeTypes = selectedMember.profile;
 		const strengthCourses = coursesForPathwayView('strengths');
-		const strengthSkills = [...new Set(strengthCourses.flatMap((course) => course.develops))].map(getSkill).filter(isSkill).slice(0, 10);
+		const courseNodes = strengthCourses.flatMap((course) => {
+			const typeNumber = categoryType(course);
+			if (!typeNumber || !activeTypes.includes(typeNumber)) return [];
+			const point = strengthCoursePoint(course, strengthCourses.filter((item) => categoryType(item) === typeNumber));
+			return courseNode(course, 'Strength Mastery', typeNumber, bandForCourseLevel(course), 0, [], point);
+		});
 		return [
-			{ id: 'profile', kind: 'profile', title: selectedMember.profile.join('-'), label: 'Profile origin', detail: selectedMember.profileDescription, role: 'Profile Origin', x: 50, y: 50 },
-			...profileTypes.map((type, index) => ({
+			{ id: 'profile', kind: 'profile', title: selectedMember.profile.join('-'), label: selectedMember.name.split(' ')[0], detail: selectedMember.profileDescription, role: 'Profile Origin', x: 50, y: 50 },
+			...wheelTypes.map((type) => {
+				const rank = activeTypes.indexOf(type.number);
+				const isActive = rank >= 0;
+				const point = typeMarkerPoint(type.number);
+				return {
 				id: `signal-type-${type.number}`,
 				kind: 'signal' as const,
-				title: `${type.number} / ${type.name}`,
-				label: index === 0 ? 'Primary strength field' : 'Supporting strength field',
+					title: `${type.number}`,
+					label: isActive ? ['Primary', 'Secondary', 'Tertiary'][rank] ?? 'Active' : 'Type anchor',
 				detail: `${type.capacity}. ${type.healthyExpression}`,
-				role: 'Strength Mastery' as const,
+					role: isActive ? 'Strength Mastery' as const : 'Type Perspective' as const,
 				typeNumber: type.number,
 				band: 'inner' as const,
 				territory: pathwayToTerritory.strengths,
 				skillIds: skillsForType(type.number).map((skill) => skill.id),
-				...mapPoint(type.number, 'inner', index - 1)
-			})),
-			...strengthSkills.map((skill, index) => {
-				const typeNumber = skill.typeNumber && activeTypes.includes(skill.typeNumber) ? skill.typeNumber : activeTypes[index % activeTypes.length];
-				return {
-					id: `skill-${skill.id}`,
-					kind: 'skill' as const,
-					title: skill.name,
-					label: 'Capability',
-					detail: skill.description,
-					role: 'Strength Mastery' as const,
-					typeNumber,
-					band: 'middle' as const,
-					territory: pathwayToTerritory.strengths,
-					skillIds: [skill.id],
-					courseIds: coursesForSkill(skill.id).map((course) => course.id),
-					...mapPoint(typeNumber, 'middle', laneForIndex(index))
+					courseIds: strengthCourses.filter((course) => categoryType(course) === type.number).map((course) => course.id),
+					meta: typeTerritories[type.number],
+					x: point.x,
+					y: point.y
 				};
 			}),
-			...strengthCourses.map((course, index) => courseNode(course, 'Strength Mastery', categoryType(course) ?? activeTypes[index % activeTypes.length], course.map.radialBand, laneForIndex(index)))
+			...courseNodes
 		];
 	}
 
@@ -708,8 +718,8 @@
 		];
 	}
 
-	function courseNode(course: Course, role: MapRole, typeNumber: number, band: RadialBand, lane = 0, memberNames: string[] = []): Node {
-		const point = mapPoint(typeNumber, band, lane);
+	function courseNode(course: Course, role: MapRole, typeNumber: number, band: RadialBand, lane = 0, memberNames: string[] = [], explicitPoint?: MapPoint): Node {
+		const point = explicitPoint ?? mapPoint(typeNumber, band, lane);
 		return {
 			id: `course-${course.id}`,
 			kind: 'course',
@@ -736,6 +746,56 @@
 		return -90 + index * 40;
 	}
 
+	function bandForCourseLevel(course: Course): RadialBand {
+		if (course.level === 'advanced') return 'outer';
+		if (course.level === 'intermediate') return 'middle';
+		return 'inner';
+	}
+
+	function polarPoint(angleDeg: number, radius: number, centerY = 50): MapPoint {
+		const angle = angleDeg * (Math.PI / 180);
+		return { x: 50 + Math.cos(angle) * radius, y: centerY + Math.sin(angle) * radius };
+	}
+
+	function strengthPoint(typeNumber: number, band: RadialBand, lane = 0): MapPoint {
+		const angle = typeAngle(typeNumber) + (strengthCourseLaneAngles[lane] ?? 0);
+		return polarPoint(angle, strengthRadialBands[band]);
+	}
+
+	function strengthCoursePoint(course: Course, typeCourses: Course[]): MapPoint {
+		const typeNumber = categoryType(course) ?? selectedMember.primaryType;
+		const band = bandForCourseLevel(course);
+		if (course.chain) return strengthPoint(typeNumber, band, 4);
+		const sameBandStandalone = typeCourses
+			.filter((item) => !item.chain && bandForCourseLevel(item) === band)
+			.sort((a, b) => a.id.localeCompare(b.id));
+		const laneIndex = Math.max(0, sameBandStandalone.findIndex((item) => item.id === course.id));
+		return strengthPoint(typeNumber, band, laneIndex % 4);
+	}
+
+	function buildStrengthChainSegments(): ChainSegment[] {
+		if (selectedArea !== 'strengths') return [];
+		const strengthCourseNodes = mapNodes.filter((node) => node.kind === 'course' && node.courseIds?.[0]);
+		return strengthCourseNodes.flatMap((node) => {
+			const courseId = node.courseIds?.[0];
+			const course = courseId ? getCourse(courseId) : undefined;
+			if (!course?.chain?.id) return [];
+			return course.unlocks.flatMap((unlockId) => {
+				const nextCourse = getCourse(unlockId);
+				if (nextCourse?.chain?.id !== course.chain?.id) return [];
+				const nextNode = strengthCourseNodes.find((item) => item.courseIds?.[0] === unlockId);
+				if (!nextNode) return [];
+				const selected = Boolean(selectedNode?.courseIds?.[0] === course.id || selectedNode?.courseIds?.[0] === unlockId || selectedNode?.connectedObjectIds?.includes(course.id) || selectedNode?.connectedObjectIds?.includes(unlockId));
+				return [{
+					id: `${course.id}-${unlockId}`,
+					from: { x: node.x, y: node.y },
+					to: { x: nextNode.x, y: nextNode.y },
+					selected
+				}];
+			});
+		});
+	}
+
 	function mapPoint(typeNumber: number, band: RadialBand, lane = 0) {
 		const angle = (typeAngle(typeNumber) + lane * 8) * (Math.PI / 180);
 		const radius = radialBands[band] + Math.abs(lane) * 2.8;
@@ -760,12 +820,11 @@
 	}
 
 	function polar(angleDeg: number, radius: number) {
-		const angle = angleDeg * (Math.PI / 180);
-		return { x: 50 + Math.cos(angle) * radius, y: 50 + Math.sin(angle) * radius };
+		return polarPoint(angleDeg, radius);
 	}
 
 	function typeMarkerPoint(typeNumber: number) {
-		return polar(typeAngle(typeNumber), 22);
+		return polar(typeAngle(typeNumber), selectedArea === 'strengths' ? strengthTypeAnchorRadius : 22);
 	}
 
 	function laneForIndex(index: number) {
@@ -880,6 +939,7 @@
 	}
 
 	function edgeClass(node: Node) {
+		if (selectedArea === 'strengths') return node.kind === 'course' ? 'course-line strength-course-line' : 'influence-line strength-anchor-line';
 		if (selectedArea === 'stress-growth') return 'flow-line';
 		if (selectedArea === 'fortification') return 'route-line';
 		if (selectedArea === 'team') return 'relationship-line';
@@ -888,6 +948,7 @@
 	}
 
 	function edgeStart(node: Node) {
+		if (selectedArea === 'strengths' && node.kind === 'course' && node.typeNumber) return typeMarkerPoint(node.typeNumber);
 		if (selectedArea === 'fortification' && node.kind === 'course') return { x: Math.max(12, node.x - 14), y: node.y };
 		if (selectedArea === 'team' && (node.kind === 'person' || node.kind === 'team')) return { x: 25, y: 50 };
 		return { x: 50, y: 50 };
@@ -1481,81 +1542,106 @@
 						</div>
 					{:else}
 						<div class={`capability-map ${mapModeClass()}`} aria-label="Interactive development capability map">
-					{#if showWheel}
-						<svg class="wheel-geometry" viewBox="0 0 100 100" aria-hidden="true">
-							<circle class="wheel-ring outer" cx="50" cy="50" r="47" />
-							<circle class="wheel-ring middle" cx="50" cy="50" r="34" />
-							<circle class="wheel-ring inner" cx="50" cy="50" r="24" />
-							<circle class="wheel-ring hub" cx="50" cy="50" r="16" />
-							{#each wheelTypes as type}
-								<path class:active={activeSectorTypes.includes(type.number)} class:muted={!activeSectorTypes.includes(type.number)} class="wheel-sector" d={sectorPath(type.number)} style={`--sector-color: ${type.color};`} />
-							{/each}
-							{#each wheelTypes as type}
-								{@const point = typeMarkerPoint(type.number)}
-								<g class:active={activeSectorTypes.includes(type.number)} class="type-marker" transform={`translate(${point.x} ${point.y})`}>
-									<circle r="2.8" style={`--sector-color: ${type.color};`} />
-									<text dominant-baseline="middle" text-anchor="middle">{type.number}</text>
-								</g>
-							{/each}
-						</svg>
-					{:else}
-						<div class="atlas-grid" aria-hidden="true"></div>
-					{/if}
-					<svg class="map-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-						{#each visibleNodes.filter((node) => node.kind !== 'profile') as node}
-							{@const start = edgeStart(node)}
-							<line class={edgeClass(node)} class:selected={selectedNode?.id === node.id || selectedNode?.id === 'profile'} x1={start.x} y1={start.y} x2={node.x} y2={node.y} />
-						{/each}
-						{#each skillRelations as relation}
-							{@const targetNode = mapNodes.find((node) => node.id === `skill-${relation.to}`)}
-							{#if targetNode && isNodeVisible(targetNode.id)}
-								{#each relation.from as fromSkillId}
-									{@const fromNode = mapNodes.find((node) => node.id === `skill-${fromSkillId}`)}
-									{#if fromNode && isNodeVisible(fromNode.id)}
-										<line class="skill-line" class:selected={selectedNode?.skillIds?.includes(relation.to) || selectedNode?.skillIds?.includes(fromSkillId)} x1={fromNode.x} y1={fromNode.y} x2={targetNode.x} y2={targetNode.y} />
-									{/if}
+					<div class="map-coordinate-plane">
+						{#if showWheel}
+							<svg class="wheel-geometry" viewBox="0 0 100 100" aria-label={`${selectedTerritoryLabel} enneagram geometry`}>
+								<circle class="wheel-ring outer" cx="50" cy="50" r="47" />
+								<circle class="wheel-ring middle" cx="50" cy="50" r="34" />
+								<circle class="wheel-ring inner" cx="50" cy="50" r="24" />
+								<circle class="wheel-ring hub" cx="50" cy="50" r="16" />
+								{#each wheelTypes as type}
+									<path
+										class:active={activeSectorTypes.includes(type.number)}
+										class:muted={!activeSectorTypes.includes(type.number)}
+										class:selected-sector={selectedNode?.typeNumber === type.number}
+										class:off-selected-sector={selectedArea === 'strengths' && selectedNode?.kind === 'signal' && selectedNode.typeNumber !== type.number}
+										class="wheel-sector"
+										d={sectorPath(type.number)}
+										style={`--sector-color: ${type.color};`}
+										role="button"
+										tabindex="0"
+										aria-label={`Select Type ${type.number} ${type.name} sector`}
+										onclick={() => selectNode(`signal-type-${type.number}`)}
+										onkeydown={(event) => {
+											if (event.key === 'Enter' || event.key === ' ') {
+												event.preventDefault();
+												selectNode(`signal-type-${type.number}`);
+											}
+										}}
+									/>
+								{/each}
+								{#each wheelTypes as type}
+									{@const point = typeMarkerPoint(type.number)}
+									<g class:active={activeSectorTypes.includes(type.number)} class="type-marker" transform={`translate(${point.x} ${point.y})`}>
+										<circle r="2.8" style={`--sector-color: ${type.color};`} />
+										<text dominant-baseline="middle" text-anchor="middle">{type.number}</text>
+									</g>
+								{/each}
+							</svg>
+						{:else}
+							<div class="atlas-grid" aria-hidden="true"></div>
+						{/if}
+						<svg class="map-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+							{#if selectedArea === 'strengths'}
+								{#each strengthChainSegments as segment}
+									<line class="strength-chain-line" class:selected={segment.selected} x1={segment.from.x} y1={segment.from.y} x2={segment.to.x} y2={segment.to.y} />
 								{/each}
 							{/if}
-						{/each}
-					</svg>
-
-					<button class="map-clear-target" type="button" aria-label="Clear selected map item" onclick={clearMapSelection}></button>
-
-					{#each visibleNodes as node}
-						<button
-							class={nodeClass(node)}
-							class:selected={selectedNode?.id === node.id}
-							class:course-expanded={node.kind === 'course' && selectedNode?.id === node.id}
-							type="button"
-							style={`--x: ${node.x}%; --y: ${node.y}%;`}
-							aria-label={nodeAriaLabel(node)}
-							title={node.kind === 'course' ? nodeAriaLabel(node) : node.title}
-							onclick={(event) => {
-								event.stopPropagation();
-								selectNode(node.id);
-							}}
-						>
-							{#if node.kind === 'course'}
-								<span class="course-role-chip">{selectedNode?.id === node.id ? node.role : roleAbbreviation(node.role ?? node.label)}</span>
-								<strong>{node.title}</strong>
-								<small class="course-compact-meta">{selectedNode?.id === node.id ? node.meta : compactNodeMeta(node)}</small>
-								<div class="course-node-state">
-									<span class={`course-status-dot ${courseNodeStatusKind(node)}`} aria-hidden="true"></span>
-									{#if selectedNode?.id === node.id}
-										<small>{courseVisualStatusLabel(node)}</small>
-									{/if}
-								</div>
-								{#if courseNodeStatusKind(node) === 'in-progress'}
-									<span class="course-node-progress" aria-hidden="true"><span style={`width: ${courseNodeProgress(node)}%`}></span></span>
+							{#each visibleNodes.filter((node) => node.kind !== 'profile') as node}
+								{@const start = edgeStart(node)}
+								<line class={edgeClass(node)} class:selected={selectedNode?.id === node.id || selectedNode?.id === 'profile'} x1={start.x} y1={start.y} x2={node.x} y2={node.y} />
+							{/each}
+							{#each skillRelations as relation}
+								{@const targetNode = mapNodes.find((node) => node.id === `skill-${relation.to}`)}
+								{#if targetNode && isNodeVisible(targetNode.id)}
+									{#each relation.from as fromSkillId}
+										{@const fromNode = mapNodes.find((node) => node.id === `skill-${fromSkillId}`)}
+										{#if fromNode && isNodeVisible(fromNode.id)}
+											<line class="skill-line" class:selected={selectedNode?.skillIds?.includes(relation.to) || selectedNode?.skillIds?.includes(fromSkillId)} x1={fromNode.x} y1={fromNode.y} x2={targetNode.x} y2={targetNode.y} />
+										{/if}
+									{/each}
 								{/if}
-							{:else}
-								<span>{node.label}</span>
-								<strong>{node.title}</strong>
-								{#if node.meta}<small>{node.meta}</small>{/if}
-								{#if node.members?.length}<small class="node-members">{node.members.join(' + ')}</small>{/if}
-							{/if}
-						</button>
-					{/each}
+							{/each}
+						</svg>
+
+						<button class="map-clear-target" type="button" aria-label="Clear selected map item" onclick={clearMapSelection}></button>
+
+						{#each visibleNodes as node}
+							<button
+								class={nodeClass(node)}
+								class:selected={selectedNode?.id === node.id}
+								class:course-expanded={node.kind === 'course' && selectedNode?.id === node.id}
+								type="button"
+								style={`--x: ${node.x}%; --y: ${node.y}%;`}
+								aria-label={nodeAriaLabel(node)}
+								title={node.kind === 'course' ? nodeAriaLabel(node) : node.title}
+								onclick={(event) => {
+									event.stopPropagation();
+									selectNode(node.id);
+								}}
+							>
+								{#if node.kind === 'course'}
+									<span class="course-role-chip">{selectedNode?.id === node.id ? node.role : roleAbbreviation(node.role ?? node.label)}</span>
+									<strong>{node.title}</strong>
+									<small class="course-compact-meta">{selectedNode?.id === node.id ? node.meta : compactNodeMeta(node)}</small>
+									<div class="course-node-state">
+										<span class={`course-status-dot ${courseNodeStatusKind(node)}`} aria-hidden="true"></span>
+										{#if selectedNode?.id === node.id}
+											<small>{courseVisualStatusLabel(node)}</small>
+										{/if}
+									</div>
+									{#if courseNodeStatusKind(node) === 'in-progress'}
+										<span class="course-node-progress" aria-hidden="true"><span style={`width: ${courseNodeProgress(node)}%`}></span></span>
+									{/if}
+								{:else}
+									<span>{node.label}</span>
+									<strong>{node.title}</strong>
+									{#if node.meta}<small>{node.meta}</small>{/if}
+									{#if node.members?.length}<small class="node-members">{node.members.join(' + ')}</small>{/if}
+								{/if}
+							</button>
+						{/each}
+					</div>
 						</div>
 					{/if}
 				</div>
