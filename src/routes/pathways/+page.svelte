@@ -277,6 +277,8 @@
 		const classes = ['map-node', `node-${node.kind}`];
 		if (node.kind === 'course') {
 			classes.push(`course-${courseNodeStatusKind(node)}`);
+		}
+		if (node.kind === 'course' || node.kind === 'skill') {
 			if (node.x < 24) classes.push('expand-right');
 			if (node.x > 76) classes.push('expand-left');
 			if (node.y < 28) classes.push('expand-down');

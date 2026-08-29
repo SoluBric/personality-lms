@@ -2500,7 +2500,11 @@ li {
 }
 
 .development-map {
-	overflow: hidden;
+	--pathways-map-height: clamp(680px, 72vh, 860px);
+	--pathways-map-header-height: 88px;
+	--pathways-inspector-width: minmax(320px, 0.36fr);
+	--pathways-shell-gap: 18px;
+	overflow: visible;
 }
 
 .map-heading {
@@ -2533,31 +2537,34 @@ li {
 
 .map-layout {
 	display: grid;
-	grid-template-columns: minmax(700px, 1fr) minmax(360px, 0.42fr);
-	gap: 18px;
+	grid-template-columns: minmax(0, 1fr) var(--pathways-inspector-width);
+	align-items: start;
+	gap: var(--pathways-shell-gap);
 }
 
 .map-content-shell {
 	position: relative;
 	display: grid;
-	align-content: start;
-	min-height: 720px;
-	overflow: hidden;
+	grid-template-rows: auto minmax(0, 1fr);
+	align-content: stretch;
+	overflow: visible;
 	border: 1px solid var(--line);
 	border-radius: 8px;
 	background: color-mix(in srgb, var(--panel-strong) 90%, transparent);
 }
 
 .map-content-shell .capability-map {
-	min-height: 720px;
+	height: var(--pathways-map-height);
+	min-height: 0;
 	border: 0;
 	border-radius: 0;
 }
 
 .capability-map {
 	position: relative;
-	min-height: 720px;
-	overflow: hidden;
+	height: var(--pathways-map-height);
+	min-height: 0;
+	overflow: visible;
 	border: 1px solid var(--line);
 	border-radius: 8px;
 	background:
@@ -2569,15 +2576,17 @@ li {
 }
 
 .map-local-heading {
-	position: absolute;
-	left: 18px;
-	right: 18px;
-	top: 18px;
+	position: relative;
 	z-index: 20;
 	display: flex;
 	align-items: flex-start;
 	justify-content: space-between;
 	gap: 14px;
+	padding: 16px 18px;
+	border-bottom: 1px solid color-mix(in srgb, var(--line) 76%, transparent);
+	background:
+		linear-gradient(145deg, color-mix(in srgb, var(--accent-soft) 20%, transparent), transparent),
+		color-mix(in srgb, var(--panel-strong) 92%, transparent);
 }
 
 .map-local-heading h2 {
@@ -2624,9 +2633,8 @@ li {
 .pathway-list-view {
 	display: grid;
 	gap: 14px;
-	max-height: 720px;
-	overflow-y: auto;
-	padding: 128px 18px 18px;
+	overflow: visible;
+	padding: 18px;
 	background:
 		linear-gradient(145deg, color-mix(in srgb, var(--accent-soft) 28%, transparent), transparent),
 		color-mix(in srgb, var(--panel-strong) 90%, transparent);
@@ -2927,7 +2935,7 @@ li {
 
 .atlas-grid {
 	position: absolute;
-	inset: 108px 28px 28px;
+	inset: 24px 28px 28px;
 	z-index: 0;
 	display: grid;
 	grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2958,10 +2966,10 @@ li {
 
 .wheel-geometry {
 	position: absolute;
-	inset: 108px 30px 30px;
+	inset: 24px 30px 30px;
 	z-index: 0;
 	width: calc(100% - 60px);
-	height: calc(100% - 138px);
+	height: calc(100% - 54px);
 	overflow: visible;
 }
 
@@ -3138,6 +3146,33 @@ li {
 	transform: translate(-50%, -50%) scale(1.04);
 }
 
+.map-node.expand-right {
+	transform: translate(-8%, -50%);
+}
+
+.map-node.expand-left {
+	transform: translate(-92%, -50%);
+}
+
+.map-node.expand-down {
+	transform: translate(-50%, -16%);
+}
+
+.map-node.expand-right:hover,
+.map-node.expand-right.selected {
+	transform: translate(-8%, -50%) scale(1.04);
+}
+
+.map-node.expand-left:hover,
+.map-node.expand-left.selected {
+	transform: translate(-92%, -50%) scale(1.04);
+}
+
+.map-node.expand-down:hover,
+.map-node.expand-down.selected {
+	transform: translate(-50%, -16%) scale(1.04);
+}
+
 .map-node:focus-visible {
 	outline: 2px solid var(--accent);
 	outline-offset: 3px;
@@ -3300,11 +3335,11 @@ li {
 }
 
 .capability-map:not(.atlas-mode) .node-course.course-expanded.expand-right {
-	transform: translate(-18%, -50%) scale(1.03);
+	transform: translate(-8%, -50%) scale(1.03);
 }
 
 .capability-map:not(.atlas-mode) .node-course.course-expanded.expand-left {
-	transform: translate(-82%, -50%) scale(1.03);
+	transform: translate(-92%, -50%) scale(1.03);
 }
 
 .capability-map:not(.atlas-mode) .node-course.course-expanded.expand-down {
@@ -3525,8 +3560,9 @@ li {
 .map-inspector {
 	align-self: stretch;
 	padding: 24px;
+	height: calc(var(--pathways-map-height) + var(--pathways-map-header-height));
 	min-height: 0;
-	max-height: 780px;
+	max-height: calc(var(--pathways-map-height) + var(--pathways-map-header-height));
 	overflow: hidden;
 	background:
 		linear-gradient(145deg, color-mix(in srgb, var(--accent-soft) 42%, transparent), transparent),
@@ -3537,9 +3573,10 @@ li {
 	display: flex;
 	flex-direction: column;
 	gap: 14px;
-	height: 100%;
+	max-height: 100%;
 	min-height: 0;
 	overflow-y: auto;
+	overflow-x: hidden;
 	padding-right: 6px;
 }
 
@@ -4280,6 +4317,11 @@ li {
 }
 
 @media (max-width: 1120px) {
+	.development-map {
+		--pathways-map-height: clamp(620px, 70vh, 780px);
+		--pathways-map-header-height: 112px;
+	}
+
 	.pathways-dashboard,
 	.map-layout,
 	.learning-focus-row,
@@ -4306,7 +4348,12 @@ li {
 	}
 
 	.capability-map {
-		min-height: 760px;
+		height: var(--pathways-map-height);
+	}
+
+	.map-inspector {
+		height: auto;
+		max-height: var(--pathways-map-height);
 	}
 
 	.team-pathway-line {
@@ -4319,6 +4366,11 @@ li {
 }
 
 @media (max-width: 760px) {
+	.development-map {
+		--pathways-map-height: auto;
+		--pathways-map-header-height: auto;
+	}
+
 	.development-metrics,
 	.team-kpis,
 	.coverage-list,
@@ -4328,6 +4380,7 @@ li {
 	}
 
 	.capability-map {
+		height: auto;
 		min-height: auto;
 		display: grid;
 		gap: 10px;
@@ -4337,6 +4390,28 @@ li {
 	.map-content-shell {
 		min-height: auto;
 		overflow: visible;
+	}
+
+	.map-content-shell .capability-map {
+		height: auto;
+	}
+
+	.map-local-heading {
+		flex-direction: column;
+	}
+
+	.map-heading-controls {
+		width: 100%;
+		justify-items: start;
+	}
+
+	.map-filter {
+		justify-content: flex-start;
+	}
+
+	.map-inspector {
+		height: auto;
+		max-height: none;
 	}
 
 	.pathway-list-view {
