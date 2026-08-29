@@ -247,6 +247,10 @@
 		selectedNodeId = nodeId;
 	}
 
+	function clearMapSelection() {
+		selectedNodeId = null;
+	}
+
 	function focusCourse(mode: FocusMode, courseId: string) {
 		focusMode = mode;
 		selectedArea = getCourse(courseId)?.pathway ?? selectedArea;
@@ -258,7 +262,14 @@
 	}
 
 	function nodeClass(node: Node) {
-		return `map-node node-${node.kind}`;
+		const classes = ['map-node', `node-${node.kind}`];
+		if (node.kind === 'course') {
+			classes.push(`course-${courseNodeStatusKind(node)}`);
+			if (node.x < 24) classes.push('expand-right');
+			if (node.x > 76) classes.push('expand-left');
+			if (node.y < 28) classes.push('expand-down');
+		}
+		return classes.join(' ');
 	}
 
 	function selectArea(area: FilterMode) {
@@ -283,6 +294,64 @@
 		if (state?.status === 'completed') return 'Completed';
 		if (state?.status === 'in-progress') return 'In progress';
 		return 'Not started';
+	}
+
+	function courseNodeCourse(node: Node) {
+		return node.kind === 'course' && node.courseIds?.[0] ? getCourse(node.courseIds[0]) : undefined;
+	}
+
+	function courseNodeStatusKind(node: Node) {
+		const course = courseNodeCourse(node);
+		if (!course) return 'neutral';
+		const state = getCourseState(course.id);
+		if (state?.status === 'completed') return 'completed';
+		if (state?.status === 'in-progress') return 'in-progress';
+		if (course.prerequisites.some((courseId) => getCourseState(courseId)?.status !== 'completed')) return 'locked';
+		return 'not-started';
+	}
+
+	function courseVisualStatusLabel(node: Node) {
+		const course = courseNodeCourse(node);
+		if (!course) return node.status ?? 'Available';
+		if (courseNodeStatusKind(node) === 'locked') return 'Locked';
+		return courseStateLabel(course);
+	}
+
+	function courseNodeProgress(node: Node) {
+		const course = courseNodeCourse(node);
+		return course ? progressPct(course.id) : 0;
+	}
+
+	function compactNodeMeta(node: Node) {
+		const course = courseNodeCourse(node);
+		if (!course) return node.meta ?? node.label;
+		return `${titleCase(levelLabel(course))} / ${course.lengthMinutes} min`;
+	}
+
+	function roleAbbreviation(role: string) {
+		const labels: Record<string, string> = {
+			Foundation: 'F',
+			'Strength Mastery': 'SM',
+			'Growth Resource': 'GR',
+			Fortification: 'FT',
+			'Type Perspective': 'TP',
+			Collaboration: 'C',
+			'Shared Team Learning': 'TEAM',
+			'Team Member': 'TM',
+			'Core Resilience': 'CR',
+			'Pressure Practice': 'PP',
+			'Center Collaboration': 'CC',
+			'Profile Origin': 'P',
+			Territory: 'T'
+		};
+		return labels[role] ?? role.split(' ').map((word) => word[0]).join('').slice(0, 4).toUpperCase();
+	}
+
+	function nodeAriaLabel(node: Node) {
+		if (node.kind === 'course') {
+			return `${node.title}, ${compactNodeMeta(node)}, ${courseVisualStatusLabel(node)}`;
+		}
+		return `${node.label}, ${node.title}`;
 	}
 
 	function progressPct(courseId: string) {
@@ -1192,6 +1261,8 @@
 						{/each}
 					</svg>
 
+					<button class="map-clear-target" type="button" aria-label="Clear selected map item" onclick={clearMapSelection}></button>
+
 					{#each visibleNodes as node}
 						<button
 							class={nodeClass(node)}
@@ -1199,16 +1270,31 @@
 							class:course-expanded={node.kind === 'course' && selectedNode?.id === node.id}
 							type="button"
 							style={`--x: ${node.x}%; --y: ${node.y}%;`}
-							onclick={() => selectNode(node.id)}
+							aria-label={nodeAriaLabel(node)}
+							title={node.kind === 'course' ? nodeAriaLabel(node) : node.title}
+							onclick={(event) => {
+								event.stopPropagation();
+								selectNode(node.id);
+							}}
 						>
-							<span>{node.label}</span>
-							<strong>{node.title}</strong>
-							{#if node.kind !== 'course' || selectedNode?.id === node.id}
+							{#if node.kind === 'course'}
+								<span class="course-role-chip">{selectedNode?.id === node.id ? node.role : roleAbbreviation(node.role ?? node.label)}</span>
+								<strong>{node.title}</strong>
+								<small class="course-compact-meta">{selectedNode?.id === node.id ? node.meta : compactNodeMeta(node)}</small>
+								<div class="course-node-state">
+									<span class={`course-status-dot ${courseNodeStatusKind(node)}`} aria-hidden="true"></span>
+									{#if selectedNode?.id === node.id}
+										<small>{courseVisualStatusLabel(node)}</small>
+									{/if}
+								</div>
+								{#if courseNodeStatusKind(node) === 'in-progress'}
+									<span class="course-node-progress" aria-hidden="true"><span style={`width: ${courseNodeProgress(node)}%`}></span></span>
+								{/if}
+							{:else}
+								<span>{node.label}</span>
+								<strong>{node.title}</strong>
 								{#if node.meta}<small>{node.meta}</small>{/if}
-								{#if node.status}<small class="node-status">{node.status}</small>{/if}
 								{#if node.members?.length}<small class="node-members">{node.members.join(' + ')}</small>{/if}
-							{:else if node.status}
-								<small class="node-status">{node.status}</small>
 							{/if}
 						</button>
 					{/each}

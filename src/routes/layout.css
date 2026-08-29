@@ -2730,6 +2730,7 @@ li {
 	inset: 0;
 	width: 100%;
 	height: 100%;
+	pointer-events: none;
 }
 
 .map-lines line {
@@ -2779,6 +2780,17 @@ li {
 	opacity: 0.92;
 }
 
+.map-clear-target {
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+	border: 0;
+	border-radius: inherit;
+	background: transparent;
+	box-shadow: none;
+	cursor: default;
+}
+
 .map-node {
 	position: absolute;
 	left: var(--x);
@@ -2799,8 +2811,17 @@ li {
 	transition:
 		border-color 180ms ease,
 		background 180ms ease,
+		opacity 180ms ease,
 		box-shadow 180ms ease,
 		transform 180ms ease;
+}
+
+.capability-map:has(.map-node.selected) .map-node:not(.selected) {
+	opacity: 0.74;
+}
+
+.capability-map:has(.map-node.selected) .map-node:not(.selected):hover {
+	opacity: 1;
 }
 
 .map-node:hover,
@@ -2813,6 +2834,15 @@ li {
 		0 18px 40px var(--shadow),
 		0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent);
 	transform: translate(-50%, -50%) scale(1.04);
+}
+
+.map-node:focus-visible {
+	outline: 2px solid var(--accent);
+	outline-offset: 3px;
+}
+
+.map-node.selected {
+	z-index: 12;
 }
 
 .map-node span,
@@ -2830,6 +2860,7 @@ li {
 }
 
 .node-profile {
+	z-index: 4;
 	width: 190px;
 	min-height: 116px;
 	place-items: center;
@@ -2843,11 +2874,30 @@ li {
 }
 
 .node-skill {
-	width: 168px;
+	z-index: 3;
+	width: auto;
+	min-width: 96px;
+	min-height: 36px;
+	padding: 8px 12px;
 	border-color: color-mix(in srgb, var(--accent) 42%, var(--line));
+	border-radius: 999px;
+	background: color-mix(in srgb, var(--bg-soft) 66%, transparent);
+	text-align: center;
+	box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
+}
+
+.node-skill span,
+.node-skill small {
+	display: none;
+}
+
+.node-skill strong {
+	font-size: 12px;
+	line-height: 1.05;
 }
 
 .node-territory {
+	z-index: 3;
 	width: 210px;
 	min-height: 116px;
 	border-color: color-mix(in srgb, var(--accent) 50%, var(--line));
@@ -2879,9 +2929,42 @@ li {
 }
 
 .node-course {
-	width: 148px;
-	min-height: 54px;
-	background: color-mix(in srgb, var(--bg-soft) 76%, transparent);
+	z-index: 2;
+	width: 132px;
+	min-height: 50px;
+	padding: 9px 10px 12px;
+	border-color: color-mix(in srgb, var(--line) 84%, transparent);
+	background:
+		linear-gradient(180deg, color-mix(in srgb, var(--panel-strong) 84%, transparent), color-mix(in srgb, var(--bg-soft) 72%, transparent));
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22);
+}
+
+.node-course:hover {
+	box-shadow:
+		0 14px 30px rgba(0, 0, 0, 0.32),
+		0 0 0 3px color-mix(in srgb, var(--accent) 14%, transparent);
+}
+
+.node-course.course-not-started {
+	border-style: solid;
+}
+
+.node-course.course-in-progress {
+	border-color: color-mix(in srgb, var(--accent) 54%, var(--line));
+}
+
+.node-course.course-completed {
+	border-color: rgba(47, 191, 134, 0.58);
+}
+
+.node-course.course-locked {
+	border-style: dashed;
+	opacity: 0.58;
+}
+
+.node-course.course-locked:hover,
+.node-course.course-locked.selected {
+	opacity: 0.86;
 }
 
 .capability-map:not(.atlas-mode) .map-node:not(.node-course) {
@@ -2900,17 +2983,30 @@ li {
 }
 
 .capability-map:not(.atlas-mode) .node-course {
-	width: 108px;
-	min-height: 44px;
-	padding: 7px 8px;
-	gap: 2px;
+	width: 118px;
+	min-height: 48px;
+	padding: 8px 9px 13px;
+	gap: 3px;
 }
 
 .capability-map:not(.atlas-mode) .node-course.course-expanded {
 	z-index: 8;
-	width: 172px;
-	min-height: 88px;
-	padding: 10px;
+	width: 168px;
+	min-height: 92px;
+	padding: 11px;
+	transform: translate(-50%, -50%) scale(1.03);
+}
+
+.capability-map:not(.atlas-mode) .node-course.course-expanded.expand-right {
+	transform: translate(-18%, -50%) scale(1.03);
+}
+
+.capability-map:not(.atlas-mode) .node-course.course-expanded.expand-left {
+	transform: translate(-82%, -50%) scale(1.03);
+}
+
+.capability-map:not(.atlas-mode) .node-course.course-expanded.expand-down {
+	transform: translate(-50%, -16%) scale(1.03);
 }
 
 .capability-map:not(.atlas-mode) .map-node span,
@@ -2931,17 +3027,127 @@ li {
 	-webkit-line-clamp: 2;
 }
 
-.capability-map:not(.atlas-mode) .node-course:not(.course-expanded) span {
-	display: none;
-}
-
-.capability-map:not(.atlas-mode) .node-course:not(.course-expanded) .node-status {
-	margin-top: 2px;
-	font-size: 8px;
-}
-
 .capability-map:not(.atlas-mode) .node-course.course-expanded strong {
 	-webkit-line-clamp: 3;
+}
+
+.node-course .course-role-chip {
+	justify-self: start;
+	width: auto;
+	min-width: 24px;
+	padding: 3px 6px;
+	border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--line));
+	border-radius: 999px;
+	background: color-mix(in srgb, var(--accent-soft) 46%, transparent);
+	color: var(--accent);
+	font-size: 9px;
+	font-weight: 950;
+	line-height: 1;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+}
+
+.node-course:not(.course-expanded) .course-role-chip {
+	position: absolute;
+	right: 7px;
+	top: 7px;
+	display: grid;
+	place-items: center;
+	min-width: 21px;
+	height: 21px;
+	padding: 0 5px;
+	background: color-mix(in srgb, var(--bg) 72%, var(--accent-soft));
+}
+
+.node-course .course-compact-meta {
+	padding-right: 22px;
+	letter-spacing: 0.06em;
+}
+
+.node-course.course-expanded .course-compact-meta {
+	padding-right: 0;
+	color: var(--muted);
+	font-size: 10px;
+}
+
+.course-node-state {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	min-height: 12px;
+}
+
+.course-node-state small {
+	font-size: 9px;
+	letter-spacing: 0.08em;
+}
+
+.course-status-dot {
+	position: relative;
+	display: inline-grid;
+	width: 11px;
+	height: 11px;
+	flex: 0 0 auto;
+	place-items: center;
+	border: 1px solid color-mix(in srgb, var(--text) 34%, transparent);
+	border-radius: 50%;
+	background: color-mix(in srgb, var(--bg) 70%, transparent);
+}
+
+.node-course:not(.course-expanded) .course-status-dot {
+	position: absolute;
+	left: 8px;
+	bottom: 7px;
+}
+
+.course-status-dot.in-progress {
+	border-color: var(--accent);
+	background: conic-gradient(var(--accent) 0 55%, color-mix(in srgb, var(--text) 12%, transparent) 55% 100%);
+}
+
+.course-status-dot.completed {
+	border-color: rgba(47, 191, 134, 0.78);
+	background: rgba(47, 191, 134, 0.78);
+}
+
+.course-status-dot.completed::after {
+	content: "";
+	width: 5px;
+	height: 3px;
+	border-bottom: 2px solid #101413;
+	border-left: 2px solid #101413;
+	transform: rotate(-45deg) translateY(-1px);
+}
+
+.course-status-dot.locked {
+	border-radius: 3px;
+	border-style: dashed;
+}
+
+.course-status-dot.locked::after {
+	content: "";
+	width: 4px;
+	height: 3px;
+	border: 1px solid currentColor;
+	border-radius: 2px 2px 1px 1px;
+}
+
+.course-node-progress {
+	position: absolute;
+	left: 10px;
+	right: 10px;
+	bottom: 4px;
+	height: 3px;
+	overflow: hidden;
+	border-radius: 999px;
+	background: color-mix(in srgb, var(--text) 10%, transparent);
+}
+
+.course-node-progress span {
+	display: block;
+	height: 100%;
+	border-radius: inherit;
+	background: var(--accent);
 }
 
 .node-course small.node-status {
@@ -2961,10 +3167,39 @@ li {
 	border-color: color-mix(in srgb, var(--accent) 46%, var(--line));
 }
 
+.strengths-mode .node-signal,
+.growth-mode .node-signal {
+	width: 110px;
+	min-height: 74px;
+	place-items: center;
+	border-radius: 50%;
+	background:
+		radial-gradient(circle at 35% 25%, rgba(255, 255, 255, 0.16), transparent 30%),
+		color-mix(in srgb, var(--accent-soft) 38%, var(--bg-soft));
+	text-align: center;
+}
+
+.stress-mode .node-signal {
+	width: 142px;
+	min-height: 50px;
+	border-radius: 999px;
+	background:
+		linear-gradient(90deg, color-mix(in srgb, var(--accent-soft) 54%, transparent), transparent),
+		color-mix(in srgb, var(--bg-soft) 78%, transparent);
+}
+
+.stress-mode .node-signal span {
+	color: var(--accent);
+}
+
 .team-mode .node-person {
+	width: 118px;
+	min-height: 54px;
+	border-radius: 999px;
 	background:
 		linear-gradient(160deg, rgba(47, 191, 134, 0.18), transparent),
 		color-mix(in srgb, var(--bg-soft) 84%, transparent);
+	text-align: center;
 }
 
 .node-pathway,
@@ -2980,6 +3215,7 @@ li {
 }
 
 .node-person {
+	z-index: 3;
 	width: 150px;
 	border-color: rgba(47, 191, 134, 0.38);
 }
@@ -3806,6 +4042,17 @@ li {
 		position: static;
 		width: 100%;
 		transform: none;
+	}
+
+	.capability-map:not(.atlas-mode) .node-course,
+	.capability-map:not(.atlas-mode) .node-course.course-expanded,
+	.capability-map:not(.atlas-mode) .map-node:not(.node-course),
+	.capability-map:not(.atlas-mode) .node-profile,
+	.node-skill,
+	.team-mode .node-person {
+		width: 100%;
+		min-height: 54px;
+		border-radius: 8px;
 	}
 
 	.map-node:hover,
