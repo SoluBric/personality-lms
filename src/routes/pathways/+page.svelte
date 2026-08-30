@@ -1589,12 +1589,6 @@
 							<h2>{selectedTerritoryLabel}</h2>
 						</div>
 						<div class="map-heading-controls">
-							{#if selectedArea !== 'All' && selectedArea !== null}
-								<div class="view-switch" aria-label="Development presentation">
-									<button class:active={developmentView === 'map'} type="button" onclick={() => selectDevelopmentView('map')}>Map</button>
-									<button class:active={developmentView === 'list'} type="button" onclick={() => selectDevelopmentView('list')}>List</button>
-								</div>
-							{/if}
 							<nav class="map-filter" aria-label="Development map area">
 								{#each filters as filter}
 									<button class:active={selectedArea === filter} type="button" onclick={() => selectArea(filter)}>
@@ -1602,6 +1596,12 @@
 									</button>
 								{/each}
 							</nav>
+							{#if selectedArea !== 'All' && selectedArea !== null}
+								<div class="view-switch" aria-label="Development presentation">
+									<button class:active={developmentView === 'map'} type="button" onclick={() => selectDevelopmentView('map')}>Map</button>
+									<button class:active={developmentView === 'list'} type="button" onclick={() => selectDevelopmentView('list')}>List</button>
+								</div>
+							{/if}
 						</div>
 					</div>
 					{#if developmentView === 'list' && selectedArea !== 'All' && selectedArea !== null}
@@ -1779,7 +1779,7 @@
 												<small>{courseVisualStatusLabel(node)}</small>
 											{/if}
 										</div>
-										{#if courseNodeStatusKind(node) === 'in-progress'}
+										{#if ['in-progress', 'completed'].includes(courseNodeStatusKind(node))}
 											<span class="course-node-progress" aria-hidden="true"><span style={`width: ${courseNodeProgress(node)}%`}></span></span>
 										{/if}
 									{:else}
@@ -1808,8 +1808,10 @@
 						<div class="map-general-tray">
 							<div class="general-tray-heading">
 								<div>
-									<p class="eyebrow">{generalTrayEyebrow()}</p>
-									<h3>{generalTrayTitle()}</h3>
+									<div class="general-tray-title-line">
+										<p class="eyebrow">{generalTrayEyebrow()}</p>
+										<h3>({generalTrayTitle()})</h3>
+									</div>
 								</div>
 								<span>{sharedMapState.generalCourses.length ? `${sharedMapState.generalCourses.length} in view` : 'Empty'}</span>
 							</div>

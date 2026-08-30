@@ -2595,10 +2595,11 @@ li {
 .map-local-heading {
 	position: relative;
 	z-index: 20;
-	display: flex;
-	align-items: flex-start;
+	display: grid;
+	grid-template-columns: minmax(220px, 1fr) auto;
+	align-items: end;
 	justify-content: space-between;
-	gap: 14px;
+	gap: 18px;
 	padding: 16px 18px;
 	border-bottom: 1px solid color-mix(in srgb, var(--line) 76%, transparent);
 	background:
@@ -2612,13 +2613,29 @@ li {
 }
 
 .map-local-heading .map-filter {
-	max-width: 540px;
+	max-width: none;
 }
 
 .map-heading-controls {
-	display: grid;
-	justify-items: end;
-	gap: 8px;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 12px;
+}
+
+.map-heading-controls .view-switch {
+	position: relative;
+	margin-left: 4px;
+}
+
+.map-heading-controls .view-switch::before {
+	content: "";
+	position: absolute;
+	left: -10px;
+	top: 7px;
+	bottom: 7px;
+	width: 1px;
+	background: color-mix(in srgb, var(--line) 86%, transparent);
 }
 
 .view-switch {
@@ -3488,10 +3505,11 @@ li {
 }
 
 .capability-map:not(.atlas-mode) .node-course {
-	width: 118px;
+	width: 132px;
 	min-height: 48px;
-	padding: 8px 9px 13px;
+	padding: 10px 10px 14px;
 	gap: 3px;
+	border-top-right-radius: 14px;
 }
 
 .capability-map:not(.atlas-mode) .node-course.course-expanded {
@@ -3545,7 +3563,7 @@ li {
 	border-radius: 999px;
 	background: color-mix(in srgb, var(--accent-soft) 46%, transparent);
 	color: var(--accent);
-	font-size: 9px;
+	font-size: 8px;
 	font-weight: 950;
 	line-height: 1;
 	letter-spacing: 0.08em;
@@ -3554,19 +3572,33 @@ li {
 
 .node-course:not(.course-expanded) .course-role-chip {
 	position: absolute;
-	right: 7px;
-	top: 7px;
+	right: -1px;
+	top: -1px;
 	display: grid;
 	place-items: center;
 	min-width: 21px;
 	height: 21px;
-	padding: 0 5px;
+	padding: 0 6px;
+	border-top-right-radius: inherit;
+	border-bottom-right-radius: 0;
+	border-top-left-radius: 999px;
 	background: color-mix(in srgb, var(--bg) 72%, var(--accent-soft));
 }
 
 .node-course .course-compact-meta {
-	padding-right: 22px;
+	padding-right: 0;
 	letter-spacing: 0.06em;
+	white-space: nowrap;
+}
+
+.capability-map:not(.atlas-mode) .node-course .course-compact-meta {
+	display: block;
+	overflow: hidden;
+	color: var(--muted);
+	font-size: 8px;
+	line-height: 1.05;
+	text-overflow: clip;
+	white-space: nowrap;
 }
 
 .node-course.course-expanded .course-compact-meta {
@@ -3600,9 +3632,7 @@ li {
 }
 
 .node-course:not(.course-expanded) .course-status-dot {
-	position: absolute;
-	left: 8px;
-	bottom: 7px;
+	display: none;
 }
 
 .course-status-dot.in-progress {
@@ -3639,20 +3669,24 @@ li {
 
 .course-node-progress {
 	position: absolute;
-	left: 10px;
-	right: 10px;
-	bottom: 4px;
+	left: 0;
+	right: 0;
+	bottom: 0;
 	height: 3px;
 	overflow: hidden;
-	border-radius: 999px;
-	background: color-mix(in srgb, var(--text) 10%, transparent);
+	border-radius: 0 0 8px 8px;
+	background: transparent;
 }
 
 .course-node-progress span {
 	display: block;
 	height: 100%;
 	border-radius: inherit;
-	background: var(--accent);
+	background: #f6c84f;
+}
+
+.node-course.course-completed .course-node-progress span {
+	background: #2fbf86;
 }
 
 .map-general-tray {
@@ -3661,7 +3695,7 @@ li {
 	right: 18px;
 	bottom: 16px;
 	z-index: 3;
-	height: calc(var(--pathways-general-tray-height) - 30px);
+	height: calc(var(--pathways-general-tray-height) - 22px);
 	display: grid;
 	grid-template-rows: auto minmax(0, 1fr);
 	gap: 10px;
@@ -3676,14 +3710,24 @@ li {
 
 .general-tray-heading {
 	display: flex;
-	align-items: start;
+	align-items: center;
 	justify-content: space-between;
 	gap: 14px;
 }
 
+.general-tray-title-line {
+	display: flex;
+	align-items: baseline;
+	gap: 8px;
+	flex-wrap: wrap;
+}
+
 .general-tray-heading h3 {
 	margin: 0;
-	font-size: 15px;
+	color: var(--muted);
+	font-size: 12px;
+	font-weight: 750;
+	letter-spacing: 0;
 }
 
 .general-tray-heading span,
@@ -3709,7 +3753,7 @@ li {
 	gap: 6px;
 	min-width: 230px;
 	max-width: 230px;
-	min-height: 86px;
+	min-height: 102px;
 	padding: 12px 34px 12px 12px;
 	border: 1px solid var(--line);
 	border-radius: 8px;
