@@ -3507,7 +3507,7 @@ li {
 .capability-map:not(.atlas-mode) .node-course {
 	width: 132px;
 	min-height: 48px;
-	padding: 10px 10px 14px;
+	padding: 10px 10px 10px;
 	gap: 3px;
 	border-top-right-radius: 14px;
 }
@@ -3612,6 +3612,10 @@ li {
 	align-items: center;
 	gap: 6px;
 	min-height: 12px;
+}
+
+.node-course:not(.course-expanded) .course-node-state {
+	display: none;
 }
 
 .course-node-state small {
