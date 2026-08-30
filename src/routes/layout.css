@@ -3051,6 +3051,8 @@ li {
 	fill: color-mix(in srgb, var(--sector-color) 32%, transparent);
 	stroke: color-mix(in srgb, var(--sector-color) 58%, var(--line));
 	opacity: 0.9;
+	cursor: pointer;
+	pointer-events: auto;
 }
 
 .wheel-sector.muted {
@@ -3060,6 +3062,8 @@ li {
 .shared-enneagram-mode .wheel-sector.muted {
 	fill: color-mix(in srgb, var(--sector-color) 7%, transparent);
 	opacity: 0.18;
+	cursor: default;
+	pointer-events: none;
 }
 
 .shared-enneagram-mode .wheel-sector.selected-sector {
@@ -3220,6 +3224,10 @@ li {
 	cursor: default;
 }
 
+.map-clear-target:focus {
+	outline: none;
+}
+
 .map-node {
 	position: absolute;
 	left: var(--x);
@@ -3299,6 +3307,11 @@ li {
 
 .map-node.selected {
 	z-index: 12;
+}
+
+.map-node.non-interactive-node {
+	cursor: default;
+	pointer-events: none;
 }
 
 .map-node span,
@@ -3439,25 +3452,29 @@ li {
 }
 
 .capability-map.shared-enneagram-mode:not(.atlas-mode) .map-node.node-profile {
-	width: 136px;
-	height: 136px;
-	min-height: 136px;
-	padding: 16px;
-	border-radius: 50%;
-	background:
-		radial-gradient(circle at 50% 32%, color-mix(in srgb, var(--accent-soft) 18%, transparent), transparent 48%),
-		color-mix(in srgb, var(--bg) 88%, transparent);
+	width: 150px;
+	height: auto;
+	min-height: 0;
+	padding: 0;
+	border: 0;
+	border-radius: 0;
+	background: transparent;
+	box-shadow: none;
+	gap: 4px;
+	pointer-events: none;
 }
 
 .capability-map.shared-enneagram-mode:not(.atlas-mode) .map-node.node-profile span {
 	color: var(--accent);
 	font-size: 9px;
 	letter-spacing: 0.16em;
+	text-shadow: 0 1px 8px color-mix(in srgb, var(--bg) 82%, transparent);
 }
 
 .capability-map.shared-enneagram-mode:not(.atlas-mode) .map-node.node-profile strong {
-	font-size: 25px;
+	font-size: 21px;
 	line-height: 1;
+	text-shadow: 0 1px 10px color-mix(in srgb, var(--bg) 88%, transparent);
 }
 
 .capability-map:not(.atlas-mode) .node-course {
@@ -3743,10 +3760,9 @@ li {
 	place-items: center;
 	padding: 0;
 	border-radius: 50%;
-	background:
-		radial-gradient(circle at 35% 25%, rgba(255, 255, 255, 0.18), transparent 34%),
-		color-mix(in srgb, var(--bg-soft) 80%, transparent);
-	box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
+	border-color: color-mix(in srgb, var(--type-color) 54%, var(--line));
+	background: color-mix(in srgb, var(--type-color) 42%, var(--panel));
+	box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
 	text-align: center;
 }
 
@@ -3756,25 +3772,31 @@ li {
 }
 
 .capability-map.shared-enneagram-mode:not(.atlas-mode) .map-node.node-signal strong {
-	color: var(--muted);
+	color: #101413;
 	font-size: 18px;
 	line-height: 1;
 }
 
 .capability-map.shared-enneagram-mode:not(.atlas-mode) .map-node.node-signal.active-type-node {
-	border-color: color-mix(in srgb, var(--accent) 74%, var(--line));
-	background:
-		radial-gradient(circle at 35% 25%, rgba(255, 255, 255, 0.2), transparent 34%),
-		color-mix(in srgb, var(--accent-soft) 48%, var(--bg-soft));
-	box-shadow:
-		0 12px 26px rgba(0, 0, 0, 0.24),
-		0 0 0 3px color-mix(in srgb, var(--accent) 14%, transparent);
+	border-color: color-mix(in srgb, var(--type-color) 84%, var(--text));
+	background: color-mix(in srgb, var(--type-color) 88%, var(--panel));
+	box-shadow: 0 8px 16px rgba(0, 0, 0, 0.16);
 }
 
 .capability-map.shared-enneagram-mode:not(.atlas-mode) .map-node.node-signal.active-zone-node {
 	box-shadow:
-		0 12px 26px rgba(0, 0, 0, 0.24),
-		0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent);
+		0 8px 16px rgba(0, 0, 0, 0.16),
+		0 0 0 3px color-mix(in srgb, var(--type-color) 18%, transparent);
+}
+
+.capability-map.shared-enneagram-mode:not(.atlas-mode) .map-node.node-signal:hover,
+.capability-map.shared-enneagram-mode:not(.atlas-mode) .map-node.node-signal.selected {
+	border-color: color-mix(in srgb, var(--type-color) 86%, #fff);
+	background: color-mix(in srgb, var(--type-color) 90%, var(--panel));
+	box-shadow:
+		0 10px 18px rgba(0, 0, 0, 0.18),
+		0 0 0 5px color-mix(in srgb, var(--type-color) 24%, transparent),
+		0 0 0 1px color-mix(in srgb, var(--type-color) 88%, transparent);
 }
 
 .capability-map.shared-enneagram-mode:not(.atlas-mode) .map-node.node-signal.primary-type-node {
@@ -3788,7 +3810,8 @@ li {
 }
 
 .capability-map.shared-enneagram-mode:not(.atlas-mode) .map-node.node-signal.inactive-type-node {
-	opacity: 0.5;
+	opacity: 0.58;
+	background: color-mix(in srgb, var(--type-color) 28%, var(--panel));
 }
 
 .capability-map.shared-enneagram-mode .map-node.off-selected-type {

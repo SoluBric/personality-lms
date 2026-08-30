@@ -135,7 +135,7 @@
 	] as const;
 	const radialBands: Record<RadialBand, number> = { inner: 28, middle: 38, outer: 47 };
 	const strengthRadialBands: Record<RadialBand, number> = { inner: 31, middle: 40, outer: 48 };
-	const strengthTypeAnchorRadius = 21;
+	const sharedEnneagramRadius = 31;
 	const strengthCourseLaneAngles = [-6.5, 6.5, -12, 12, 0];
 	const typeTerritories: Record<number, string> = {
 		1: 'Standards & disciplined improvement',
@@ -299,6 +299,16 @@
 		selectedNodeId = nodeId;
 	}
 
+	function canSelectNode(node: Node) {
+		if (usesSharedEnneagramMap && node.kind === 'profile') return false;
+		if (usesSharedEnneagramMap && node.kind === 'signal') {
+			if (!node.typeNumber) return false;
+			if (selectedArea === 'fortification') return sharedMapState.activeZoneIds.includes(node.typeNumber);
+			return sharedMapState.activeTypeIds.includes(node.typeNumber) || sharedMapState.activeZoneIds.includes(node.typeNumber);
+		}
+		return true;
+	}
+
 	function clearMapSelection() {
 		selectedNodeId = null;
 	}
@@ -315,6 +325,7 @@
 
 	function nodeClass(node: Node) {
 		const classes = ['map-node', `node-${node.kind}`];
+		if (!canSelectNode(node)) classes.push('non-interactive-node');
 		if (node.kind === 'course') {
 			classes.push(`course-${courseNodeStatusKind(node)}`);
 		}
@@ -335,6 +346,11 @@
 			if (node.y < 28) classes.push('expand-down');
 		}
 		return classes.join(' ');
+	}
+
+	function nodeStyle(node: Node) {
+		const type = node.typeNumber ? getType(node.typeNumber) : undefined;
+		return [`--x: ${node.x}%`, `--y: ${node.y}%`, type ? `--type-color: ${type.color}` : ''].filter(Boolean).join('; ');
 	}
 
 	function selectArea(area: FilterMode) {
@@ -915,7 +931,7 @@
 	}
 
 	function typeMarkerPoint(typeNumber: number) {
-		return polar(typeAngle(typeNumber), usesSharedEnneagramMap ? strengthTypeAnchorRadius : 22);
+		return polar(typeAngle(typeNumber), usesSharedEnneagramMap ? sharedEnneagramRadius : 22);
 	}
 
 	function laneForIndex(index: number) {
@@ -1669,25 +1685,37 @@
 								<circle class="wheel-ring outer" cx="50" cy="50" r="47" />
 								<circle class="wheel-ring hub" cx="50" cy="50" r="16" />
 								{#each wheelTypes as type}
-									<path
-										class:active={activeZoneTypes.includes(type.number)}
-										class:muted={!activeZoneTypes.includes(type.number)}
-										class:selected-sector={selectedNode?.typeNumber === type.number}
-										class:off-selected-sector={usesSharedEnneagramMap && selectedNode?.kind === 'signal' && selectedNode.typeNumber !== type.number}
-										class="wheel-sector"
-										d={sectorPath(type.number)}
-										style={`--sector-color: ${type.color};`}
-										role="button"
-										tabindex="0"
-										aria-label={`Select Type ${type.number} ${type.name} sector`}
-										onclick={() => selectNode(`signal-type-${type.number}`)}
-										onkeydown={(event) => {
-											if (event.key === 'Enter' || event.key === ' ') {
-												event.preventDefault();
-												selectNode(`signal-type-${type.number}`);
-											}
-										}}
-									/>
+									{@const zoneIsActive = activeZoneTypes.includes(type.number)}
+									{#if zoneIsActive}
+										<path
+											class:active={zoneIsActive}
+											class:muted={!zoneIsActive}
+											class:selected-sector={selectedNode?.typeNumber === type.number}
+											class:off-selected-sector={usesSharedEnneagramMap && selectedNode?.kind === 'signal' && selectedNode.typeNumber !== type.number}
+											class="wheel-sector"
+											d={sectorPath(type.number)}
+											style={`--sector-color: ${type.color};`}
+											role="button"
+											tabindex="0"
+											aria-label={`Select Type ${type.number} ${type.name} sector`}
+											onclick={() => selectNode(`signal-type-${type.number}`)}
+											onkeydown={(event) => {
+												if (event.key === 'Enter' || event.key === ' ') {
+													event.preventDefault();
+													selectNode(`signal-type-${type.number}`);
+												}
+											}}
+										/>
+									{:else}
+										<path
+											class:active={zoneIsActive}
+											class:muted={!zoneIsActive}
+											class="wheel-sector"
+											d={sectorPath(type.number)}
+											style={`--sector-color: ${type.color};`}
+											aria-hidden="true"
+										/>
+									{/if}
 								{/each}
 								{#if usesSharedEnneagramMap}
 									{#each enneagramConnections as [from, to]}
@@ -1696,13 +1724,6 @@
 										<line class={connectionClass(from, to)} x1={fromPoint.x} y1={fromPoint.y} x2={toPoint.x} y2={toPoint.y} />
 									{/each}
 								{/if}
-								{#each wheelTypes as type}
-									{@const point = typeMarkerPoint(type.number)}
-									<g class:active={activeSectorTypes.includes(type.number)} class:zone-active={activeZoneTypes.includes(type.number)} class="type-marker" transform={`translate(${point.x} ${point.y})`}>
-										<circle r="2.8" style={`--sector-color: ${type.color};`} />
-										<text dominant-baseline="middle" text-anchor="middle">{type.number}</text>
-									</g>
-								{/each}
 							</svg>
 						{:else}
 							<div class="atlas-grid" aria-hidden="true"></div>
@@ -1730,42 +1751,57 @@
 							{/each}
 						</svg>
 
-						<button class="map-clear-target" type="button" aria-label="Clear selected map item" onclick={clearMapSelection}></button>
+						<button class="map-clear-target" type="button" tabindex="-1" aria-label="Clear selected map item" onclick={clearMapSelection}></button>
 
 						{#each visibleNodes as node}
-							<button
-								class={nodeClass(node)}
-								class:selected={selectedNode?.id === node.id}
-								class:course-expanded={node.kind === 'course' && selectedNode?.id === node.id}
-								type="button"
-								style={`--x: ${node.x}%; --y: ${node.y}%;`}
-								aria-label={nodeAriaLabel(node)}
-								title={node.kind === 'course' ? nodeAriaLabel(node) : node.title}
-								onclick={(event) => {
-									event.stopPropagation();
-									selectNode(node.id);
-								}}
-							>
-								{#if node.kind === 'course'}
-									<span class="course-role-chip">{selectedNode?.id === node.id ? node.role : roleAbbreviation(node.role ?? node.label)}</span>
-									<strong>{node.title}</strong>
-									<small class="course-compact-meta">{selectedNode?.id === node.id ? node.meta : compactNodeMeta(node)}</small>
-									<div class="course-node-state">
-										<span class={`course-status-dot ${courseNodeStatusKind(node)}`} aria-hidden="true"></span>
-										{#if selectedNode?.id === node.id}
-											<small>{courseVisualStatusLabel(node)}</small>
+							{@const nodeCanSelect = canSelectNode(node)}
+							{#if nodeCanSelect}
+								<button
+									class={nodeClass(node)}
+									class:selected={selectedNode?.id === node.id}
+									class:course-expanded={node.kind === 'course' && selectedNode?.id === node.id}
+									type="button"
+									style={nodeStyle(node)}
+									aria-label={nodeAriaLabel(node)}
+									title={node.kind === 'course' ? nodeAriaLabel(node) : node.title}
+									onclick={(event) => {
+										event.stopPropagation();
+										selectNode(node.id);
+									}}
+								>
+									{#if node.kind === 'course'}
+										<span class="course-role-chip">{selectedNode?.id === node.id ? node.role : roleAbbreviation(node.role ?? node.label)}</span>
+										<strong>{node.title}</strong>
+										<small class="course-compact-meta">{selectedNode?.id === node.id ? node.meta : compactNodeMeta(node)}</small>
+										<div class="course-node-state">
+											<span class={`course-status-dot ${courseNodeStatusKind(node)}`} aria-hidden="true"></span>
+											{#if selectedNode?.id === node.id}
+												<small>{courseVisualStatusLabel(node)}</small>
+											{/if}
+										</div>
+										{#if courseNodeStatusKind(node) === 'in-progress'}
+											<span class="course-node-progress" aria-hidden="true"><span style={`width: ${courseNodeProgress(node)}%`}></span></span>
 										{/if}
-									</div>
-									{#if courseNodeStatusKind(node) === 'in-progress'}
-										<span class="course-node-progress" aria-hidden="true"><span style={`width: ${courseNodeProgress(node)}%`}></span></span>
+									{:else}
+										<span>{node.label}</span>
+										<strong>{node.title}</strong>
+										{#if node.meta}<small>{node.meta}</small>{/if}
+										{#if node.members?.length}<small class="node-members">{node.members.join(' + ')}</small>{/if}
 									{/if}
-								{:else}
+								</button>
+							{:else}
+								<div
+									class={nodeClass(node)}
+									class:course-expanded={node.kind === 'course' && selectedNode?.id === node.id}
+									style={nodeStyle(node)}
+									title={node.title}
+								>
 									<span>{node.label}</span>
 									<strong>{node.title}</strong>
 									{#if node.meta}<small>{node.meta}</small>{/if}
 									{#if node.members?.length}<small class="node-members">{node.members.join(' + ')}</small>{/if}
-								{/if}
-							</button>
+								</div>
+							{/if}
 						{/each}
 					</div>
 					{#if usesSharedEnneagramMap}
