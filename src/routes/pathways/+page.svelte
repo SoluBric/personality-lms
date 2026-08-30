@@ -22,10 +22,19 @@
 
 	type FocusMode = 'current' | 'suggested';
 	type FilterMode = 'All' | CoursePathway;
+	type SharedMapPathway = 'strengths' | 'stress-growth' | 'fortification';
 	type NodeKind = 'profile' | 'territory' | 'signal' | 'skill' | 'course' | 'pathway' | 'team' | 'person';
 	type RadialBand = 'inner' | 'middle' | 'outer';
 	type MapPoint = { x: number; y: number };
 	type ChainSegment = { id: string; from: MapPoint; to: MapPoint; selected: boolean };
+	type HighlightedConnection = { from: number; to: number; kind: 'stress' | 'growth' | 'profile' };
+	type MapState = {
+		activeTypeIds: number[];
+		activeZoneIds: number[];
+		highlightedConnections: HighlightedConnection[];
+		courses: Course[];
+		generalCourses: Course[];
+	};
 	type MapRole =
 		| 'Foundation'
 		| 'Strength Mastery'
@@ -112,6 +121,18 @@
 	const pathways = Object.keys(pathwayCopy) as CoursePathway[];
 	const enneagramOrder = [9, 1, 2, 3, 4, 5, 6, 7, 8];
 	const wheelTypes = enneagramOrder.map(getType);
+	const sharedMapPathways: SharedMapPathway[] = ['strengths', 'stress-growth', 'fortification'];
+	const enneagramConnections = [
+		[1, 4],
+		[4, 2],
+		[2, 8],
+		[8, 5],
+		[5, 7],
+		[7, 1],
+		[9, 3],
+		[3, 6],
+		[6, 9]
+	] as const;
 	const radialBands: Record<RadialBand, number> = { inner: 28, middle: 38, outer: 47 };
 	const strengthRadialBands: Record<RadialBand, number> = { inner: 31, middle: 40, outer: 48 };
 	const strengthTypeAnchorRadius = 21;
@@ -175,14 +196,23 @@
 	const activeSkills = $derived(getSkillsForCourses(activeCourses));
 	const relationshipRoutes = $derived(relationships.filter((relationship) => relationship.teamId === currentTeam.id && relationship.memberIds.includes(selectedMember.id)));
 	const teamCourses = $derived(currentTeam.pathwayCourseIds.map(getCourse).filter(isCourse));
+	const sharedMapState = $derived(buildSharedMapState());
 	const mapNodes = $derived(buildMapNodes());
 	const visibleNodes = $derived(mapNodes);
 	const selectedNode = $derived(selectedNodeId ? mapNodes.find((node) => node.id === selectedNodeId) : undefined);
-	const selectedCourse = $derived(selectedNode?.kind === 'course' && selectedNode.courseIds?.[0] ? getCourse(selectedNode.courseIds[0]) : undefined);
+	const selectedCourse = $derived(
+		selectedNode?.kind === 'course' && selectedNode.courseIds?.[0]
+			? getCourse(selectedNode.courseIds[0])
+			: selectedNodeId?.startsWith('course-')
+				? getCourse(selectedNodeId.replace('course-', ''))
+				: undefined
+	);
 	const selectedSkill = $derived(selectedNode?.kind === 'skill' && selectedNode.skillIds?.[0] ? getSkill(selectedNode.skillIds[0]) : undefined);
 	const activeSectorTypes = $derived(getActiveSectorTypes());
+	const activeZoneTypes = $derived(sharedMapState.activeZoneIds);
+	const usesSharedEnneagramMap = $derived(isSharedMapPathway(selectedArea));
 	const showWheel = $derived(selectedArea !== null && selectedArea !== 'All');
-	const strengthChainSegments = $derived(buildStrengthChainSegments());
+	const courseChainSegments = $derived(buildCourseChainSegments());
 	const completedCourses = $derived(activeCourseStates.filter((state) => state.status === 'completed'));
 	const inProgressCourses = $derived(activeCourseStates.filter((state) => state.status === 'in-progress'));
 	const selectedTerritoryLabel = $derived(selectedArea === null ? 'Profile origin' : selectedArea === 'All' ? 'Development atlas' : pathwayCopy[selectedArea].label);
@@ -216,6 +246,10 @@
 
 	function isSkill(skill: Skill | undefined): skill is Skill {
 		return Boolean(skill);
+	}
+
+	function isSharedMapPathway(area: FilterMode | null): area is SharedMapPathway {
+		return Boolean(area && sharedMapPathways.includes(area as SharedMapPathway));
 	}
 
 	function getRecommendedCourses(member: Member) {
@@ -284,9 +318,12 @@
 		if (node.kind === 'course') {
 			classes.push(`course-${courseNodeStatusKind(node)}`);
 		}
-		if (selectedArea === 'strengths' && node.typeNumber) {
+		if (usesSharedEnneagramMap && node.typeNumber) {
 			const rank = selectedMember.profile.indexOf(node.typeNumber);
-			classes.push(rank >= 0 ? 'active-type-node' : 'inactive-type-node');
+			const isActiveType = sharedMapState.activeTypeIds.includes(node.typeNumber);
+			const isActiveZone = sharedMapState.activeZoneIds.includes(node.typeNumber);
+			classes.push(isActiveType ? 'active-type-node' : 'inactive-type-node');
+			classes.push(isActiveZone ? 'active-zone-node' : 'inactive-zone-node');
 			if (rank === 0) classes.push('primary-type-node');
 			if (rank === 1) classes.push('secondary-type-node');
 			if (rank === 2) classes.push('tertiary-type-node');
@@ -319,6 +356,21 @@
 
 	function courseMeta(course: Course) {
 		return `${levelLabel(course)} / ${course.lengthMinutes} min`;
+	}
+
+	function generalTrayEyebrow() {
+		if (selectedArea === 'stress-growth') return 'General resilience courses';
+		return 'General courses';
+	}
+
+	function generalTrayTitle() {
+		if (selectedArea === 'stress-growth') return 'Type-independent support for pressure and flexibility';
+		return 'Shared courses outside type zones';
+	}
+
+	function generalCourseTrayRole(course: Course) {
+		if (course.pathway === 'stress-growth') return 'Core Resilience';
+		return courseRoleForSharedMap(course);
 	}
 
 	function courseStateLabel(course: Course) {
@@ -551,13 +603,98 @@
 		selectNode(`course-${course.id}`);
 	}
 
+	function buildSharedMapState(): MapState {
+		if (selectedArea === 'strengths') {
+			const activeTypeIds = selectedMember.profile;
+			const coursesInView = coursesForPathwayView('strengths');
+			return {
+				activeTypeIds,
+				activeZoneIds: activeTypeIds,
+				highlightedConnections: [],
+				courses: coursesInView,
+				generalCourses: courses.filter((course) => course.pathway === 'strengths' && course.category === 'general')
+			};
+		}
+		if (selectedArea === 'stress-growth') {
+			const stressCategory = currentStressCategory();
+			const growthCategory = currentGrowthCategory();
+			const coursesInView = courses.filter((course) => course.pathway === 'stress-growth' && [stressCategory, growthCategory].includes(course.category));
+			return {
+				activeTypeIds: [selectedMember.primaryType, stressType.number, growthType.number],
+				activeZoneIds: [stressType.number, growthType.number],
+				highlightedConnections: [
+					{ from: selectedMember.primaryType, to: stressType.number, kind: 'stress' },
+					{ from: selectedMember.primaryType, to: growthType.number, kind: 'growth' }
+				],
+				courses: coursesInView,
+				generalCourses: courses.filter((course) => course.pathway === 'stress-growth' && course.category === 'general')
+			};
+		}
+		if (selectedArea === 'fortification') {
+			const activeZoneIds = enneagramTypes.map((type) => type.number).filter((typeNumber) => !selectedMember.profile.includes(typeNumber));
+			const coursesInView = coursesForPathwayView('fortification');
+			return {
+				activeTypeIds: selectedMember.profile,
+				activeZoneIds,
+				highlightedConnections: [],
+				courses: coursesInView,
+				generalCourses: courses.filter((course) => course.pathway === 'fortification' && course.category === 'general')
+			};
+		}
+		return { activeTypeIds: [], activeZoneIds: [], highlightedConnections: [], courses: [], generalCourses: [] };
+	}
+
 	function buildMapNodes(): Node[] {
 		if (selectedArea === null) return buildProfileOriginNodes();
 		if (selectedArea === 'All') return buildAtlasNodes();
-		if (selectedArea === 'strengths') return buildStrengthsNodes();
-		if (selectedArea === 'stress-growth') return buildStressGrowthNodes();
-		if (selectedArea === 'fortification') return buildGrowthAreaNodes();
+		if (isSharedMapPathway(selectedArea)) return buildSharedEnneagramNodes();
 		return buildTeamNodes();
+	}
+
+	function buildSharedEnneagramNodes(): Node[] {
+		const pathway = selectedArea;
+		if (!isSharedMapPathway(pathway)) return [];
+		const coursesInView = sharedMapState.courses;
+		const courseNodes = coursesInView.flatMap((course) => {
+			const typeNumber = zoneTypeForCourse(course);
+			if (!typeNumber) return [];
+			const point = sharedCoursePoint(course, coursesInView.filter((item) => zoneTypeForCourse(item) === typeNumber), typeNumber);
+			return courseNode(course, courseRoleForSharedMap(course), typeNumber, bandForCourseLevel(course), 0, [], point);
+		});
+		return [
+			{
+				id: 'profile',
+				kind: 'profile',
+				title: selectedMember.profile.join('-'),
+				label: selectedMember.profileName,
+				detail: selectedMember.profileDescription,
+				role: 'Profile Origin',
+				typeNumber: selectedMember.primaryType,
+				x: 50,
+				y: 50
+			},
+			...wheelTypes.map((type) => {
+				const point = typeMarkerPoint(type.number);
+				const isActiveType = sharedMapState.activeTypeIds.includes(type.number);
+				return {
+					id: `signal-type-${type.number}`,
+					kind: 'signal' as const,
+					title: `${type.number}`,
+					label: isActiveType ? activeTypeLabel(type.number) : 'Type anchor',
+					detail: `${type.capacity}. ${type.healthyExpression}`,
+					role: isActiveType ? courseRoleForTypeAnchor(type.number) : 'Type Perspective' as const,
+					typeNumber: type.number,
+					band: 'inner' as const,
+					territory: pathwayToTerritory[pathway],
+					skillIds: skillsForType(type.number).map((skill) => skill.id),
+					courseIds: coursesInView.filter((course) => zoneTypeForCourse(course) === type.number).map((course) => course.id),
+					meta: typeTerritories[type.number],
+					x: point.x,
+					y: point.y
+				};
+			}),
+			...courseNodes
+		];
 	}
 
 	function buildProfileOriginNodes(): Node[] {
@@ -610,85 +747,6 @@
 				y: atlasPositions[index].y
 			};
 		});
-	}
-
-	function buildStrengthsNodes(): Node[] {
-		const activeTypes = selectedMember.profile;
-		const strengthCourses = coursesForPathwayView('strengths');
-		const courseNodes = strengthCourses.flatMap((course) => {
-			const typeNumber = categoryType(course);
-			if (!typeNumber || !activeTypes.includes(typeNumber)) return [];
-			const point = strengthCoursePoint(course, strengthCourses.filter((item) => categoryType(item) === typeNumber));
-			return courseNode(course, 'Strength Mastery', typeNumber, bandForCourseLevel(course), 0, [], point);
-		});
-		return [
-			{ id: 'profile', kind: 'profile', title: selectedMember.profile.join('-'), label: selectedMember.name.split(' ')[0], detail: selectedMember.profileDescription, role: 'Profile Origin', x: 50, y: 50 },
-			...wheelTypes.map((type) => {
-				const rank = activeTypes.indexOf(type.number);
-				const isActive = rank >= 0;
-				const point = typeMarkerPoint(type.number);
-				return {
-				id: `signal-type-${type.number}`,
-				kind: 'signal' as const,
-					title: `${type.number}`,
-					label: isActive ? ['Primary', 'Secondary', 'Tertiary'][rank] ?? 'Active' : 'Type anchor',
-				detail: `${type.capacity}. ${type.healthyExpression}`,
-					role: isActive ? 'Strength Mastery' as const : 'Type Perspective' as const,
-				typeNumber: type.number,
-				band: 'inner' as const,
-				territory: pathwayToTerritory.strengths,
-				skillIds: skillsForType(type.number).map((skill) => skill.id),
-					courseIds: strengthCourses.filter((course) => categoryType(course) === type.number).map((course) => course.id),
-					meta: typeTerritories[type.number],
-					x: point.x,
-					y: point.y
-				};
-			}),
-			...courseNodes
-		];
-	}
-
-	function buildStressGrowthNodes(): Node[] {
-		const stressCategory = currentStressCategory();
-		const growthCategory = currentGrowthCategory();
-		const primaryCourses = courses.filter((course) => course.pathway === 'stress-growth' && [stressCategory, growthCategory].includes(course.category));
-		const generalCourses = courses.filter((course) => course.pathway === 'stress-growth' && course.category === 'general').slice(0, 6);
-		const stressSkills = [...new Set([...primaryCourses, ...generalCourses].flatMap((course) => course.develops))].map(getSkill).filter(isSkill).slice(0, 10);
-		return [
-			{ id: 'profile', kind: 'profile', title: `${selectedMember.primaryType} / ${primaryType.name}`, label: 'Profile origin', detail: primaryType.description, role: 'Profile Origin', typeNumber: primaryType.number, x: 50, y: 50 },
-			{ id: 'signal-stress', kind: 'signal', title: `${stressType.number} / ${stressType.name}`, label: 'Pressure destination', detail: `The map highlights Type ${stressType.number}, but the curriculum category is ${stressCategory}.`, role: 'Pressure Practice', territory: pathwayToTerritory['stress-growth'], typeNumber: stressType.number, band: 'inner', skillIds: stressSkills.slice(0, 3).map((skill) => skill.id), ...mapPoint(stressType.number, 'inner', 0) },
-			{ id: 'signal-growth', kind: 'signal', title: `${growthType.number} / ${growthType.name}`, label: 'Growth destination', detail: `The map highlights Type ${growthType.number}, but the curriculum category is ${growthCategory}.`, role: 'Growth Resource', territory: pathwayToTerritory['stress-growth'], typeNumber: growthType.number, band: 'inner', skillIds: stressSkills.slice(3, 6).map((skill) => skill.id), ...mapPoint(growthType.number, 'inner', 0) },
-			...stressSkills.map((skill, index) => {
-				const typeNumber = skill.category === 'general' ? selectedMember.primaryType : skill.typeNumber ?? [selectedMember.primaryType, stressType.number, growthType.number][index % 3];
-				return {
-					id: `skill-${skill.id}`,
-					kind: 'skill' as const,
-					title: skill.name,
-					label: skill.category === 'general' ? 'Core resilience' : 'Capability',
-					detail: skill.description,
-					role: skill.category === 'general' ? 'Core Resilience' as const : 'Growth Resource' as const,
-					typeNumber,
-					band: 'middle' as const,
-					territory: pathwayToTerritory['stress-growth'],
-					skillIds: [skill.id],
-					courseIds: coursesForSkill(skill.id).map((course) => course.id),
-					...mapPoint(typeNumber, 'middle', laneForIndex(index))
-				};
-			}),
-			...primaryCourses.map((course, index) => {
-				const typeNumber = course.category === stressCategory ? stressType.number : growthType.number;
-				return courseNode(course, course.category === stressCategory ? 'Pressure Practice' : 'Growth Resource', typeNumber, course.map.radialBand, laneForIndex(index));
-			})
-		];
-	}
-
-	function buildGrowthAreaNodes(): Node[] {
-		const fortificationTypes = enneagramTypes.map((type) => type.number).filter((typeNumber) => !selectedMember.profile.includes(typeNumber));
-		const pathwayCourses = coursesForPathwayView('fortification').slice(0, 14);
-		return [
-			{ id: 'profile', kind: 'profile', title: `${selectedMember.name.split(' ')[0]} / ${selectedMember.profile.join('-')}`, label: 'Profile origin', detail: selectedMember.growthEdges.join(' / '), role: 'Profile Origin', territory: pathwayToTerritory.fortification, x: 50, y: 50 },
-			...pathwayCourses.map((course, index) => courseNode(course, 'Fortification', categoryType(course) ?? fortificationTypes[index % fortificationTypes.length], course.map.radialBand, laneForIndex(index)))
-		];
 	}
 
 	function buildTeamNodes(): Node[] {
@@ -752,38 +810,73 @@
 		return 'inner';
 	}
 
+	function zoneTypeForCourse(course: Course) {
+		if (course.pathway === 'stress-growth') {
+			if (course.category === currentStressCategory()) return stressType.number;
+			if (course.category === currentGrowthCategory()) return growthType.number;
+			return undefined;
+		}
+		return categoryType(course);
+	}
+
+	function activeTypeLabel(typeNumber: number) {
+		if (selectedArea === 'stress-growth') {
+			if (typeNumber === selectedMember.primaryType) return 'Primary origin';
+			if (typeNumber === stressType.number) return 'Pressure destination';
+			if (typeNumber === growthType.number) return 'Growth resource';
+		}
+		const rank = selectedMember.profile.indexOf(typeNumber);
+		if (rank >= 0) return ['Primary', 'Secondary', 'Tertiary'][rank] ?? 'Profile type';
+		return 'Active type';
+	}
+
+	function courseRoleForTypeAnchor(typeNumber: number): MapRole {
+		if (selectedArea === 'stress-growth') {
+			if (typeNumber === stressType.number) return 'Pressure Practice';
+			if (typeNumber === growthType.number) return 'Growth Resource';
+			return 'Profile Origin';
+		}
+		if (selectedArea === 'fortification') return selectedMember.profile.includes(typeNumber) ? 'Profile Origin' : 'Fortification';
+		return 'Strength Mastery';
+	}
+
+	function courseRoleForSharedMap(course: Course): MapRole {
+		if (course.pathway === 'stress-growth') return course.category === currentStressCategory() ? 'Pressure Practice' : 'Growth Resource';
+		if (course.pathway === 'fortification') return 'Fortification';
+		return 'Strength Mastery';
+	}
+
 	function polarPoint(angleDeg: number, radius: number, centerY = 50): MapPoint {
 		const angle = angleDeg * (Math.PI / 180);
 		return { x: 50 + Math.cos(angle) * radius, y: centerY + Math.sin(angle) * radius };
 	}
 
-	function strengthPoint(typeNumber: number, band: RadialBand, lane = 0): MapPoint {
+	function sharedPoint(typeNumber: number, band: RadialBand, lane = 0): MapPoint {
 		const angle = typeAngle(typeNumber) + (strengthCourseLaneAngles[lane] ?? 0);
 		return polarPoint(angle, strengthRadialBands[band]);
 	}
 
-	function strengthCoursePoint(course: Course, typeCourses: Course[]): MapPoint {
-		const typeNumber = categoryType(course) ?? selectedMember.primaryType;
+	function sharedCoursePoint(course: Course, zoneCourses: Course[], typeNumber: number): MapPoint {
 		const band = bandForCourseLevel(course);
-		if (course.chain) return strengthPoint(typeNumber, band, 4);
-		const sameBandStandalone = typeCourses
+		if (course.chain) return sharedPoint(typeNumber, band, 4);
+		const sameBandStandalone = zoneCourses
 			.filter((item) => !item.chain && bandForCourseLevel(item) === band)
 			.sort((a, b) => a.id.localeCompare(b.id));
 		const laneIndex = Math.max(0, sameBandStandalone.findIndex((item) => item.id === course.id));
-		return strengthPoint(typeNumber, band, laneIndex % 4);
+		return sharedPoint(typeNumber, band, laneIndex % 4);
 	}
 
-	function buildStrengthChainSegments(): ChainSegment[] {
-		if (selectedArea !== 'strengths') return [];
-		const strengthCourseNodes = mapNodes.filter((node) => node.kind === 'course' && node.courseIds?.[0]);
-		return strengthCourseNodes.flatMap((node) => {
+	function buildCourseChainSegments(): ChainSegment[] {
+		if (!usesSharedEnneagramMap) return [];
+		const courseNodes = mapNodes.filter((node) => node.kind === 'course' && node.courseIds?.[0]);
+		return courseNodes.flatMap((node) => {
 			const courseId = node.courseIds?.[0];
 			const course = courseId ? getCourse(courseId) : undefined;
 			if (!course?.chain?.id) return [];
 			return course.unlocks.flatMap((unlockId) => {
 				const nextCourse = getCourse(unlockId);
 				if (nextCourse?.chain?.id !== course.chain?.id) return [];
-				const nextNode = strengthCourseNodes.find((item) => item.courseIds?.[0] === unlockId);
+				const nextNode = courseNodes.find((item) => item.courseIds?.[0] === unlockId);
 				if (!nextNode) return [];
 				const selected = Boolean(selectedNode?.courseIds?.[0] === course.id || selectedNode?.courseIds?.[0] === unlockId || selectedNode?.connectedObjectIds?.includes(course.id) || selectedNode?.connectedObjectIds?.includes(unlockId));
 				return [{
@@ -803,9 +896,7 @@
 	}
 
 	function getActiveSectorTypes() {
-		if (selectedArea === 'strengths') return selectedMember.profile;
-		if (selectedArea === 'stress-growth') return [selectedMember.primaryType, stressType.number, growthType.number];
-		if (selectedArea === 'fortification') return enneagramTypes.map((type) => type.number).filter((typeNumber) => !selectedMember.profile.includes(typeNumber));
+		if (isSharedMapPathway(selectedArea)) return sharedMapState.activeTypeIds;
 		if (selectedArea === 'team') return [...teamDistribution().keys()];
 		return [];
 	}
@@ -824,7 +915,7 @@
 	}
 
 	function typeMarkerPoint(typeNumber: number) {
-		return polar(typeAngle(typeNumber), selectedArea === 'strengths' ? strengthTypeAnchorRadius : 22);
+		return polar(typeAngle(typeNumber), usesSharedEnneagramMap ? strengthTypeAnchorRadius : 22);
 	}
 
 	function laneForIndex(index: number) {
@@ -932,14 +1023,14 @@
 	function mapModeClass() {
 		if (selectedArea === null) return 'profile-mode';
 		if (selectedArea === 'All') return 'atlas-mode';
-		if (selectedArea === 'strengths') return 'strengths-mode';
-		if (selectedArea === 'stress-growth') return 'stress-mode';
-		if (selectedArea === 'fortification') return 'growth-mode';
+		if (selectedArea === 'strengths') return 'shared-enneagram-mode strengths-mode';
+		if (selectedArea === 'stress-growth') return 'shared-enneagram-mode stress-mode';
+		if (selectedArea === 'fortification') return 'shared-enneagram-mode growth-mode';
 		return 'team-mode';
 	}
 
 	function edgeClass(node: Node) {
-		if (selectedArea === 'strengths') return node.kind === 'course' ? 'course-line strength-course-line' : 'influence-line strength-anchor-line';
+		if (usesSharedEnneagramMap) return node.kind === 'course' ? 'course-line enneagram-course-line' : 'influence-line enneagram-anchor-line';
 		if (selectedArea === 'stress-growth') return 'flow-line';
 		if (selectedArea === 'fortification') return 'route-line';
 		if (selectedArea === 'team') return 'relationship-line';
@@ -948,15 +1039,26 @@
 	}
 
 	function edgeStart(node: Node) {
-		if (selectedArea === 'strengths' && node.kind === 'course' && node.typeNumber) return typeMarkerPoint(node.typeNumber);
+		if (usesSharedEnneagramMap && node.kind === 'course' && node.typeNumber) return typeMarkerPoint(node.typeNumber);
 		if (selectedArea === 'fortification' && node.kind === 'course') return { x: Math.max(12, node.x - 14), y: node.y };
 		if (selectedArea === 'team' && (node.kind === 'person' || node.kind === 'team')) return { x: 25, y: 50 };
 		return { x: 50, y: 50 };
 	}
 
+	function connectionClass(from: number, to: number) {
+		const highlight = highlightedConnection(from, to);
+		return ['enneagram-connection-line', highlight ? `connection-${highlight.kind}` : 'connection-inactive'].join(' ');
+	}
+
+	function highlightedConnection(from: number, to: number) {
+		return sharedMapState.highlightedConnections.find((connection) =>
+			(connection.from === from && connection.to === to) || (connection.from === to && connection.to === from)
+		);
+	}
+
 	function buildInspectorView(): InspectorView {
+		if (selectedCourse) return buildCourseInspector(selectedCourse, selectedNode ?? nodeForGeneralCourse(selectedCourse));
 		if (!selectedNode) return buildPathwayOverviewInspector();
-		if (selectedCourse) return buildCourseInspector(selectedCourse, selectedNode);
 		if (selectedSkill) return buildSkillInspector(selectedSkill, selectedNode);
 		if (selectedNode.kind === 'person') return buildTeamMemberInspector(selectedNode);
 		if (selectedNode.kind === 'profile' && selectedArea === 'team') return buildTeamAnchorInspector();
@@ -964,6 +1066,25 @@
 		if (selectedNode.kind === 'signal' && selectedArea === 'stress-growth') return buildStressGrowthSignalInspector(selectedNode);
 		if (selectedNode.typeNumber) return buildTypeTerritoryInspector(selectedNode);
 		return buildNodeInspector(selectedNode);
+	}
+
+	function nodeForGeneralCourse(course: Course): Node {
+		return {
+			id: `course-${course.id}`,
+			kind: 'course',
+			title: course.name,
+			label: courseRoleForSharedMap(course),
+			detail: course.recommendationContext || course.description,
+			role: courseRoleForSharedMap(course),
+			territory: pathwayToTerritory[course.pathway],
+			skillIds: course.develops,
+			courseIds: [course.id],
+			meta: courseMeta(course),
+			status: courseStateLabel(course),
+			connectedObjectIds: [...(course.prerequisites ?? []), ...(course.unlocks ?? [])],
+			x: 50,
+			y: 50
+		};
 	}
 
 	function buildPathwayOverviewInspector(): InspectorView {
@@ -1546,15 +1667,13 @@
 						{#if showWheel}
 							<svg class="wheel-geometry" viewBox="0 0 100 100" aria-label={`${selectedTerritoryLabel} enneagram geometry`}>
 								<circle class="wheel-ring outer" cx="50" cy="50" r="47" />
-								<circle class="wheel-ring middle" cx="50" cy="50" r="34" />
-								<circle class="wheel-ring inner" cx="50" cy="50" r="24" />
 								<circle class="wheel-ring hub" cx="50" cy="50" r="16" />
 								{#each wheelTypes as type}
 									<path
-										class:active={activeSectorTypes.includes(type.number)}
-										class:muted={!activeSectorTypes.includes(type.number)}
+										class:active={activeZoneTypes.includes(type.number)}
+										class:muted={!activeZoneTypes.includes(type.number)}
 										class:selected-sector={selectedNode?.typeNumber === type.number}
-										class:off-selected-sector={selectedArea === 'strengths' && selectedNode?.kind === 'signal' && selectedNode.typeNumber !== type.number}
+										class:off-selected-sector={usesSharedEnneagramMap && selectedNode?.kind === 'signal' && selectedNode.typeNumber !== type.number}
 										class="wheel-sector"
 										d={sectorPath(type.number)}
 										style={`--sector-color: ${type.color};`}
@@ -1570,9 +1689,16 @@
 										}}
 									/>
 								{/each}
+								{#if usesSharedEnneagramMap}
+									{#each enneagramConnections as [from, to]}
+										{@const fromPoint = typeMarkerPoint(from)}
+										{@const toPoint = typeMarkerPoint(to)}
+										<line class={connectionClass(from, to)} x1={fromPoint.x} y1={fromPoint.y} x2={toPoint.x} y2={toPoint.y} />
+									{/each}
+								{/if}
 								{#each wheelTypes as type}
 									{@const point = typeMarkerPoint(type.number)}
-									<g class:active={activeSectorTypes.includes(type.number)} class="type-marker" transform={`translate(${point.x} ${point.y})`}>
+									<g class:active={activeSectorTypes.includes(type.number)} class:zone-active={activeZoneTypes.includes(type.number)} class="type-marker" transform={`translate(${point.x} ${point.y})`}>
 										<circle r="2.8" style={`--sector-color: ${type.color};`} />
 										<text dominant-baseline="middle" text-anchor="middle">{type.number}</text>
 									</g>
@@ -1582,9 +1708,9 @@
 							<div class="atlas-grid" aria-hidden="true"></div>
 						{/if}
 						<svg class="map-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-							{#if selectedArea === 'strengths'}
-								{#each strengthChainSegments as segment}
-									<line class="strength-chain-line" class:selected={segment.selected} x1={segment.from.x} y1={segment.from.y} x2={segment.to.x} y2={segment.to.y} />
+							{#if usesSharedEnneagramMap}
+								{#each courseChainSegments as segment}
+									<line class="enneagram-chain-line" class:selected={segment.selected} x1={segment.from.x} y1={segment.from.y} x2={segment.to.x} y2={segment.to.y} />
 								{/each}
 							{/if}
 							{#each visibleNodes.filter((node) => node.kind !== 'profile') as node}
@@ -1642,6 +1768,36 @@
 							</button>
 						{/each}
 					</div>
+					{#if usesSharedEnneagramMap}
+						<div class="map-general-tray">
+							<div class="general-tray-heading">
+								<div>
+									<p class="eyebrow">{generalTrayEyebrow()}</p>
+									<h3>{generalTrayTitle()}</h3>
+								</div>
+								<span>{sharedMapState.generalCourses.length ? `${sharedMapState.generalCourses.length} in view` : 'Empty'}</span>
+							</div>
+							{#if sharedMapState.generalCourses.length}
+								<div class="general-course-row">
+									{#each sharedMapState.generalCourses as course}
+										<button
+											class:selected={selectedNodeId === `course-${course.id}`}
+											class="general-course-card"
+											type="button"
+											onclick={() => selectNode(`course-${course.id}`)}
+										>
+											<span>{generalCourseTrayRole(course)}</span>
+											<strong>{titleFor(course)}</strong>
+											<small>{titleCase(levelLabel(course))} · {course.lengthMinutes} min</small>
+											<i class={`course-status-dot ${courseListStatusKind(course)}`} aria-hidden="true"></i>
+										</button>
+									{/each}
+								</div>
+							{:else}
+								<div class="general-tray-empty">No general courses for this pathway.</div>
+							{/if}
+						</div>
+					{/if}
 						</div>
 					{/if}
 				</div>
@@ -1707,23 +1863,7 @@
 					</div>
 				</aside>
 			</div>
-				{#if developmentView === 'map' && selectedArea === 'stress-growth'}
-				<div class="map-lower-tray">
-					<div>
-						<p class="eyebrow">Core resilience skills</p>
-						<h3>General learning that supports every pattern</h3>
-						<p>These capabilities do not need a fixed type sector. They support awareness, regulation and response flexibility across the whole map.</p>
-					</div>
-					<div class="tray-items">
-						{#each courses.filter((course) => course.pathway === 'stress-growth' && course.category === 'general').slice(0, 4) as course}
-							<button type="button" onclick={() => selectNode(`course-${course.id}`)}>
-								<span>{courseMeta(course)}</span>
-								<strong>{titleFor(course)}</strong>
-							</button>
-						{/each}
-					</div>
-				</div>
-				{:else if developmentView === 'map' && selectedArea === 'team'}
+				{#if developmentView === 'map' && selectedArea === 'team'}
 				<div class="team-learning-lower">
 					<div>
 						<p class="eyebrow">My team skills</p>
