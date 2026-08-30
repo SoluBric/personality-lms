@@ -3042,6 +3042,15 @@ li {
 		stroke 180ms ease;
 }
 
+.wheel-sector:focus {
+	outline: none;
+}
+
+.wheel-sector:focus-visible {
+	stroke: color-mix(in srgb, var(--sector-color) 74%, #fff);
+	stroke-width: 0.44;
+}
+
 .wheel-sector.active {
 	fill: color-mix(in srgb, var(--sector-color) 26%, transparent);
 	opacity: 0.88;
@@ -3111,11 +3120,11 @@ li {
 }
 
 .enneagram-connection-line {
-	stroke: color-mix(in srgb, var(--line) 72%, transparent);
-	stroke-width: 0.42;
+	stroke: color-mix(in srgb, var(--text) 20%, var(--line));
+	stroke-width: 0.5;
 	stroke-linecap: round;
 	vector-effect: non-scaling-stroke;
-	opacity: 0.22;
+	opacity: 0.36;
 	transition:
 		opacity 180ms ease,
 		stroke 180ms ease,
@@ -3124,13 +3133,13 @@ li {
 
 .enneagram-connection-line.connection-stress {
 	stroke: color-mix(in srgb, #8f99c5 72%, var(--accent));
-	stroke-width: 0.72;
+	stroke-width: 0.78;
 	opacity: 0.82;
 }
 
 .enneagram-connection-line.connection-growth {
 	stroke: color-mix(in srgb, #2fbf86 72%, var(--accent));
-	stroke-width: 0.72;
+	stroke-width: 0.78;
 	opacity: 0.82;
 }
 
@@ -3452,7 +3461,7 @@ li {
 }
 
 .capability-map.shared-enneagram-mode:not(.atlas-mode) .map-node.node-profile {
-	width: 150px;
+	width: 112px;
 	height: auto;
 	min-height: 0;
 	padding: 0;
@@ -3466,13 +3475,14 @@ li {
 
 .capability-map.shared-enneagram-mode:not(.atlas-mode) .map-node.node-profile span {
 	color: var(--accent);
-	font-size: 9px;
-	letter-spacing: 0.16em;
+	font-size: 8px;
+	line-height: 1.18;
+	letter-spacing: 0.14em;
 	text-shadow: 0 1px 8px color-mix(in srgb, var(--bg) 82%, transparent);
 }
 
 .capability-map.shared-enneagram-mode:not(.atlas-mode) .map-node.node-profile strong {
-	font-size: 21px;
+	font-size: 18px;
 	line-height: 1;
 	text-shadow: 0 1px 10px color-mix(in srgb, var(--bg) 88%, transparent);
 }
@@ -3811,7 +3821,7 @@ li {
 
 .capability-map.shared-enneagram-mode:not(.atlas-mode) .map-node.node-signal.inactive-type-node {
 	opacity: 0.58;
-	background: color-mix(in srgb, var(--type-color) 28%, var(--panel));
+	background: color-mix(in srgb, var(--type-color) 52%, var(--panel));
 }
 
 .capability-map.shared-enneagram-mode .map-node.off-selected-type {

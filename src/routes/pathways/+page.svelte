@@ -135,7 +135,7 @@
 	] as const;
 	const radialBands: Record<RadialBand, number> = { inner: 28, middle: 38, outer: 47 };
 	const strengthRadialBands: Record<RadialBand, number> = { inner: 31, middle: 40, outer: 48 };
-	const sharedEnneagramRadius = 31;
+	const sharedEnneagramRadius = 16;
 	const strengthCourseLaneAngles = [-6.5, 6.5, -12, 12, 0];
 	const typeTerritories: Record<number, string> = {
 		1: 'Standards & disciplined improvement',
