@@ -28,6 +28,7 @@
 	type MapPoint = { x: number; y: number };
 	type ChainSegment = { id: string; from: MapPoint; to: MapPoint; selected: boolean };
 	type HighlightedConnection = { from: number; to: number; kind: 'stress' | 'growth' | 'profile' };
+	type TeamTypeArc = { id: string; typeNumber: number; rank: 1 | 2 | 3; offset: number; path: string };
 	type MapState = {
 		activeTypeIds: number[];
 		activeZoneIds: number[];
@@ -196,9 +197,11 @@
 	const activeSkills = $derived(getSkillsForCourses(activeCourses));
 	const relationshipRoutes = $derived(relationships.filter((relationship) => relationship.teamId === currentTeam.id && relationship.memberIds.includes(selectedMember.id)));
 	const teamCourses = $derived(currentTeam.pathwayCourseIds.map(getCourse).filter(isCourse));
+	const currentTeamMembers = $derived(currentTeam.memberIds.map(getMember).filter(isMember));
 	const sharedMapState = $derived(buildSharedMapState());
 	const mapNodes = $derived(buildMapNodes());
 	const visibleNodes = $derived(mapNodes);
+	const displayedMapNodes = $derived(selectedArea === 'team' ? visibleNodes.filter((node) => node.kind !== 'person') : visibleNodes);
 	const selectedNode = $derived(selectedNodeId ? mapNodes.find((node) => node.id === selectedNodeId) : undefined);
 	const selectedCourse = $derived(
 		selectedNode?.kind === 'course' && selectedNode.courseIds?.[0]
@@ -209,10 +212,12 @@
 	);
 	const selectedSkill = $derived(selectedNode?.kind === 'skill' && selectedNode.skillIds?.[0] ? getSkill(selectedNode.skillIds[0]) : undefined);
 	const activeSectorTypes = $derived(getActiveSectorTypes());
-	const activeZoneTypes = $derived(sharedMapState.activeZoneIds);
+	const activeZoneTypes = $derived(getActiveZoneTypes());
 	const usesSharedEnneagramMap = $derived(isSharedMapPathway(selectedArea));
+	const usesEnneagramCore = $derived(usesSharedEnneagramMap || selectedArea === 'team');
 	const showWheel = $derived(selectedArea !== null && selectedArea !== 'All');
 	const courseChainSegments = $derived(buildCourseChainSegments());
+	const teamTypeArcs = $derived(buildTeamTypeArcs());
 	const completedCourses = $derived(activeCourseStates.filter((state) => state.status === 'completed'));
 	const inProgressCourses = $derived(activeCourseStates.filter((state) => state.status === 'in-progress'));
 	const selectedTerritoryLabel = $derived(selectedArea === null ? 'Profile origin' : selectedArea === 'All' ? 'Development atlas' : pathwayCopy[selectedArea].label);
@@ -300,9 +305,10 @@
 	}
 
 	function canSelectNode(node: Node) {
-		if (usesSharedEnneagramMap && node.kind === 'profile') return false;
-		if (usesSharedEnneagramMap && node.kind === 'signal') {
+		if (usesEnneagramCore && node.kind === 'profile') return false;
+		if (usesEnneagramCore && node.kind === 'signal') {
 			if (!node.typeNumber) return false;
+			if (selectedArea === 'team') return activeZoneTypes.includes(node.typeNumber);
 			if (selectedArea === 'fortification') return sharedMapState.activeZoneIds.includes(node.typeNumber);
 			return sharedMapState.activeTypeIds.includes(node.typeNumber) || sharedMapState.activeZoneIds.includes(node.typeNumber);
 		}
@@ -329,15 +335,15 @@
 		if (node.kind === 'course') {
 			classes.push(`course-${courseNodeStatusKind(node)}`);
 		}
-		if (usesSharedEnneagramMap && node.typeNumber) {
+		if (usesEnneagramCore && node.typeNumber) {
 			const rank = selectedMember.profile.indexOf(node.typeNumber);
-			const isActiveType = sharedMapState.activeTypeIds.includes(node.typeNumber);
-			const isActiveZone = sharedMapState.activeZoneIds.includes(node.typeNumber);
+			const isActiveType = activeSectorTypes.includes(node.typeNumber);
+			const isActiveZone = activeZoneTypes.includes(node.typeNumber);
 			classes.push(isActiveType ? 'active-type-node' : 'inactive-type-node');
 			classes.push(isActiveZone ? 'active-zone-node' : 'inactive-zone-node');
-			if (rank === 0) classes.push('primary-type-node');
-			if (rank === 1) classes.push('secondary-type-node');
-			if (rank === 2) classes.push('tertiary-type-node');
+			if (usesSharedEnneagramMap && rank === 0) classes.push('primary-type-node');
+			if (usesSharedEnneagramMap && rank === 1) classes.push('secondary-type-node');
+			if (usesSharedEnneagramMap && rank === 2) classes.push('tertiary-type-node');
 			if (selectedNode?.kind === 'signal' && selectedNode.typeNumber !== node.typeNumber) classes.push('off-selected-type');
 		}
 		if (node.kind === 'course' || node.kind === 'skill') {
@@ -375,16 +381,24 @@
 	}
 
 	function generalTrayEyebrow() {
+		if (selectedArea === 'team') return 'Shared team courses';
 		if (selectedArea === 'stress-growth') return 'General resilience courses';
 		return 'General courses';
 	}
 
 	function generalTrayTitle() {
+		if (selectedArea === 'team') return currentTeam.pathwayName;
 		if (selectedArea === 'stress-growth') return 'Type-independent support for pressure and flexibility';
 		return 'Shared courses outside type zones';
 	}
 
+	function generalTrayCourses() {
+		if (selectedArea === 'team') return teamCourses.length ? teamCourses : courses.filter((course) => course.pathway === 'team' && course.category === 'general');
+		return sharedMapState.generalCourses;
+	}
+
 	function generalCourseTrayRole(course: Course) {
+		if (course.pathway === 'team') return 'Shared Team Learning';
 		if (course.pathway === 'stress-growth') return 'Core Resilience';
 		return courseRoleForSharedMap(course);
 	}
@@ -766,18 +780,37 @@
 	}
 
 	function buildTeamNodes(): Node[] {
-		const teamMembers = currentTeam.memberIds.map(getMember).filter(isMember);
 		const distribution = teamDistribution();
 		const typeCourses = coursesForPathwayView('team').filter((course) => course.category.startsWith('type-'));
 		const centerCourses = coursesForPathwayView('team').filter((course) => course.category.startsWith('center-'));
-		const sharedCourses = teamCourses.length ? teamCourses : coursesForPathwayView('team').filter((course) => course.category === 'general').slice(0, 4);
 		return [
-			{ id: 'profile', kind: 'profile', title: currentTeam.name, label: 'Team atlas', detail: currentTeam.description, role: 'Profile Origin', territory: pathwayToTerritory.team, courseIds: currentTeam.pathwayCourseIds, x: 50, y: 50 },
-			...teamMembers.map((member, index) => ({
+			{ id: 'profile', kind: 'profile', title: currentTeam.name, label: 'Team', detail: currentTeam.description, role: 'Profile Origin', territory: pathwayToTerritory.team, courseIds: currentTeam.pathwayCourseIds, x: 50, y: 50 },
+			...wheelTypes.map((type) => {
+				const point = typeMarkerPoint(type.number);
+				const representedBy = distribution.get(type.number) ?? [];
+				return {
+					id: `signal-type-${type.number}`,
+					kind: 'signal' as const,
+					title: `${type.number}`,
+					label: representedBy.length ? `${representedBy.length} team ${representedBy.length === 1 ? 'signal' : 'signals'}` : 'Type anchor',
+					detail: `${type.capacity}. ${type.healthyExpression}`,
+					role: 'Type Perspective' as const,
+					typeNumber: type.number,
+					band: 'inner' as const,
+					territory: pathwayToTerritory.team,
+					skillIds: skillsForType(type.number).map((skill) => skill.id),
+					courseIds: typeCourses.filter((course) => categoryType(course) === type.number).map((course) => course.id),
+					meta: typeTerritories[type.number],
+					members: representedBy,
+					x: point.x,
+					y: point.y
+				};
+			}),
+			...currentTeamMembers.map((member, index) => ({
 				id: `person-${member.id}`,
 				kind: 'person' as const,
-				title: member.name.split(' ')[0],
-				label: member.profile.join('-'),
+				title: member.name,
+				label: member.profileName,
 				detail: member.summary,
 				role: 'Team Member' as const,
 				typeNumber: member.primaryType,
@@ -787,8 +820,7 @@
 				...mapPoint(member.primaryType, 'inner', laneForIndex(index))
 			})),
 			...typeCourses.map((course, index) => courseNode(course, 'Type Perspective', categoryType(course) ?? 9, 'inner', laneForIndex(index), distribution.get(categoryType(course) ?? 9))),
-			...centerCourses.map((course, index) => courseNode(course, 'Center Collaboration', selectedMember.primaryType, 'middle', laneForIndex(index))),
-			...sharedCourses.map((course, index) => courseNode(course, 'Shared Team Learning', categoryType(course) ?? selectedMember.primaryType, 'outer', laneForIndex(index)))
+			...centerCourses.map((course, index) => courseNode(course, 'Center Collaboration', selectedMember.primaryType, 'middle', laneForIndex(index)))
 		];
 	}
 
@@ -857,6 +889,7 @@
 	}
 
 	function courseRoleForSharedMap(course: Course): MapRole {
+		if (course.pathway === 'team') return 'Shared Team Learning';
 		if (course.pathway === 'stress-growth') return course.category === currentStressCategory() ? 'Pressure Practice' : 'Growth Resource';
 		if (course.pathway === 'fortification') return 'Fortification';
 		return 'Strength Mastery';
@@ -917,6 +950,12 @@
 		return [];
 	}
 
+	function getActiveZoneTypes() {
+		if (isSharedMapPathway(selectedArea)) return sharedMapState.activeZoneIds;
+		if (selectedArea === 'team') return [...teamDistribution().keys()];
+		return [];
+	}
+
 	function sectorPath(typeNumber: number) {
 		const center = typeAngle(typeNumber);
 		const start = polar(center - 20, 47);
@@ -931,7 +970,42 @@
 	}
 
 	function typeMarkerPoint(typeNumber: number) {
-		return polar(typeAngle(typeNumber), usesSharedEnneagramMap ? sharedEnneagramRadius : 22);
+		return polar(typeAngle(typeNumber), usesEnneagramCore ? sharedEnneagramRadius : 22);
+	}
+
+	function arcPoint(center: MapPoint, angleDeg: number, radius: number) {
+		const angle = angleDeg * (Math.PI / 180);
+		return { x: center.x + Math.cos(angle) * radius, y: center.y + Math.sin(angle) * radius };
+	}
+
+	function arcPath(center: MapPoint, middleAngle: number, sweep: number, radius: number) {
+		const start = arcPoint(center, middleAngle - sweep / 2, radius);
+		const end = arcPoint(center, middleAngle + sweep / 2, radius);
+		return `M ${start.x} ${start.y} A ${radius} ${radius} 0 ${sweep > 180 ? 1 : 0} 1 ${end.x} ${end.y}`;
+	}
+
+	function buildTeamTypeArcs(): TeamTypeArc[] {
+		if (selectedArea !== 'team') return [];
+		const sweepByRank = { 1: 180, 2: 120, 3: 90 } as const;
+		const arcs: TeamTypeArc[] = [];
+		currentTeamMembers.forEach((member) => {
+			member.profile.forEach((typeNumber, index) => {
+				const rank = (index + 1) as 1 | 2 | 3;
+				const offset = arcs.filter((arc) => arc.typeNumber === typeNumber).length;
+				const sameRankOffset = arcs.filter((arc) => arc.typeNumber === typeNumber && arc.rank === rank).length;
+				const point = typeMarkerPoint(typeNumber);
+				const inwardAngle = typeAngle(typeNumber) + 180;
+				const radius = 4.25 + offset * 0.72;
+				arcs.push({
+					id: `${member.id}-${typeNumber}-${rank}`,
+					typeNumber,
+					rank,
+					offset: sameRankOffset,
+					path: arcPath(point, inwardAngle, sweepByRank[rank], radius)
+				});
+			});
+		});
+		return arcs.sort((a, b) => a.rank - b.rank || a.typeNumber - b.typeNumber || a.offset - b.offset);
 	}
 
 	function laneForIndex(index: number) {
@@ -1042,11 +1116,11 @@
 		if (selectedArea === 'strengths') return 'shared-enneagram-mode strengths-mode';
 		if (selectedArea === 'stress-growth') return 'shared-enneagram-mode stress-mode';
 		if (selectedArea === 'fortification') return 'shared-enneagram-mode growth-mode';
-		return 'team-mode';
+		return 'shared-enneagram-mode team-mode';
 	}
 
 	function edgeClass(node: Node) {
-		if (usesSharedEnneagramMap) return node.kind === 'course' ? 'course-line enneagram-course-line' : 'influence-line enneagram-anchor-line';
+		if (usesEnneagramCore) return node.kind === 'course' ? 'course-line enneagram-course-line' : 'influence-line enneagram-anchor-line';
 		if (selectedArea === 'stress-growth') return 'flow-line';
 		if (selectedArea === 'fortification') return 'route-line';
 		if (selectedArea === 'team') return 'relationship-line';
@@ -1055,7 +1129,7 @@
 	}
 
 	function edgeStart(node: Node) {
-		if (usesSharedEnneagramMap && node.kind === 'course' && node.typeNumber) return typeMarkerPoint(node.typeNumber);
+		if (usesEnneagramCore && node.kind === 'course' && node.typeNumber) return typeMarkerPoint(node.typeNumber);
 		if (selectedArea === 'fortification' && node.kind === 'course') return { x: Math.max(12, node.x - 14), y: node.y };
 		if (selectedArea === 'team' && (node.kind === 'person' || node.kind === 'team')) return { x: 25, y: 50 };
 		return { x: 50, y: 50 };
@@ -1263,9 +1337,9 @@
 		const relatedCourses = [...new Set([...(relationship?.courses ?? []), ...currentTeam.pathwayCourseIds])].map(getCourse).filter(isCourse).slice(0, 5);
 		return {
 			eyebrow: 'Team member',
-			title: `${member.name} / ${member.profile.join('-')}`,
+			title: member.name,
 			description: member.summary,
-			badge: member.profileName,
+			badge: `${member.profileName} / ${member.profile.join('-')}`,
 			blocks: [
 				{ id: 'contribution', label: 'Contribution summary', kind: 'text', text: member.profileDescription },
 				{ id: 'relationship', label: `How this relates to ${selectedMember.name.split(' ')[0]}`, kind: 'text', text: relationship ? `${relationship.complementarity} ${relationship.viewerNotes[selectedMember.id] ?? relationship.friction}` : 'This colleague contributes a different profile pattern to the team system.' },
@@ -1688,10 +1762,10 @@
 									{@const zoneIsActive = activeZoneTypes.includes(type.number)}
 									{#if zoneIsActive}
 										<path
-											class:active={zoneIsActive}
-											class:muted={!zoneIsActive}
-											class:selected-sector={selectedNode?.typeNumber === type.number}
-											class:off-selected-sector={usesSharedEnneagramMap && selectedNode?.kind === 'signal' && selectedNode.typeNumber !== type.number}
+										class:active={zoneIsActive}
+										class:muted={!zoneIsActive}
+										class:selected-sector={selectedNode?.typeNumber === type.number}
+										class:off-selected-sector={usesEnneagramCore && selectedNode?.kind === 'signal' && selectedNode.typeNumber !== type.number}
 											class="wheel-sector"
 											d={sectorPath(type.number)}
 											style={`--sector-color: ${type.color};`}
@@ -1717,11 +1791,16 @@
 										/>
 									{/if}
 								{/each}
-								{#if usesSharedEnneagramMap}
+								{#if usesEnneagramCore}
 									{#each enneagramConnections as [from, to]}
 										{@const fromPoint = typeMarkerPoint(from)}
 										{@const toPoint = typeMarkerPoint(to)}
 										<line class={connectionClass(from, to)} x1={fromPoint.x} y1={fromPoint.y} x2={toPoint.x} y2={toPoint.y} />
+									{/each}
+								{/if}
+								{#if selectedArea === 'team'}
+									{#each teamTypeArcs as arc}
+										<path class={`team-type-arc rank-${arc.rank}`} d={arc.path} />
 									{/each}
 								{/if}
 							</svg>
@@ -1734,7 +1813,7 @@
 									<line class="enneagram-chain-line" class:selected={segment.selected} x1={segment.from.x} y1={segment.from.y} x2={segment.to.x} y2={segment.to.y} />
 								{/each}
 							{/if}
-							{#each visibleNodes.filter((node) => node.kind !== 'profile') as node}
+							{#each displayedMapNodes.filter((node) => node.kind !== 'profile') as node}
 								{@const start = edgeStart(node)}
 								<line class={edgeClass(node)} class:selected={selectedNode?.id === node.id || selectedNode?.id === 'profile'} x1={start.x} y1={start.y} x2={node.x} y2={node.y} />
 							{/each}
@@ -1753,7 +1832,7 @@
 
 						<button class="map-clear-target" type="button" tabindex="-1" aria-label="Clear selected map item" onclick={clearMapSelection}></button>
 
-						{#each visibleNodes as node}
+						{#each displayedMapNodes as node}
 							{@const nodeCanSelect = canSelectNode(node)}
 							{#if nodeCanSelect}
 								<button
@@ -1804,7 +1883,25 @@
 							{/if}
 						{/each}
 					</div>
-					{#if usesSharedEnneagramMap}
+					{#if selectedArea === 'team'}
+						<div class="team-member-rail" aria-label="Team members">
+							{#each currentTeamMembers as member}
+								<button
+									class:selected={selectedNodeId === `person-${member.id}`}
+									type="button"
+									onclick={(event) => {
+										event.stopPropagation();
+										selectNode(`person-${member.id}`);
+									}}
+								>
+									<strong>{member.name}</strong>
+									<span>{member.profileName}</span>
+									<small>{member.profile.join('-')}</small>
+								</button>
+							{/each}
+						</div>
+					{/if}
+					{#if usesSharedEnneagramMap || selectedArea === 'team'}
 						<div class="map-general-tray">
 							<div class="general-tray-heading">
 								<div>
@@ -1813,11 +1910,11 @@
 										<h3>({generalTrayTitle()})</h3>
 									</div>
 								</div>
-								<span>{sharedMapState.generalCourses.length ? `${sharedMapState.generalCourses.length} in view` : 'Empty'}</span>
+								<span>{generalTrayCourses().length ? `${generalTrayCourses().length} in view` : 'Empty'}</span>
 							</div>
-							{#if sharedMapState.generalCourses.length}
+							{#if generalTrayCourses().length}
 								<div class="general-course-row">
-									{#each sharedMapState.generalCourses as course}
+									{#each generalTrayCourses() as course}
 										<button
 											class:selected={selectedNodeId === `course-${course.id}`}
 											class="general-course-card"
@@ -1901,36 +1998,6 @@
 					</div>
 				</aside>
 			</div>
-				{#if developmentView === 'map' && selectedArea === 'team'}
-				<div class="team-learning-lower">
-					<div>
-						<p class="eyebrow">My team skills</p>
-						<h3>Individual learning for better collaboration</h3>
-						<p>Build capabilities that improve work across several relationships, regardless of one colleague's profile.</p>
-						<div class="tray-items">
-							{#each courses.filter((course) => course.pathway === 'team' && course.category === 'general').slice(0, 4) as course}
-								<button type="button" onclick={() => selectNode(`course-${course.id}`)}>
-									<span>{courseMeta(course)}</span>
-									<strong>{titleFor(course)}</strong>
-								</button>
-							{/each}
-						</div>
-					</div>
-					<div>
-						<p class="eyebrow">Shared team learning</p>
-						<h3>{currentTeam.pathwayName}</h3>
-						<p>Shared learning helps the team build practices that no single profile can supply on its own.</p>
-						<div class="team-sequence">
-							{#each teamCourses as course, index}
-								<button type="button" onclick={() => selectNode(`course-${course.id}`)}>
-									<span>{index + 1}</span>
-									<strong>{titleFor(course)}</strong>
-								</button>
-							{/each}
-						</div>
-					</div>
-				</div>
-			{/if}
 		</section>
 	</main>
 </div>

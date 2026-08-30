@@ -3160,6 +3160,83 @@ li {
 	opacity: 0.82;
 }
 
+.team-type-arc {
+	fill: none;
+	stroke: var(--accent);
+	stroke-linecap: round;
+	vector-effect: non-scaling-stroke;
+	opacity: 0.88;
+	pointer-events: none;
+}
+
+.team-type-arc.rank-1 {
+	stroke-width: 0.72;
+}
+
+.team-type-arc.rank-2 {
+	stroke-width: 0.48;
+	opacity: 0.76;
+}
+
+.team-type-arc.rank-3 {
+	stroke-width: 0.36;
+	opacity: 0.68;
+}
+
+.team-member-rail {
+	position: absolute;
+	left: calc((100% - var(--pathways-map-geometry-height)) / 2 - 84px);
+	top: calc(var(--pathways-map-geometry-height) / 2);
+	z-index: 8;
+	display: grid;
+	width: 100px;
+	gap: 8px;
+	transform: translateY(-50%);
+}
+
+.team-member-rail button {
+	display: grid;
+	gap: 4px;
+	padding: 9px;
+	border: 1px solid color-mix(in srgb, var(--line) 82%, transparent);
+	border-radius: 8px;
+	background: color-mix(in srgb, var(--bg-soft) 78%, transparent);
+	color: var(--text);
+	text-align: left;
+	box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+}
+
+.team-member-rail button:hover,
+.team-member-rail button.selected {
+	border-color: var(--accent);
+	background:
+		linear-gradient(145deg, color-mix(in srgb, var(--accent-soft) 38%, transparent), transparent),
+		color-mix(in srgb, var(--panel-strong) 86%, transparent);
+	box-shadow:
+		0 14px 30px rgba(0, 0, 0, 0.24),
+		0 0 0 3px color-mix(in srgb, var(--accent) 14%, transparent);
+}
+
+.team-member-rail strong {
+	font-size: 11px;
+	line-height: 1.15;
+}
+
+.team-member-rail span {
+	color: var(--muted);
+	font-size: 9px;
+	font-weight: 850;
+	line-height: 1.2;
+}
+
+.team-member-rail small {
+	color: var(--accent);
+	font-size: 10px;
+	font-weight: 950;
+	letter-spacing: 0.12em;
+}
+
+
 .map-lines {
 	position: absolute;
 	inset: 0;
@@ -4802,6 +4879,12 @@ li {
 	.map-general-tray {
 		position: static;
 		height: auto;
+	}
+
+	.team-member-rail {
+		position: static;
+		width: 100%;
+		transform: none;
 	}
 
 	.wheel-geometry {
