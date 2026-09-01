@@ -1,5 +1,5 @@
 import { fail, redirect } from '@sveltejs/kit';
-import { accessCookieName, accessPassword, accessToken } from '$lib/server/access';
+import { accessCookieName, accessPassword, accessProtectionRequired, accessToken } from '$lib/server/access';
 import type { Actions, PageServerLoad } from './$types';
 
 function nextUrl(value: string | null) {
@@ -13,7 +13,8 @@ export const load: PageServerLoad = async ({ cookies, url }) => {
 	}
 
 	return {
-		protectionEnabled: Boolean(password)
+		protectionEnabled: Boolean(password),
+		configurationRequired: accessProtectionRequired() && !password
 	};
 };
 

@@ -17,6 +17,9 @@
 			<form method="POST" class="login-form">
 				<label for="password">Access code</label>
 				<input id="password" name="password" type="password" autocomplete="current-password" disabled={!data.protectionEnabled} />
+				{#if data.configurationRequired}
+					<p class="form-error">Access protection is required, but the demo access code has not been configured.</p>
+				{/if}
 				{#if form?.message}
 					<p class="form-error">{form.message}</p>
 				{/if}

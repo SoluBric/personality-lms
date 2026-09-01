@@ -46,6 +46,8 @@ DEMO_ACCESS_PASSWORD=your-code pnpm dev
 
 For Cloudflare Pages, add `DEMO_ACCESS_PASSWORD` as a private environment variable in the Pages project settings. Do not use a `PUBLIC_` or `VITE_` prefixed variable for this value.
 
+On Cloudflare Pages, the app fails closed if `DEMO_ACCESS_PASSWORD` is missing: protected routes redirect to `/login` instead of opening publicly.
+
 ## Cloudflare Pages
 
 The app uses `@sveltejs/adapter-cloudflare`; production output is configured in `wrangler.jsonc` as `.svelte-kit/cloudflare`.
@@ -61,3 +63,9 @@ Recommended Cloudflare Pages settings:
 - Build command: `pnpm build:cloudflare`
 - Build output directory: `.svelte-kit/cloudflare`
 - Node version: current Cloudflare Pages default is fine for this project
+
+Privacy/security launch notes:
+
+- `robots.txt` disallows all crawling.
+- `_headers` adds `X-Robots-Tag: noindex, nofollow` and baseline browser security headers.
+- The app-level hook also applies those headers to dynamic SvelteKit responses.
