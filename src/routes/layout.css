@@ -632,11 +632,14 @@ main {
 		color-mix(in srgb, var(--bg-soft) 84%, transparent);
 }
 
-.about-section h1 {
+.about-section > .eyebrow {
 	margin: 0;
-	font-size: clamp(34px, 5vw, 64px);
-	font-weight: 480;
-	line-height: 0.98;
+	color: var(--accent);
+	font-size: clamp(18px, 1.6vw, 24px);
+	font-weight: 800;
+	line-height: 1.15;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
 }
 
 .about-section p,
@@ -701,10 +704,9 @@ main {
 }
 
 .about-theme-shell {
-	display: flex;
-	flex-wrap: wrap;
+	display: grid;
 	gap: 10px;
-	align-items: center;
+	justify-items: start;
 	padding: 12px;
 }
 
@@ -728,6 +730,14 @@ main {
 .about-theme-shell b + b {
 	background: transparent;
 	color: var(--muted);
+}
+
+.about-theme-swatches {
+	display: flex;
+	gap: 10px;
+	border: 0 !important;
+	padding: 0 !important;
+	background: transparent;
 }
 
 .about-theme-shell span {
@@ -756,7 +766,7 @@ main {
 
 .about-note {
 	display: grid;
-	gap: 10px;
+	gap: 14px;
 	padding: 16px;
 }
 
@@ -767,7 +777,16 @@ main {
 .about-note ul,
 .about-accordion ul {
 	margin: 0;
-	padding-left: 22px;
+	padding-left: 28px;
+}
+
+.about-note ul {
+	display: grid;
+	gap: 12px;
+}
+
+.about-note p {
+	padding-left: 28px;
 }
 
 .about-accordion {
@@ -895,6 +914,17 @@ main {
 .app-shell[data-mode='light'] .primary-link,
 .app-shell[data-mode='light'] .login-form button {
 	color: #111713;
+}
+
+.app-shell[data-mode='light'] .order-square {
+	border-color: color-mix(in srgb, var(--accent) 58%, var(--line));
+	background:
+		linear-gradient(145deg, color-mix(in srgb, var(--accent-soft) 76%, white), color-mix(in srgb, var(--accent-soft) 42%, white)),
+		color-mix(in srgb, var(--accent-soft) 78%, white);
+	color: var(--accent);
+	box-shadow:
+		0 8px 16px color-mix(in srgb, var(--accent) 18%, transparent),
+		inset 0 0 0 1px rgba(255, 255, 255, .72);
 }
 
 .app-shell[data-mode='light'] .member-menu-options button.active,

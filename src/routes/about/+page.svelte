@@ -82,7 +82,6 @@
 			<section class="about-display panel">
 				<article id="quick-start" class="about-section">
 					<p class="eyebrow">Quick start</p>
-					<h1>Quick start</h1>
 
 					<div class="about-instruction">
 						<div class="about-picker-shell" aria-hidden="true">
@@ -97,7 +96,9 @@
 					<div class="about-instruction">
 						<div class="about-theme-shell" aria-hidden="true">
 							<div><b>Dark</b><b>Light</b></div>
-							<span></span><span></span><span></span><span></span>
+							<div class="about-theme-swatches">
+								<span></span><span></span><span></span><span></span>
+							</div>
 						</div>
 						<p>Use the toggle in the top-left nav to switch between dark and light mode, and choose a theme colour too.</p>
 					</div>
@@ -113,14 +114,12 @@
 
 				<article id="about-demo-app" class="about-section">
 					<p class="eyebrow">About this demo app</p>
-					<h1>About this demo app</h1>
 					<p>Primary purpose of this demo app was to explore the intersection between a personality test app and a LMS.</p>
 					<p>Other main focuses of this demo app were exploring how various interfaces and dynamics can be used to cleanly represent differing details, and exploring tailored learning pathways as compared to generic and straight-line setups.</p>
 				</article>
 
 				<article id="content-context" class="about-section">
 					<p class="eyebrow">Content context</p>
-					<h1>Content context</h1>
 					<p>This demo app makes use of the Enneagram for content, which is a personality test that involves nine types. More information about the Enneagram can be found below.</p>
 
 					<div class="about-note">
