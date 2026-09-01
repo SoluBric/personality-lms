@@ -3,7 +3,8 @@ import { accessCookieName, accessPassword, accessProtectionRequired, accessToken
 import type { Actions, PageServerLoad } from './$types';
 
 function nextUrl(value: string | null) {
-	return value && value.startsWith('/') && !value.startsWith('//') ? value : '/profile';
+	if (!value || value === '/') return '/about';
+	return value.startsWith('/') && !value.startsWith('//') ? value : '/about';
 }
 
 export const load: PageServerLoad = async ({ cookies, url }) => {
