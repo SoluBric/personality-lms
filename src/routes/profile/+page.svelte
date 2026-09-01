@@ -1,4 +1,6 @@
 <script lang="ts">
+	import MemberPicker from '$lib/MemberPicker.svelte';
+	import ThemeControls from '$lib/ThemeControls.svelte';
 	import {
 		courses,
 		enneagramTypes,
@@ -10,19 +12,14 @@
 		territoryToPathway,
 		type Center,
 		type Course,
+		type CoursePathway,
 		type EnneagramType,
 		type Member,
 		type Recommendation,
 		type Skill,
 		type Territory
 	} from '$lib/demo-data';
-
-	const themes = [
-		{ id: 'violet', name: 'Violet', accent: '#a78bfa', soft: '#251d3b' },
-		{ id: 'teal', name: 'Teal', accent: '#2dd4bf', soft: '#102f2c' },
-		{ id: 'gold', name: 'Gold', accent: '#f6c85f', soft: '#332712' },
-		{ id: 'slate', name: 'Slate', accent: '#93c5fd', soft: '#172033' }
-	];
+	import { themeState, themeStyle } from '$lib/theme.svelte';
 
 	const connectionLines: Record<number, { growth: number; stress: number }> = {
 		1: { growth: 7, stress: 4 },
@@ -42,48 +39,61 @@
 		{ name: 'Head', types: [5, 6, 7], theme: 'Understanding, anticipation, planning and uncertainty.' }
 	];
 
-	const territoryCopy: Record<Territory, { label: string; compact: string; question: string; pathway: string }> = {
+	type HighlightedConnection = { from: number; to: number; kind: 'stress' | 'growth' };
+
+	const pathwayDescriptions: Record<CoursePathway, string> = {
+		strengths: 'Develop capabilities already associated with your strongest profile patterns, moving from natural preference toward more deliberate and advanced application.',
+		'stress-growth': 'Build flexibility under pressure by recognising stress patterns, accessing growth resources and developing general resilience practices.',
+		fortification: 'Broaden behavioural range by developing useful capabilities associated with type territories outside your strongest three patterns.',
+		team: 'Connect personal development to colleagues, relationship dynamics and shared team capability.'
+	};
+
+	const territoryCopy: Record<Territory, { label: string; compact: string; question: string }> = {
 		Strengths: {
 			label: 'Strengths',
-			compact: 'Build further on capabilities that already come naturally and turn them into more deliberate professional strengths.',
-			question: 'What already works well, and where could mastery look more intentional?',
-			pathway: 'Listening / influence / facilitation progression'
+			compact: pathwayDescriptions.strengths,
+			question: 'Pathway: Strengths'
 		},
 		'Stress & Growth': {
 			label: 'Stress & Growth',
-			compact: 'Recognise how your patterns shift under pressure and practise alternative responses that increase flexibility.',
-			question: 'What happens when pressure increases, and what response would create more range?',
-			pathway: 'Recognition -> regulation -> alternative responses'
+			compact: pathwayDescriptions['stress-growth'],
+			question: 'Pathway: Stress & Growth'
 		},
 		Fortification: {
 			label: 'Fortification',
-			compact: 'Build capabilities around recurring challenges, overuse patterns and blind spots so more responses are available.',
-			question: 'Where would additional capability give you more range?',
-			pathway: 'From Accommodation to Constructive Assertion'
+			compact: pathwayDescriptions.fortification,
+			question: 'Pathway: Fortification'
 		},
 		Team: {
 			label: 'Team',
-			compact: 'Use profile insight to improve collaboration, navigate differences and develop shared capability with colleagues.',
-			question: 'How can this understanding help you work more effectively with others?',
-			pathway: 'Shared team pathway'
+			compact: pathwayDescriptions.team,
+			question: 'Pathway: Team'
 		}
 	};
 
 	const territories = Object.keys(territoryCopy) as Territory[];
 	const priorityRank: Record<Recommendation['priority'], number> = { primary: 0, supporting: 1, explore: 2 };
+	const enneagramOrder = [9, 1, 2, 3, 4, 5, 6, 7, 8];
+	const enneagramConnections = [
+		[1, 4],
+		[4, 2],
+		[2, 8],
+		[8, 5],
+		[5, 7],
+		[7, 1],
+		[9, 3],
+		[3, 6],
+		[6, 9]
+	] as const;
 
 	let selectedMemberId = $state('emily');
-	let mode = $state<'dark' | 'light'>('dark');
-	let themeId = $state('violet');
 	let selectedWheelType = $state<number | null>(null);
 	let hoverWheelType = $state<number | null>(null);
 	let selectedPatternType = $state<number>(9);
 	let selectedLevel = $state(3);
-	let expandedKey = $state<string | null>('main-0');
 	let selectedLearningTerritory = $state<Territory | null>(null);
 
 	const selectedMember = $derived(members.find((member) => member.id === selectedMemberId) ?? members[0]);
-	const selectedTheme = $derived(themes.find((theme) => theme.id === themeId) ?? themes[0]);
 	const mainType = $derived(getType(selectedMember.primaryType));
 	const selectedWheelDetail = $derived(selectedWheelType ? getType(selectedWheelType) : null);
 	const rankedTypes = $derived([...enneagramTypes].sort((a, b) => selectedMember.scores[b.number] - selectedMember.scores[a.number]));
@@ -93,8 +103,11 @@
 	const connectionAnchor = $derived(selectedWheelDetail ?? mainType);
 	const growthType = $derived(getType(connectionLines[connectionAnchor.number].growth));
 	const stressType = $derived(getType(connectionLines[connectionAnchor.number].stress));
+	const primaryStressType = $derived(getType(connectionLines[selectedMember.primaryType].stress));
+	const primaryGrowthType = $derived(getType(connectionLines[selectedMember.primaryType].growth));
 	const currentTeam = $derived(teams.find((team) => team.id === selectedMember.teamId) ?? teams[0]);
 	const selectedTerritoryCopy = $derived(selectedLearningTerritory ? territoryCopy[selectedLearningTerritory] : null);
+	const selectedTerritoryPathway = $derived(selectedLearningTerritory ? territoryToPathway[selectedLearningTerritory] : null);
 	const selectedTerritoryCourses = $derived(selectedLearningTerritory ? getCoursesForTerritory(selectedLearningTerritory, selectedMember) : []);
 	const selectedTerritorySkills = $derived(getSkillsForCourses(selectedTerritoryCourses.map((item) => item.course)));
 	const selectedTerritoryStory = $derived(selectedLearningTerritory ? getTerritoryStory(selectedLearningTerritory, selectedMember) : '');
@@ -113,16 +126,13 @@
 		selectedWheelType = null;
 		selectedPatternType = nextMember.primaryType;
 		selectedLevel = 3;
-		expandedKey = 'main-0';
 		selectedLearningTerritory = null;
 	}
 
-	function wheelPosition(index: number, score: number, typeNumber: number) {
-		const angle = (-90 + index * 40) * (Math.PI / 180);
-		const profileBoost = selectedMember.profile.includes(typeNumber) ? 26 : 0;
-		const radius = 156 + (score / 100) * 34 + profileBoost;
-		const size = 54 + (score / 100) * 42 + (selectedMember.profile.includes(typeNumber) ? 18 : 0);
-		return `--x: ${Math.cos(angle) * radius}px; --y: ${Math.sin(angle) * radius}px; --node-size: ${size}px;`;
+	function wheelPosition(typeNumber: number) {
+		const angle = typeAngle(typeNumber) * (Math.PI / 180);
+		const radius = 206;
+		return `--x: ${Math.cos(angle) * radius}px; --y: ${Math.sin(angle) * radius}px;`;
 	}
 
 	function toggleWheelType(typeNumber: number) {
@@ -136,10 +146,6 @@
 
 	function ordinal(index: number) {
 		return ['1st', '2nd', '3rd'][index] ?? `${index + 1}th`;
-	}
-
-	function toggleExpanded(key: string) {
-		expandedKey = expandedKey === key ? null : key;
 	}
 
 	function profileTypeForCenter(center: Center) {
@@ -164,6 +170,49 @@
 
 	function isSkill(skill: Skill | undefined): skill is Skill {
 		return Boolean(skill);
+	}
+
+	function titleCase(value: string) {
+		return value.replace(/\b\w/g, (letter) => letter.toUpperCase());
+	}
+
+	function categoryType(course: Course) {
+		const match = course.category.match(/(?:type|stress|growth)-(\d+)/);
+		return match ? Number(match[1]) : undefined;
+	}
+
+	function courseMeta(course: Course) {
+		return `${titleCase(course.level)} · ${course.lengthMinutes} min`;
+	}
+
+	function courseUrl(course: Course) {
+		return `/courses/${course.id}?learner=${selectedMember.id}`;
+	}
+
+	function recommendationPriorityLabel(priority: Recommendation['priority']) {
+		if (priority === 'primary') return 'Top recommendation';
+		if (priority === 'supporting') return 'Recommended';
+		return 'Explore';
+	}
+
+	function courseCategoryContext(course: Course) {
+		const pathwayLabel = territoryCopy[pathwayTerritory(course.pathway)].label;
+		const typeNumber = categoryType(course);
+		if (typeNumber) return `${pathwayLabel} · Type ${typeNumber}`;
+		if (course.pathway === 'stress-growth') {
+			if (course.category.startsWith('stress-')) return `${pathwayLabel} · Pressure Practice`;
+			if (course.category.startsWith('growth-')) return `${pathwayLabel} · Growth Resource`;
+			return `${pathwayLabel} · Core Resilience`;
+		}
+		if (course.pathway === 'team') {
+			if (course.category.startsWith('center-')) return `${pathwayLabel} · ${titleCase(course.category.replace('center-', ''))} Center`;
+			return `${pathwayLabel} · General`;
+		}
+		return pathwayLabel;
+	}
+
+	function pathwayTerritory(pathway: CoursePathway): Territory {
+		return territories.find((territory) => territoryToPathway[territory] === pathway) ?? 'Strengths';
 	}
 
 	function skillsForType(typeNumber: number) {
@@ -200,15 +249,109 @@
 
 	function getTerritoryStory(territory: Territory, member = selectedMember) {
 		if (territory === 'Strengths') {
-			return `${member.name.split(' ')[0]}'s profile already shows ${mainType.capacity}. This direction asks what mastery could look like when that natural pattern becomes more deliberate, influential and transferable.`;
+			return `${member.name.split(' ')[0]}'s top three patterns are ${member.profile.map((typeNumber) => `Type ${typeNumber}`).join(', ')}. This pathway develops those familiar capacities into more deliberate, transferable practice.`;
 		}
 		if (territory === 'Stress & Growth') {
-			return `${member.name.split(' ')[0]} can use pressure signals from ${stressType.number} / ${stressType.name} and growth resources from ${growthType.number} / ${growthType.name} to practise more flexible responses.`;
+			return `${member.name.split(' ')[0]}'s Type ${member.primaryType} pattern can use pressure signals from Type ${primaryStressType.number} and growth resources from Type ${primaryGrowthType.number}, alongside general resilience practices.`;
 		}
 		if (territory === 'Fortification') {
-			return `This direction connects recurring challenges such as ${member.growthEdges.slice(0, 2).join(' and ').toLowerCase()} to trainable professional capabilities.`;
+			const fortificationTypes = enneagramTypes.map((type) => type.number).filter((typeNumber) => !member.profile.includes(typeNumber));
+			return `This pathway looks beyond ${member.profile.map((typeNumber) => `Type ${typeNumber}`).join(', ')} into useful complementary territories: ${fortificationTypes.map((typeNumber) => `Type ${typeNumber}`).join(', ')}.`;
 		}
-		return `${member.name.split(' ')[0]}'s team context adds relationship and shared decision patterns, especially through ${currentTeam.name}'s pathway: ${currentTeam.pathwayName}.`;
+		return `${member.name.split(' ')[0]}'s team context adds colleague patterns, relationship dynamics and shared courses from ${currentTeam.name}'s pathway: ${currentTeam.pathwayName}.`;
+	}
+
+	function whyThisMatters(territory: Territory) {
+		const pathway = territoryToPathway[territory];
+		const recommendedReasons = getCoursesForTerritory(territory)
+			.map((item) => item.recommendation?.reason ?? item.course.recommendationContext)
+			.filter(Boolean)
+			.slice(0, 3);
+		if (recommendedReasons.length) return recommendedReasons;
+		if (territory === 'Strengths') return selectedMember.profile.map((typeNumber) => `Type ${typeNumber} is part of ${selectedMember.name.split(' ')[0]}'s strongest profile pattern.`);
+		if (territory === 'Stress & Growth') return [`Primary Type ${selectedMember.primaryType} connects pressure to Type ${primaryStressType.number} and growth to Type ${primaryGrowthType.number}.`];
+		if (territory === 'Team') return currentTeam.priorities.slice(0, 3);
+		return courses.filter((course) => course.pathway === pathway).map((course) => course.recommendationContext).filter(Boolean).slice(0, 3);
+	}
+
+	function miniMapActiveZoneIds(territory: Territory) {
+		if (territory === 'Strengths') return selectedMember.profile;
+		if (territory === 'Stress & Growth') return [primaryStressType.number, primaryGrowthType.number];
+		if (territory === 'Fortification') return enneagramTypes.map((type) => type.number).filter((typeNumber) => !selectedMember.profile.includes(typeNumber));
+		return enneagramTypes.map((type) => type.number);
+	}
+
+	function miniMapActiveTypeIds(territory: Territory) {
+		if (territory === 'Stress & Growth') return [selectedMember.primaryType, primaryStressType.number, primaryGrowthType.number];
+		if (territory === 'Team') return enneagramTypes.map((type) => type.number);
+		return selectedMember.profile;
+	}
+
+	function miniMapHighlightedConnections(territory: Territory): HighlightedConnection[] {
+		if (territory !== 'Stress & Growth') return [];
+		return [
+			{ from: selectedMember.primaryType, to: primaryStressType.number, kind: 'stress' },
+			{ from: selectedMember.primaryType, to: primaryGrowthType.number, kind: 'growth' }
+		];
+	}
+
+	function typeAngle(typeNumber: number) {
+		const index = enneagramOrder.indexOf(typeNumber);
+		return -90 + index * 40;
+	}
+
+	function polarPoint(angleDeg: number, radius: number) {
+		const angle = angleDeg * (Math.PI / 180);
+		return { x: 50 + Math.cos(angle) * radius, y: 50 + Math.sin(angle) * radius };
+	}
+
+	function sectorPath(typeNumber: number) {
+		const center = typeAngle(typeNumber);
+		const start = polarPoint(center - 20, 43);
+		const end = polarPoint(center + 20, 43);
+		const innerEnd = polarPoint(center + 20, 15);
+		const innerStart = polarPoint(center - 20, 15);
+		return `M ${start.x} ${start.y} A 43 43 0 0 1 ${end.x} ${end.y} L ${innerEnd.x} ${innerEnd.y} A 15 15 0 0 0 ${innerStart.x} ${innerStart.y} Z`;
+	}
+
+	function overviewTypePoint(typeNumber: number) {
+		return polarPoint(typeAngle(typeNumber), 16);
+	}
+
+	function profileWheelPoint(typeNumber: number) {
+		return polarPoint(typeAngle(typeNumber), 50);
+	}
+
+	function profileConnectionClass(from: number, to: number) {
+		const primary = selectedMember.primaryType;
+		const stress = connectionLines[primary].stress;
+		const growth = connectionLines[primary].growth;
+		const connectsPrimary = from === primary || to === primary;
+		const other = from === primary ? to : from;
+		if (connectsPrimary && other === stress) return 'stress-line';
+		if (connectsPrimary && other === growth) return 'growth-line';
+		return '';
+	}
+
+	function overviewSectorClass(territory: Territory, typeNumber: number) {
+		return [
+			'overview-sector',
+			miniMapActiveZoneIds(territory).includes(typeNumber) ? 'active-zone' : '',
+			miniMapActiveTypeIds(territory).includes(typeNumber) ? 'active-type' : ''
+		].filter(Boolean).join(' ');
+	}
+
+	function overviewTypeDotClass(territory: Territory, typeNumber: number) {
+		return [
+			'overview-type-dot',
+			miniMapActiveZoneIds(territory).includes(typeNumber) ? 'active-zone' : '',
+			miniMapActiveTypeIds(territory).includes(typeNumber) ? 'active-type' : ''
+		].filter(Boolean).join(' ');
+	}
+
+	function overviewConnectionClass(territory: Territory, from: number, to: number) {
+		const highlight = miniMapHighlightedConnections(territory).find((connection) => (connection.from === from && connection.to === to) || (connection.from === to && connection.to === from));
+		return ['overview-map-line', highlight ? `connection-${highlight.kind}` : 'connection-inactive'].join(' ');
 	}
 
 	function getRelationshipWith(teammate: Member) {
@@ -254,7 +397,7 @@
 	<meta name="description" content="Profile page for assessment-informed development insight." />
 </svelte:head>
 
-<div class="app-shell" data-mode={mode} style={`--accent: ${selectedTheme.accent}; --accent-soft: ${selectedTheme.soft};`}>
+<div class="app-shell" data-mode={themeState.mode} style={themeStyle()}>
 	<header class="topbar">
 		<div class="user-mark">
 			<strong>{selectedMember.name}</strong>
@@ -262,34 +405,24 @@
 		</div>
 
 		<nav class="main-nav" aria-label="Primary">
-			<a href="/">Dashboard</a>
 			<a class="active" href="/profile">Profile</a>
 			<a href="/pathways">Pathways</a>
 			<a href="/team">Team</a>
+			<span class="nav-divider" aria-hidden="true"></span>
+			<a class="about-link" href="/about">About This Demo</a>
 		</nav>
 
-		<label class="member-select">
-			<span>For demo purposes</span>
-			<div class="select-shell">
-				<select bind:value={selectedMemberId} onchange={(event) => selectMember(event.currentTarget.value)}>
-					{#each members as member}
-						<option value={member.id}>{member.name} / {member.profile.join('-')}</option>
-					{/each}
-				</select>
-			</div>
-		</label>
+		<MemberPicker members={members} teams={teams} bind:value={selectedMemberId} onSelect={selectMember} />
 
-		<div class="header-controls">
-			<div class="segmented" aria-label="Color mode">
-				<button class:active={mode === 'dark'} type="button" onclick={() => (mode = 'dark')}>Dark</button>
-				<button class:active={mode === 'light'} type="button" onclick={() => (mode = 'light')}>Light</button>
+		<ThemeControls />
+
+		<details class="tablet-settings">
+			<summary aria-label="Open display settings"><span class="settings-glyph" aria-hidden="true"></span></summary>
+			<div class="tablet-settings-panel">
+				<MemberPicker members={members} teams={teams} bind:value={selectedMemberId} onSelect={selectMember} />
+				<ThemeControls />
 			</div>
-			<div class="theme-switcher" aria-label="Theme color">
-				{#each themes as theme}
-					<button class:active={theme.id === themeId} type="button" aria-label={`Use ${theme.name} theme`} title={theme.name} style={`--swatch: ${theme.accent};`} onclick={() => (themeId = theme.id)}></button>
-				{/each}
-			</div>
-		</div>
+		</details>
 	</header>
 
 	<main>
@@ -320,25 +453,33 @@
 
 				<div class="wheel-stage" aria-label="Interactive Enneagram score wheel">
 					<div class="wheel-rings"></div>
-					{#each enneagramTypes as type, index}
+					<svg class="profile-wheel-lines" viewBox="0 0 100 100" aria-hidden="true">
+						<circle cx="50" cy="50" r="50" />
+						{#each enneagramConnections as [from, to]}
+							{@const fromPoint = profileWheelPoint(from)}
+							{@const toPoint = profileWheelPoint(to)}
+							<line class={profileConnectionClass(from, to)} x1={fromPoint.x} y1={fromPoint.y} x2={toPoint.x} y2={toPoint.y} />
+						{/each}
+					</svg>
+					{#each enneagramTypes as type}
 						{@const score = selectedMember.scores[type.number]}
 						<button
 							class:primary={selectedMember.profile.includes(type.number)}
+							class:muted={!selectedMember.profile.includes(type.number)}
 							class:active={selectedWheelType === type.number || hoverWheelType === type.number}
 							class="wheel-node"
 							type="button"
-							style={`${wheelPosition(index, score, type.number)} --type-color: ${type.color};`}
+							style={`${wheelPosition(type.number)} --type-color: ${type.color};`}
 							onclick={() => toggleWheelType(type.number)}
 							aria-label={`${type.number} ${type.name}, score ${score}`}
 						>
 							<span>{type.number}</span>
-							<strong>{score}</strong>
 						</button>
 					{/each}
-					<div class="wheel-center">
-						<span>Profile</span>
+					<button class:active={selectedWheelType === null} class="wheel-center" type="button" onclick={() => (selectedWheelType = null)}>
+						<span>{selectedMember.profileName}</span>
 						<strong>{selectedMember.profile.join('-')}</strong>
-					</div>
+					</button>
 				</div>
 			</div>
 
@@ -402,9 +543,9 @@
 				<h2>{mainType.name}</h2>
 				<p>{mainType.description}</p>
 			</article>
-			{@render OperatingColumn('Healthy expression', mainType.healthyExpression, mainType.strengths, 'main')}
-			{@render OperatingColumn('When overused', mainType.overusedExpression, mainType.blindSpotsDetailed, 'overuse')}
-			{@render OperatingColumn('Growth direction', mainType.developmentQuestion, mainType.growthPractices, 'growth')}
+			{@render OperatingColumn('Healthy expression', mainType.healthyExpression, mainType.strengths)}
+			{@render OperatingColumn('When overused', mainType.overusedExpression, mainType.blindSpotsDetailed)}
+			{@render OperatingColumn('Growth direction', mainType.developmentQuestion, mainType.growthPractices)}
 		</section>
 
 		<section class="profile-bridge-grid">
@@ -420,7 +561,7 @@
 					<div class="connection-card growth-card">
 						<span>Growth resource</span>
 						<strong><i class="type-dot" style={`--type-color: ${growthType.color};`}>{growthType.number}</i>{growthType.name}</strong>
-						<p>{growthType.healthyExpression}</p>
+						<p>Useful capabilities from this connection can broaden {connectionAnchor.number}'s response range without asking the person to become another type.</p>
 						<div class="chip-list">
 							{#each growthType.growthPractices as practice}<span>{practice}</span>{/each}
 						</div>
@@ -433,11 +574,12 @@
 					</div>
 
 					<div class="connection-card stress-card">
-						<span>Pressure signal</span>
+						<span>Pressure direction</span>
 						<strong><i class="type-dot" style={`--type-color: ${stressType.color};`}>{stressType.number}</i>{stressType.name}</strong>
-						<p>{stressType.overusedExpression}</p>
+						<p>Under sustained pressure, signals associated with this connection may become more prominent. Notice the shift early rather than treating it as a fixed identity.</p>
 						<div class="chip-list">
-							{#each stressType.strengths as strength}<span>{strength}</span>{/each}
+							<span>{stressType.overusedExpression}</span>
+							<span>{stressType.developmentQuestion}</span>
 						</div>
 					</div>
 				</div>
@@ -563,6 +705,24 @@
 					<nav class="territory-rail" aria-label="Development territories">
 						{#each territories as territory}
 							<button class:active={selectedLearningTerritory === territory} type="button" onclick={() => (selectedLearningTerritory = territory)}>
+								<div class="overview-map-preview compact-preview" aria-hidden="true">
+									<svg viewBox="0 0 100 100" role="img">
+										<circle class="overview-ring outer" cx="50" cy="50" r="43" />
+										<circle class="overview-ring hub" cx="50" cy="50" r="15" />
+										{#each enneagramTypes as type}
+											<path class={overviewSectorClass(territory, type.number)} d={sectorPath(type.number)} style={`--sector-color: ${type.color};`} />
+										{/each}
+										{#each enneagramConnections as [from, to]}
+											{@const fromPoint = overviewTypePoint(from)}
+											{@const toPoint = overviewTypePoint(to)}
+											<line class={overviewConnectionClass(territory, from, to)} x1={fromPoint.x} y1={fromPoint.y} x2={toPoint.x} y2={toPoint.y} />
+										{/each}
+										{#each enneagramTypes as type}
+											{@const point = overviewTypePoint(type.number)}
+											<circle class={overviewTypeDotClass(territory, type.number)} cx={point.x} cy={point.y} r="3.4" style={`--sector-color: ${type.color};`} />
+										{/each}
+									</svg>
+								</div>
 								<strong>{territoryCopy[territory].label}</strong>
 								<span>{getCoursesForTerritory(territory).length} suggestions</span>
 							</button>
@@ -571,15 +731,21 @@
 					</nav>
 
 					<article class="learning-detail">
-						<p class="eyebrow">{selectedTerritoryCopy.label}</p>
-						<h3>{selectedTerritoryCopy.question}</h3>
+						<div class="learning-detail-topline">
+							<div>
+								<p class="eyebrow">Pathway</p>
+								<h3>{selectedTerritoryCopy.label}</h3>
+							</div>
+							<a href={`/pathways?area=${selectedTerritoryPathway ?? 'All'}&view=map#development-map`}>View Map</a>
+						</div>
+						<p>{selectedTerritoryPathway ? pathwayDescriptions[selectedTerritoryPathway] : selectedTerritoryCopy.compact}</p>
 						<p>{selectedTerritoryStory}</p>
 
 						<div class="learning-subgrid">
 							<div>
 								<span>Why this matters</span>
 								<ul>
-									{#each selectedLearningTerritory === 'Team' ? currentTeam.priorities : selectedMember.growthEdges as reason}
+									{#each whyThisMatters(selectedLearningTerritory) as reason}
 										<li>{reason}</li>
 									{/each}
 								</ul>
@@ -596,7 +762,7 @@
 
 						<div class="pathway-strip">
 							<span>Pathway / learning route</span>
-							<strong>{selectedLearningTerritory === 'Team' ? currentTeam.pathwayName : selectedTerritoryCopy.pathway}</strong>
+							<strong>{selectedTerritoryCopy.label}</strong>
 						</div>
 
 						<div class="learning-course-list">
@@ -606,21 +772,25 @@
 									<div>
 										<div class="course-row-top">
 											<h4>{item.course.name}</h4>
-											<span>{item.course.level} / {item.course.lengthMinutes} min</span>
+											<span>{courseMeta(item.course)}</span>
 										</div>
+										<span class="course-context-label">{courseCategoryContext(item.course)}</span>
 										<p>{item.course.description}</p>
 										<div class="skill-tags">
 											{#if getSkill(item.course.develops[0])}
 												<span>{getSkill(item.course.develops[0])?.name}</span>
 											{/if}
-											{#each item.course.develops.slice(1).map(getSkill).filter(isSkill) as skill}
+											{#each item.course.develops.slice(1, 3).map(getSkill).filter(isSkill) as skill}
 												<span>{skill.name}</span>
 											{/each}
 										</div>
 										<div class="recommendation-reason">
-											<span>{item.recommendation?.priority ?? item.course.pathway}</span>
+											<span>{item.recommendation ? recommendationPriorityLabel(item.recommendation.priority) : courseCategoryContext(item.course)}</span>
 											<strong>{item.recommendation?.reason ?? (item.course.pathway === 'team' ? 'Part of the shared team learning route.' : 'Included because it supports this v3 pathway and category.')}</strong>
 										</div>
+										<a class="inline-course-action" href={courseUrl(item.course)}>
+											{item.recommendation ? 'View course' : 'Open course'}
+										</a>
 									</div>
 								</article>
 							{/each}
@@ -632,15 +802,34 @@
 					{#each territories as territory}
 						{@const territoryCourses = getCoursesForTerritory(territory).slice(0, 3)}
 						<button type="button" onclick={() => (selectedLearningTerritory = territory)}>
-							<p class="eyebrow">{territoryCopy[territory].label}</p>
-							<h3>{territoryCopy[territory].question}</h3>
+							<div class="overview-map-preview profile-pathway-preview" aria-hidden="true">
+								<svg viewBox="0 0 100 100" role="img">
+									<circle class="overview-ring outer" cx="50" cy="50" r="43" />
+									<circle class="overview-ring hub" cx="50" cy="50" r="15" />
+									{#each enneagramTypes as type}
+										<path class={overviewSectorClass(territory, type.number)} d={sectorPath(type.number)} style={`--sector-color: ${type.color};`} />
+									{/each}
+									{#each enneagramConnections as [from, to]}
+										{@const fromPoint = overviewTypePoint(from)}
+										{@const toPoint = overviewTypePoint(to)}
+										<line class={overviewConnectionClass(territory, from, to)} x1={fromPoint.x} y1={fromPoint.y} x2={toPoint.x} y2={toPoint.y} />
+									{/each}
+									{#each enneagramTypes as type}
+										{@const point = overviewTypePoint(type.number)}
+										<circle class={overviewTypeDotClass(territory, type.number)} cx={point.x} cy={point.y} r="3.4" style={`--sector-color: ${type.color};`} />
+									{/each}
+								</svg>
+							</div>
+							<p class="eyebrow">Pathway</p>
+							<h3>{territoryCopy[territory].label}</h3>
 							<p>{territoryCopy[territory].compact}</p>
-							<div>
+							<small>{getTerritoryStory(territory)}</small>
+							<div class="territory-course-pills">
 								{#each territoryCourses as item}
 									<span>{item.course.name}</span>
 								{/each}
 							</div>
-							<strong>Explore</strong>
+							<strong>View pathway</strong>
 						</button>
 					{/each}
 				</div>
@@ -719,20 +908,15 @@
 	</main>
 </div>
 
-{#snippet OperatingColumn(title: string, intro: string, items: string[], kind: string)}
+{#snippet OperatingColumn(title: string, intro: string, items: string[])}
 	<article class="panel">
 		<p class="eyebrow">{title}</p>
 		<h2>{intro}</h2>
 		<div class="expand-list">
-			{#each items as item, index}
-				{@const key = `${kind}-${index}`}
-				<button class:open={expandedKey === key} type="button" onclick={() => toggleExpanded(key)}>
+			{#each items as item}
+				<div class="static-insight-row">
 					<strong>{item}</strong>
-					<i aria-hidden="true"></i>
-					{#if expandedKey === key}
-						<span>This connects to {mainType.name}'s broader capacity for {mainType.capacity}, and can later link into skills, reflection prompts and pathway recommendations.</span>
-					{/if}
-				</button>
+				</div>
 			{/each}
 		</div>
 	</article>

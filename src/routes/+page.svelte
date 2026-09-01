@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { members } from '$lib/demo-data';
+	import { themeState, themeStyle } from '$lib/theme.svelte';
 
 	const selectedMember = members[0];
 </script>
@@ -9,7 +10,7 @@
 	<meta name="description" content="Dashboard placeholder for the assessment-informed learning demo." />
 </svelte:head>
 
-<div class="app-shell" data-mode="dark" style="--accent: #a78bfa; --accent-soft: #251d3b;">
+<div class="app-shell" data-mode={themeState.mode} style={themeStyle()}>
 	<header class="topbar dashboard-topbar">
 		<div class="user-mark">
 			<strong>{selectedMember.name}</strong>
@@ -17,10 +18,11 @@
 		</div>
 
 		<nav class="main-nav" aria-label="Primary">
-			<a class="active" href="/">Dashboard</a>
-			<a href="/profile">Profile</a>
+			<a class="active" href="/profile">Profile</a>
 			<a href="/pathways">Pathways</a>
 			<a href="/team">Team</a>
+			<span class="nav-divider" aria-hidden="true"></span>
+			<a class="about-link" href="/about">About This Demo</a>
 		</nav>
 	</header>
 

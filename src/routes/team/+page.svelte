@@ -1,17 +1,23 @@
 <script lang="ts">
+	import MemberPicker from '$lib/MemberPicker.svelte';
+	import ThemeControls from '$lib/ThemeControls.svelte';
 	import {
 		courses,
 		enneagramTypes,
 		members,
 		recommendations,
 		relationships,
+		skills,
 		teams,
 		type Course,
 		type EnneagramType,
 		type Member,
 		type Relationship,
+		type Recommendation,
+		type Skill,
 		type Team
 	} from '$lib/demo-data';
+	import { themeState, themeStyle } from '$lib/theme.svelte';
 
 	type Lens = 'people' | 'relationships' | 'strengths' | 'watch' | 'development';
 
@@ -22,13 +28,6 @@
 		riskId?: string;
 		courseIds?: string[];
 	};
-
-	const themes = [
-		{ id: 'violet', name: 'Violet', accent: '#a78bfa', soft: '#251d3b' },
-		{ id: 'teal', name: 'Teal', accent: '#2dd4bf', soft: '#102f2c' },
-		{ id: 'gold', name: 'Gold', accent: '#f6c85f', soft: '#332712' },
-		{ id: 'slate', name: 'Slate', accent: '#93c5fd', soft: '#172033' }
-	];
 
 	const nodePositions: Record<string, { x: number; y: number }> = {
 		emily: { x: 50, y: 22 },
@@ -98,25 +97,14 @@
 		}
 	};
 
-	const lensOptions: { id: Lens; label: string }[] = [
-		{ id: 'people', label: 'People' },
-		{ id: 'relationships', label: 'Relationships' },
-		{ id: 'strengths', label: 'Team Strengths' },
-		{ id: 'watch', label: 'Areas to Watch' },
-		{ id: 'development', label: 'Development' }
-	];
-
 	let selectedMemberId = $state('emily');
 	let selectedColleagueId = $state('james');
 	let perspectiveMemberId = $state('emily');
-	let mode = $state<'dark' | 'light'>('dark');
-	let themeId = $state('violet');
 	let lens = $state<Lens>('relationships');
 	let selectedCoverageId = $state('Relational awareness');
 	let selectedWatchId = $state('Harmony versus productive disagreement');
 
 	const selectedMember = $derived(members.find((member) => member.id === selectedMemberId) ?? members[0]);
-	const selectedTheme = $derived(themes.find((theme) => theme.id === themeId) ?? themes[0]);
 	const currentTeam = $derived(getTeam(selectedMember.teamId));
 	const teamMembers = $derived(currentTeam.memberIds.map(getMember).filter(isMember));
 	const colleagues = $derived(teamMembers.filter((member) => member.id !== selectedMember.id));
@@ -170,6 +158,50 @@
 
 	function isCourse(course: Course | undefined): course is Course {
 		return Boolean(course);
+	}
+
+	function getSkill(skillId: string) {
+		return skills.find((skill) => skill.id === skillId);
+	}
+
+	function isSkill(skill: Skill | undefined): skill is Skill {
+		return Boolean(skill);
+	}
+
+	function titleCase(value: string) {
+		return value.replace(/-/g, ' ').replace(/\b\w/g, (letter) => letter.toUpperCase());
+	}
+
+	function categoryType(course: Course) {
+		const match = course.category.match(/(?:type|stress|growth)-(\d+)/);
+		return match ? Number(match[1]) : undefined;
+	}
+
+	function teamCourseContext(course: Course) {
+		const typeNumber = categoryType(course);
+		if (typeNumber) return `Team · Type ${typeNumber}`;
+		if (course.category.startsWith('center-')) return `Team · ${titleCase(course.category.replace('center-', ''))} Center`;
+		return 'Team · General';
+	}
+
+	function courseMeta(course: Course) {
+		return `${titleCase(course.level)} · ${course.lengthMinutes} min`;
+	}
+
+	function courseSkills(course: Course) {
+		return course.develops.map(getSkill).filter(isSkill).slice(0, 3);
+	}
+
+	function recommendationForCourse(course: Course): Recommendation | undefined {
+		return recommendations.find((recommendation) => recommendation.learnerId === selectedMember.id && recommendation.courseId === course.id);
+	}
+
+	function courseRelevance(course: Course, relationship?: Relationship) {
+		return recommendationForCourse(course)?.reason ?? course.recommendationContext ?? (relationship ? `Relevant to ${relationship.theme.toLowerCase()}.` : '');
+	}
+
+	function courseUrl(course: Course) {
+		return `/courses/${course.id}?learner=${selectedMember.id}`;
 	}
 
 	function getRelationship(firstId: string, secondId: string, teamId: string) {
@@ -235,7 +267,7 @@
 	<meta name="description" content="Team relationship and shared development view." />
 </svelte:head>
 
-<div class="app-shell" data-mode={mode} style={`--accent: ${selectedTheme.accent}; --accent-soft: ${selectedTheme.soft};`}>
+<div class="app-shell" data-mode={themeState.mode} style={themeStyle()}>
 	<header class="topbar">
 		<div class="user-mark">
 			<strong>{selectedMember.name}</strong>
@@ -243,34 +275,24 @@
 		</div>
 
 		<nav class="main-nav" aria-label="Primary">
-			<a href="/">Dashboard</a>
 			<a href="/profile">Profile</a>
 			<a href="/pathways">Pathways</a>
 			<a class="active" href="/team">Team</a>
+			<span class="nav-divider" aria-hidden="true"></span>
+			<a class="about-link" href="/about">About This Demo</a>
 		</nav>
 
-		<label class="member-select">
-			<span>For demo purposes</span>
-			<div class="select-shell">
-				<select bind:value={selectedMemberId} onchange={(event) => selectMember(event.currentTarget.value)}>
-					{#each members as member}
-						<option value={member.id}>{member.name} / {member.profile.join('-')}</option>
-					{/each}
-				</select>
-			</div>
-		</label>
+		<MemberPicker members={members} teams={teams} bind:value={selectedMemberId} onSelect={selectMember} />
 
-		<div class="header-controls">
-			<div class="segmented" aria-label="Color mode">
-				<button class:active={mode === 'dark'} type="button" onclick={() => (mode = 'dark')}>Dark</button>
-				<button class:active={mode === 'light'} type="button" onclick={() => (mode = 'light')}>Light</button>
+		<ThemeControls />
+
+		<details class="tablet-settings">
+			<summary aria-label="Open display settings"><span class="settings-glyph" aria-hidden="true"></span></summary>
+			<div class="tablet-settings-panel">
+				<MemberPicker members={members} teams={teams} bind:value={selectedMemberId} onSelect={selectMember} />
+				<ThemeControls />
 			</div>
-			<div class="theme-switcher" aria-label="Theme color">
-				{#each themes as theme}
-					<button class:active={theme.id === themeId} type="button" aria-label={`Use ${theme.name} theme`} title={theme.name} style={`--swatch: ${theme.accent};`} onclick={() => (themeId = theme.id)}></button>
-				{/each}
-			</div>
-		</div>
+		</details>
 	</header>
 
 	<main>
@@ -291,13 +313,8 @@
 			<div class="panel-heading map-heading">
 				<div>
 					<p class="eyebrow">Team system</p>
-					<h2>{lensOptions.find((option) => option.id === lens)?.label}</h2>
+					<h2>Development</h2>
 				</div>
-				<nav class="map-filter" aria-label="Team view lens">
-					{#each lensOptions as option}
-						<button class:active={lens === option.id} type="button" onclick={() => (lens = option.id)}>{option.label}</button>
-					{/each}
-				</nav>
 			</div>
 
 			<div class="team-map-layout">
@@ -382,8 +399,15 @@
 							<div class="context-course">
 								<span>Contextual learning</span>
 								<strong>{primarySharedCourse.name}</strong>
+								<small>{teamCourseContext(primarySharedCourse)} · {courseMeta(primarySharedCourse)}</small>
 								<p>{primarySharedCourse.description}</p>
-								<small>This appears here because the relationship theme is {selectedRelationship.theme.toLowerCase()}.</small>
+								<div class="skill-tags compact-tags">
+									{#each courseSkills(primarySharedCourse) as skill}
+										<span>{skill.name}</span>
+									{/each}
+								</div>
+								<small>Why this is relevant here: {courseRelevance(primarySharedCourse, selectedRelationship)}</small>
+								<a class="inline-course-action" href={courseUrl(primarySharedCourse)}>View course</a>
 							</div>
 						{/if}
 					{:else}
@@ -442,7 +466,10 @@
 						<strong>{selectedWatch.description}</strong>
 						<div class="mini-list">
 							{#each selectedWatch.courseIds?.map(getCourse).filter(isCourse) ?? [] as course}
-								<button type="button">{course.name}</button>
+								<a href={courseUrl(course)}>
+									<strong>{course.name}</strong>
+									<span>{teamCourseContext(course)} · {courseMeta(course)}</span>
+								</a>
 							{/each}
 						</div>
 					</div>
@@ -465,12 +492,19 @@
 						<div>
 							<small>Stage {index + 1}</small>
 							<h3>{course.name}</h3>
+							<small>{teamCourseContext(course)} · {courseMeta(course)}</small>
 							<p>{stageCopy[currentTeam.id]?.[course.id] ?? course.description}</p>
+							<div class="skill-tags compact-tags">
+								{#each courseSkills(course) as skill}
+									<span>{skill.name}</span>
+								{/each}
+							</div>
 							<div class="pathway-badges">
 								{#if recommendations.some((recommendation) => recommendation.learnerId === selectedMember.id && recommendation.courseId === course.id)}<span>Personal</span>{/if}
 								{#if sharedCourses.some((sharedCourse) => sharedCourse.id === course.id)}<span>Relationship</span>{/if}
 								<span>Team</span>
 							</div>
+							<a class="inline-course-action" href={courseUrl(course)}>View course</a>
 						</div>
 					</article>
 				{/each}
