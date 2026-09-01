@@ -466,7 +466,7 @@
 						<button
 							class:primary={selectedMember.profile.includes(type.number)}
 							class:muted={!selectedMember.profile.includes(type.number)}
-							class:active={selectedWheelType === type.number || hoverWheelType === type.number}
+							class:active={selectedWheelType === type.number || hoverWheelType === type.number || (selectedWheelType === null && selectedMember.profile.includes(type.number))}
 							class="wheel-node"
 							type="button"
 							style={`${wheelPosition(type.number)} --type-color: ${type.color};`}

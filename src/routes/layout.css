@@ -492,24 +492,19 @@ main {
 	width: min(560px, 100%);
 }
 
-.login-panel,
-.about-card {
+.login-panel {
 	border: 1px solid var(--line);
 	border-radius: 8px;
 	background:
 		linear-gradient(145deg, color-mix(in srgb, var(--accent-soft) 24%, transparent), transparent),
 		color-mix(in srgb, var(--panel-strong) 94%, transparent);
 	box-shadow: 0 18px 60px var(--shadow);
-}
-
-.login-panel {
 	display: grid;
 	gap: 18px;
 	padding: 32px;
 }
 
-.login-panel h1,
-.about-hero h1 {
+.login-panel h1 {
 	margin: 0;
 	font-size: clamp(42px, 7vw, 76px);
 	font-weight: 450;
@@ -517,9 +512,7 @@ main {
 	line-height: 0.96;
 }
 
-.login-panel p,
-.about-hero p,
-.about-card p {
+.login-panel p {
 	margin: 0;
 	color: var(--muted);
 	font-size: 18px;
@@ -576,31 +569,238 @@ main {
 	color: var(--text);
 }
 
-.about-hero {
+.about-layout {
 	display: grid;
-	grid-template-columns: minmax(0, 920px);
-	min-height: 420px;
-	align-content: center;
-	padding: 36px;
-}
-
-.about-grid {
-	display: grid;
-	grid-template-columns: repeat(2, minmax(0, 1fr));
+	grid-template-columns: 280px minmax(0, 1fr);
 	gap: 18px;
+	align-items: start;
 }
 
-.about-card {
+.about-sidebar {
+	position: sticky;
+	top: 18px;
 	display: grid;
-	gap: 12px;
-	min-height: 220px;
-	padding: 24px;
+	gap: 18px;
+	padding: 20px;
+	border: 1px solid var(--line);
+	border-radius: 8px;
+	background:
+		linear-gradient(145deg, color-mix(in srgb, var(--accent-soft) 28%, transparent), transparent),
+		color-mix(in srgb, var(--panel-strong) 92%, transparent);
+	box-shadow: 0 18px 60px var(--shadow);
 }
 
-.about-card h2 {
+.about-sidebar nav {
+	display: grid;
+	gap: 8px;
+}
+
+.about-sidebar a {
+	padding: 12px 13px;
+	border: 1px solid transparent;
+	border-radius: 8px;
+	color: var(--muted);
+	font-size: 12px;
+	font-weight: 900;
+	letter-spacing: 0.1em;
+	text-decoration: none;
+	text-transform: uppercase;
+}
+
+.about-sidebar a.active,
+.about-sidebar a:hover {
+	border-color: color-mix(in srgb, var(--accent) 52%, var(--line));
+	background: color-mix(in srgb, var(--accent-soft) 58%, transparent);
+	color: var(--text);
+}
+
+.about-display {
+	display: grid;
+	gap: 16px;
+	padding: 16px;
+}
+
+.about-section {
+	scroll-margin-top: 24px;
+	display: grid;
+	gap: 18px;
+	padding: clamp(22px, 3vw, 34px);
+	border: 1px solid var(--line);
+	border-radius: 8px;
+	background:
+		linear-gradient(145deg, color-mix(in srgb, var(--accent-soft) 18%, transparent), transparent 68%),
+		color-mix(in srgb, var(--bg-soft) 84%, transparent);
+}
+
+.about-section h1 {
 	margin: 0;
-	font-size: 30px;
-	line-height: 1.06;
+	font-size: clamp(34px, 5vw, 64px);
+	font-weight: 480;
+	line-height: 0.98;
+}
+
+.about-section p,
+.about-section li {
+	margin: 0;
+	color: var(--muted);
+	font-size: 18px;
+	line-height: 1.5;
+}
+
+.about-instruction {
+	display: grid;
+	grid-template-columns: minmax(220px, 310px) minmax(0, 1fr);
+	gap: 18px;
+	align-items: center;
+}
+
+.about-picker-shell,
+.about-theme-shell,
+.about-note,
+.about-accordion details {
+	border: 1px solid color-mix(in srgb, var(--accent) 32%, var(--line));
+	border-radius: 8px;
+	background:
+		linear-gradient(145deg, color-mix(in srgb, var(--accent-soft) 34%, transparent), transparent),
+		color-mix(in srgb, var(--panel-strong) 88%, transparent);
+}
+
+.about-picker-shell {
+	position: relative;
+	display: grid;
+	gap: 4px;
+	min-height: 92px;
+	padding: 14px 42px 14px 16px;
+}
+
+.about-picker-shell span {
+	color: var(--muted);
+	font-size: 12px;
+}
+
+.about-picker-shell strong {
+	color: var(--text);
+	font-size: 17px;
+}
+
+.about-picker-shell small {
+	color: var(--muted);
+	font-size: 13px;
+	font-weight: 800;
+}
+
+.about-picker-shell i {
+	position: absolute;
+	right: 18px;
+	top: 50%;
+	width: 10px;
+	height: 10px;
+	border-right: 2px solid var(--muted);
+	border-bottom: 2px solid var(--muted);
+	transform: translateY(-70%) rotate(45deg);
+}
+
+.about-theme-shell {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	align-items: center;
+	padding: 12px;
+}
+
+.about-theme-shell div {
+	display: flex;
+	gap: 6px;
+	padding: 5px;
+	border: 1px solid var(--line);
+	border-radius: 8px;
+}
+
+.about-theme-shell b {
+	min-width: 58px;
+	padding: 8px 10px;
+	border-radius: 6px;
+	background: var(--accent);
+	color: #101413;
+	text-align: center;
+}
+
+.about-theme-shell b + b {
+	background: transparent;
+	color: var(--muted);
+}
+
+.about-theme-shell span {
+	width: 28px;
+	height: 28px;
+	border: 2px solid var(--line);
+	border-radius: 999px;
+	background: var(--accent);
+}
+
+.about-theme-shell span:nth-of-type(1) {
+	background: #2dd4bf;
+}
+
+.about-theme-shell span:nth-of-type(2) {
+	background: #f6c85f;
+}
+
+.about-theme-shell span:nth-of-type(3) {
+	background: #93c5fd;
+}
+
+.about-theme-shell span:nth-of-type(4) {
+	background: #a78bfa;
+}
+
+.about-note {
+	display: grid;
+	gap: 10px;
+	padding: 16px;
+}
+
+.about-note strong {
+	color: var(--text);
+}
+
+.about-note ul,
+.about-accordion ul {
+	margin: 0;
+	padding-left: 22px;
+}
+
+.about-accordion {
+	display: grid;
+	gap: 10px;
+}
+
+.about-accordion details {
+	padding: 0;
+	overflow: hidden;
+}
+
+.about-accordion summary {
+	padding: 16px;
+	color: var(--text);
+	cursor: pointer;
+	font-size: 19px;
+	font-weight: 900;
+	list-style-position: inside;
+}
+
+.about-accordion details[open] summary {
+	border-bottom: 1px solid var(--line);
+	background: color-mix(in srgb, var(--accent-soft) 48%, transparent);
+}
+
+.about-accordion details > p,
+.about-accordion details > ul {
+	padding: 0 18px 18px;
+}
+
+.about-accordion details > p:first-of-type {
+	padding-top: 18px;
 }
 
 main {
@@ -621,7 +821,8 @@ main {
 .app-shell[data-mode='light'] .panel,
 .app-shell[data-mode='light'] .overview-hero,
 .app-shell[data-mode='light'] .login-panel,
-.app-shell[data-mode='light'] .about-card {
+.app-shell[data-mode='light'] .about-sidebar,
+.app-shell[data-mode='light'] .about-display {
 	background:
 		linear-gradient(145deg, color-mix(in srgb, var(--accent-soft) 20%, transparent), transparent 68%),
 		color-mix(in srgb, var(--panel-strong) 96%, transparent);
@@ -638,8 +839,56 @@ main {
 .app-shell[data-mode='light'] .trifix-strip button,
 .app-shell[data-mode='light'] .trifix-bubble,
 .app-shell[data-mode='light'] .general-course-card,
-.app-shell[data-mode='light'] .login-form input {
+.app-shell[data-mode='light'] .login-form input,
+.app-shell[data-mode='light'] .team-kpis > div,
+.app-shell[data-mode='light'] .relationship-panel,
+.app-shell[data-mode='light'] .relation-grid > div,
+.app-shell[data-mode='light'] .relationship-focus,
+.app-shell[data-mode='light'] .friction-loop,
+.app-shell[data-mode='light'] .context-course,
+.app-shell[data-mode='light'] .coverage-detail,
+.app-shell[data-mode='light'] .team-pathway-line article,
+.app-shell[data-mode='light'] .about-section,
+.app-shell[data-mode='light'] .about-picker-shell,
+.app-shell[data-mode='light'] .about-theme-shell,
+.app-shell[data-mode='light'] .about-note,
+.app-shell[data-mode='light'] .about-accordion details {
 	background: color-mix(in srgb, #fffefa 88%, var(--accent-soft));
+}
+
+.app-shell[data-mode='light'] .profile-type-card,
+.app-shell[data-mode='light'] .profile-blend-card,
+.app-shell[data-mode='light'] .team-pathway-line article,
+.app-shell[data-mode='light'] .relationship-panel,
+.app-shell[data-mode='light'] .team-network {
+	background:
+		linear-gradient(145deg, color-mix(in srgb, var(--accent-soft) 38%, transparent), transparent 72%),
+		color-mix(in srgb, #fffdf5 90%, var(--accent-soft));
+}
+
+.app-shell[data-mode='light'] .level-ladder button:nth-child(-n + 3) {
+	background:
+		linear-gradient(180deg, rgba(34, 197, 94, 0.22), rgba(34, 197, 94, 0.04)),
+		color-mix(in srgb, #f4fff7 86%, var(--accent-soft));
+}
+
+.app-shell[data-mode='light'] .level-ladder button:nth-child(n + 4):nth-child(-n + 6) {
+	background:
+		linear-gradient(180deg, rgba(246, 200, 95, 0.28), rgba(246, 200, 95, 0.06)),
+		color-mix(in srgb, #fff8df 86%, var(--accent-soft));
+}
+
+.app-shell[data-mode='light'] .level-ladder button:nth-child(n + 7) {
+	background:
+		linear-gradient(180deg, rgba(239, 103, 91, 0.2), rgba(239, 103, 91, 0.04)),
+		color-mix(in srgb, #fff2ee 86%, var(--accent-soft));
+}
+
+.app-shell[data-mode='light'] .level-ladder button.active,
+.app-shell[data-mode='light'] .level-ladder button:hover {
+	background:
+		linear-gradient(180deg, color-mix(in srgb, var(--accent-soft) 74%, transparent), transparent),
+		color-mix(in srgb, #fff7dd 86%, var(--accent-soft));
 }
 
 .app-shell[data-mode='light'] .segmented button.active,
@@ -6066,8 +6315,13 @@ li {
 		grid-template-columns: 1fr;
 	}
 
-	.about-grid {
+	.about-layout,
+	.about-instruction {
 		grid-template-columns: 1fr;
+	}
+
+	.about-sidebar {
+		position: static;
 	}
 
 	.development-map {

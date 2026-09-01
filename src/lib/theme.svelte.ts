@@ -4,14 +4,6 @@ export type ColorMode = 'dark' | 'light';
 
 export const themes = [
 	{
-		id: 'violet',
-		name: 'Violet',
-		accent: '#a78bfa',
-		soft: '#251d3b',
-		lightAccent: '#7c3aed',
-		lightSoft: '#efe7ff'
-	},
-	{
 		id: 'teal',
 		name: 'Teal',
 		accent: '#2dd4bf',
@@ -34,6 +26,14 @@ export const themes = [
 		soft: '#172033',
 		lightAccent: '#2563eb',
 		lightSoft: '#e4efff'
+	},
+	{
+		id: 'violet',
+		name: 'Violet',
+		accent: '#a78bfa',
+		soft: '#251d3b',
+		lightAccent: '#7c3aed',
+		lightSoft: '#efe7ff'
 	}
 ] as const;
 

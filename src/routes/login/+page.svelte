@@ -12,9 +12,7 @@
 <div class="app-shell login-shell" data-mode={themeState.mode} style={themeStyle()}>
 	<main class="login-main">
 		<section class="login-panel">
-			<p class="eyebrow">Private demo</p>
-			<h1>Access required</h1>
-			<p>This demo is protected so only invited viewers can open the app.</p>
+			<h1>Access code required</h1>
 
 			<form method="POST" class="login-form">
 				<label for="password">Access code</label>
@@ -22,12 +20,8 @@
 				{#if form?.message}
 					<p class="form-error">{form.message}</p>
 				{/if}
-				<button type="submit" disabled={!data.protectionEnabled}>Enter demo</button>
+				<button type="submit" disabled={!data.protectionEnabled}>Submit code</button>
 			</form>
-
-			{#if !data.protectionEnabled}
-				<p class="login-note">Set <code>DEMO_ACCESS_PASSWORD</code> in Cloudflare Pages to enable the gate.</p>
-			{/if}
 		</section>
 	</main>
 </div>
