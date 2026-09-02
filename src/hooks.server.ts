@@ -34,8 +34,16 @@ function redirectResponse(location: string) {
 export const handle: Handle = async ({ event, resolve }) => {
 	const password = accessPassword();
 
-	if ((!password && !accessProtectionRequired()) || isPublicPath(event.url.pathname)) {
+	if (isPublicPath(event.url.pathname)) {
 		return withSecurityHeaders(await resolve(event));
+	}
+
+	if (!password && !accessProtectionRequired()) {
+		return withSecurityHeaders(await resolve(event));
+	}
+
+	if (!password) {
+		return withSecurityHeaders(new Response('Access protection is not configured.', { status: 503 }));
 	}
 
 	const expectedToken = await accessToken(password);

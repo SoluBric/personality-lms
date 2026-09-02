@@ -1,6 +1,7 @@
 <script lang="ts">
 	import MemberPicker from '$lib/MemberPicker.svelte';
 	import ThemeControls from '$lib/ThemeControls.svelte';
+	import { courseCategoryLabel, selectedDemoLearner, setSelectedDemoLearner } from '$lib/demo-routing.svelte';
 	import {
 		courses,
 		enneagramTypes,
@@ -86,12 +87,13 @@
 		[6, 9]
 	] as const;
 
-	let selectedMemberId = $state('emily');
+	let selectedMemberId = $derived(selectedDemoLearner.id);
 	let selectedWheelType = $state<number | null>(null);
 	let hoverWheelType = $state<number | null>(null);
 	let selectedPatternType = $state<number>(9);
 	let selectedLevel = $state(3);
 	let selectedLearningTerritory = $state<Territory | null>(null);
+	let lastSelectedMemberId = $state('emily');
 
 	const selectedMember = $derived(members.find((member) => member.id === selectedMemberId) ?? members[0]);
 	const mainType = $derived(getType(selectedMember.primaryType));
@@ -116,13 +118,22 @@
 	const teammates = $derived(teamMembers.filter((member) => member.id !== selectedMember.id));
 	const teamWatchItems = $derived([...currentTeam.priorities, ...currentTeam.risks].filter((item, index, list) => list.indexOf(item) === index).slice(0, 6));
 
+	$effect(() => {
+		if (selectedMemberId === lastSelectedMemberId) return;
+		lastSelectedMemberId = selectedMemberId;
+		selectedWheelType = null;
+		selectedPatternType = selectedMember.primaryType;
+		selectedLevel = 3;
+		selectedLearningTerritory = null;
+	});
+
 	function getType(typeNumber: number): EnneagramType {
 		return enneagramTypes.find((type) => type.number === typeNumber) ?? enneagramTypes[0];
 	}
 
 	function selectMember(memberId: string) {
-		selectedMemberId = memberId;
-		const nextMember = members.find((member) => member.id === memberId) ?? members[0];
+		const nextMemberId = setSelectedDemoLearner(memberId);
+		const nextMember = members.find((member) => member.id === nextMemberId) ?? members[0];
 		selectedWheelType = null;
 		selectedPatternType = nextMember.primaryType;
 		selectedLevel = 3;
@@ -176,17 +187,12 @@
 		return value.replace(/\b\w/g, (letter) => letter.toUpperCase());
 	}
 
-	function categoryType(course: Course) {
-		const match = course.category.match(/(?:type|stress|growth)-(\d+)/);
-		return match ? Number(match[1]) : undefined;
-	}
-
 	function courseMeta(course: Course) {
 		return `${titleCase(course.level)} · ${course.lengthMinutes} min`;
 	}
 
 	function courseUrl(course: Course) {
-		return `/courses/${course.id}?learner=${selectedMember.id}`;
+		return `/courses/${course.id}`;
 	}
 
 	function recommendationPriorityLabel(priority: Recommendation['priority']) {
@@ -196,19 +202,12 @@
 	}
 
 	function courseCategoryContext(course: Course) {
-		const pathwayLabel = territoryCopy[pathwayTerritory(course.pathway)].label;
-		const typeNumber = categoryType(course);
-		if (typeNumber) return `${pathwayLabel} · Type ${typeNumber}`;
-		if (course.pathway === 'stress-growth') {
-			if (course.category.startsWith('stress-')) return `${pathwayLabel} · Pressure Practice`;
-			if (course.category.startsWith('growth-')) return `${pathwayLabel} · Growth Resource`;
-			return `${pathwayLabel} · Core Resilience`;
-		}
-		if (course.pathway === 'team') {
-			if (course.category.startsWith('center-')) return `${pathwayLabel} · ${titleCase(course.category.replace('center-', ''))} Center`;
-			return `${pathwayLabel} · General`;
-		}
-		return pathwayLabel;
+		return courseCategoryLabel(course, {
+			strengths: territoryCopy.Strengths.label,
+			'stress-growth': territoryCopy['Stress & Growth'].label,
+			fortification: territoryCopy.Fortification.label,
+			team: territoryCopy.Team.label
+		});
 	}
 
 	function pathwayTerritory(pathway: CoursePathway): Territory {
@@ -412,15 +411,22 @@
 			<a class="about-link" href="/about">About This Demo</a>
 		</nav>
 
-		<MemberPicker members={members} teams={teams} bind:value={selectedMemberId} onSelect={selectMember} />
+		<MemberPicker members={members} teams={teams} value={selectedMemberId} onSelect={selectMember} />
 
 		<ThemeControls />
+
+		<form class="logout-form" method="POST" action="/logout">
+			<button class="logout-button" type="submit">Logout</button>
+		</form>
 
 		<details class="tablet-settings">
 			<summary aria-label="Open display settings"><span class="settings-glyph" aria-hidden="true"></span></summary>
 			<div class="tablet-settings-panel">
-				<MemberPicker members={members} teams={teams} bind:value={selectedMemberId} onSelect={selectMember} />
+				<MemberPicker members={members} teams={teams} value={selectedMemberId} onSelect={selectMember} />
 				<ThemeControls />
+				<form class="logout-form" method="POST" action="/logout">
+					<button class="logout-button" type="submit">Logout</button>
+				</form>
 			</div>
 		</details>
 	</header>
@@ -786,7 +792,7 @@
 										</div>
 										<div class="recommendation-reason">
 											<span>{item.recommendation ? recommendationPriorityLabel(item.recommendation.priority) : courseCategoryContext(item.course)}</span>
-											<strong>{item.recommendation?.reason ?? (item.course.pathway === 'team' ? 'Part of the shared team learning route.' : 'Included because it supports this v3 pathway and category.')}</strong>
+											<strong>{item.recommendation?.reason ?? item.course.recommendationContext ?? 'This course may be useful for the selected learning area.'}</strong>
 										</div>
 										<a class="inline-course-action" href={courseUrl(item.course)}>
 											{item.recommendation ? 'View course' : 'Open course'}

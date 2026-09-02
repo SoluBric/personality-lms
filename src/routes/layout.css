@@ -84,7 +84,7 @@ main {
 	position: relative;
 	z-index: 300;
 	display: grid;
-	grid-template-columns: max-content minmax(360px, 1fr) max-content max-content;
+	grid-template-columns: max-content minmax(360px, 1fr) max-content max-content max-content;
 	gap: 14px;
 	align-items: center;
 	margin-bottom: 18px;
@@ -182,7 +182,6 @@ main {
 	gap: 14px;
 	width: min(680px, calc(100vw - 52px));
 	min-height: 134px;
-	max-height: 134px;
 	padding: 14px;
 	border: 1px solid color-mix(in srgb, var(--accent) 38%, var(--line));
 	border-radius: 8px;
@@ -234,6 +233,45 @@ main {
 
 .tablet-settings-panel .header-controls {
 	justify-items: start;
+}
+
+.tablet-settings-panel .logout-form {
+	grid-column: 2;
+	justify-self: start;
+	align-self: end;
+}
+
+.logout-form {
+	margin: 0;
+}
+
+.logout-button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 42px;
+	padding: 9px 12px;
+	border: 1px solid var(--line);
+	border-radius: 7px;
+	background: color-mix(in srgb, var(--bg-soft) 78%, transparent);
+	color: var(--muted);
+	font: inherit;
+	font-size: 12px;
+	font-weight: 850;
+	text-transform: uppercase;
+	cursor: pointer;
+	transition:
+		border-color 160ms ease,
+		background 160ms ease,
+		color 160ms ease;
+}
+
+.logout-button:hover,
+.logout-button:focus-visible {
+	border-color: color-mix(in srgb, var(--accent) 42%, var(--line));
+	background: color-mix(in srgb, var(--accent-soft) 65%, transparent);
+	color: var(--text);
+	outline: 0;
 }
 
 .dashboard-topbar {
@@ -853,6 +891,7 @@ main {
 .app-shell[data-mode='light'] .member-menu-options,
 .app-shell[data-mode='light'] .segmented,
 .app-shell[data-mode='light'] .theme-switcher,
+.app-shell[data-mode='light'] .logout-button,
 .app-shell[data-mode='light'] .tablet-settings > summary,
 .app-shell[data-mode='light'] .tablet-settings-panel,
 .app-shell[data-mode='light'] .trifix-strip button,
@@ -6621,7 +6660,8 @@ li {
 	}
 
 	.topbar > .member-picker,
-	.topbar > .header-controls {
+	.topbar > .header-controls,
+	.topbar > .logout-form {
 		display: none;
 	}
 

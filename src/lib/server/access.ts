@@ -1,13 +1,15 @@
 import { env } from '$env/dynamic/private';
+import { dev } from '$app/environment';
 
 export const accessCookieName = 'personality_lms_access';
+export const accessCookieMaxAge = 60 * 60 * 24 * 3;
 
 export function accessPassword() {
 	return env.DEMO_ACCESS_PASSWORD?.trim() ?? '';
 }
 
 export function accessProtectionRequired() {
-	return env.CF_PAGES === '1';
+	return !dev;
 }
 
 export async function accessToken(password: string) {

@@ -1,16 +1,27 @@
 import { fail, redirect } from '@sveltejs/kit';
-import { accessCookieName, accessPassword, accessProtectionRequired, accessToken } from '$lib/server/access';
+import { accessCookieMaxAge, accessCookieName, accessPassword, accessProtectionRequired, accessToken } from '$lib/server/access';
 import type { Actions, PageServerLoad } from './$types';
 
-function nextUrl(value: string | null) {
+function nextUrl(value: string | null, requestUrl: URL) {
 	if (!value || value === '/') return '/about';
-	return value.startsWith('/') && !value.startsWith('//') ? value : '/about';
+
+	if (!value.startsWith('/') || value.startsWith('//') || value.includes('\\')) {
+		return '/about';
+	}
+
+	try {
+		const target = new URL(value, requestUrl.origin);
+		if (target.origin !== requestUrl.origin) return '/about';
+		return `${target.pathname}${target.search}${target.hash}`;
+	} catch {
+		return '/about';
+	}
 }
 
 export const load: PageServerLoad = async ({ cookies, url }) => {
 	const password = accessPassword();
 	if (password && cookies.get(accessCookieName) === (await accessToken(password))) {
-		throw redirect(303, nextUrl(url.searchParams.get('next')));
+		throw redirect(303, nextUrl(url.searchParams.get('next'), url));
 	}
 
 	return {
@@ -42,9 +53,9 @@ export const actions: Actions = {
 			httpOnly: true,
 			sameSite: 'lax',
 			secure: url.protocol === 'https:',
-			maxAge: 60 * 60 * 24 * 14
+			maxAge: accessCookieMaxAge
 		});
 
-		throw redirect(303, nextUrl(url.searchParams.get('next')));
+		throw redirect(303, nextUrl(url.searchParams.get('next'), url));
 	}
 };

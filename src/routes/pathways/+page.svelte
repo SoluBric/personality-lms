@@ -2,6 +2,7 @@
 	import { page } from '$app/state';
 	import MemberPicker from '$lib/MemberPicker.svelte';
 	import ThemeControls from '$lib/ThemeControls.svelte';
+	import { courseCategoryLabel, selectedDemoLearner, setSelectedDemoLearner } from '$lib/demo-routing.svelte';
 	import {
 		courses,
 		enneagramTypes,
@@ -220,7 +221,7 @@
 		return 'All';
 	}
 
-	let selectedMemberId = $state('emily');
+	let selectedMemberId = $derived(selectedDemoLearner.id);
 	let focusMode = $state<FocusMode>('current');
 	let developmentView = $state<DevelopmentView>(initialDevelopmentView());
 	let selectedArea = $state<FilterMode | null>(initialSelectedArea());
@@ -331,7 +332,7 @@
 	}
 
 	function selectMember(memberId: string) {
-		selectedMemberId = memberId;
+		setSelectedDemoLearner(memberId);
 		selectedArea = 'All';
 		selectedNodeId = null;
 	}
@@ -436,19 +437,12 @@
 	}
 
 	function courseCategoryContext(course: Course) {
-		const pathwayLabel = pathwayCopy[course.pathway].label;
-		const typeNumber = categoryType(course);
-		if (typeNumber) return `${pathwayLabel} · Type ${typeNumber}`;
-		if (course.pathway === 'stress-growth') {
-			if (course.category.startsWith('stress-')) return `${pathwayLabel} · Pressure Practice`;
-			if (course.category.startsWith('growth-')) return `${pathwayLabel} · Growth Resource`;
-			return `${pathwayLabel} · Core Resilience`;
-		}
-		if (course.pathway === 'team') {
-			if (course.category.startsWith('center-')) return `${pathwayLabel} · ${titleCase(course.category.replace('center-', ''))} Center`;
-			return `${pathwayLabel} · General`;
-		}
-		return `${pathwayLabel} · ${courseRoleForSharedMap(course)}`;
+		return courseCategoryLabel(course, {
+			strengths: pathwayCopy.strengths.label,
+			'stress-growth': pathwayCopy['stress-growth'].label,
+			fortification: pathwayCopy.fortification.label,
+			team: pathwayCopy.team.label
+		});
 	}
 
 	function courseChainLabel(course: Course) {
@@ -1682,7 +1676,7 @@
 	}
 
 	function courseUrl(courseId: string) {
-		return `/courses/${courseId}?learner=${selectedMember.id}`;
+		return `/courses/${courseId}`;
 	}
 
 	function formatToken(value: string) {
@@ -1715,15 +1709,22 @@
 			<a class="about-link" href="/about">About This Demo</a>
 		</nav>
 
-		<MemberPicker members={members} teams={teams} bind:value={selectedMemberId} onSelect={selectMember} />
+		<MemberPicker members={members} teams={teams} value={selectedMemberId} onSelect={selectMember} />
 
 		<ThemeControls />
+
+		<form class="logout-form" method="POST" action="/logout">
+			<button class="logout-button" type="submit">Logout</button>
+		</form>
 
 		<details class="tablet-settings">
 			<summary aria-label="Open display settings"><span class="settings-glyph" aria-hidden="true"></span></summary>
 			<div class="tablet-settings-panel">
-				<MemberPicker members={members} teams={teams} bind:value={selectedMemberId} onSelect={selectMember} />
+				<MemberPicker members={members} teams={teams} value={selectedMemberId} onSelect={selectMember} />
 				<ThemeControls />
+				<form class="logout-form" method="POST" action="/logout">
+					<button class="logout-button" type="submit">Logout</button>
+				</form>
 			</div>
 		</details>
 	</header>

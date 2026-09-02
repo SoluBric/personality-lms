@@ -1,6 +1,7 @@
 <script lang="ts">
 	import MemberPicker from '$lib/MemberPicker.svelte';
 	import ThemeControls from '$lib/ThemeControls.svelte';
+	import { courseCategoryLabel, selectedDemoLearner, setSelectedDemoLearner } from '$lib/demo-routing.svelte';
 	import {
 		courses,
 		learnerCourseStates,
@@ -26,14 +27,10 @@
 	};
 	const courseSections = ['Course Start', 'Section 1', 'Section 2', 'Section 3'];
 
-	let selectedMemberId = $state('');
+	let selectedMemberId = $derived(selectedDemoLearner.id);
 	let courseView = $state<'details' | 'content'>('details');
 	let activeSection = $state(courseSections[0]);
 	let activeCourseTray = $state<'current' | 'recommended' | undefined>();
-
-	$effect(() => {
-		if (!selectedMemberId) selectedMemberId = data.initialLearnerId;
-	});
 
 	const course = $derived(courses.find((item) => item.id === data.courseId)!);
 	const selectedMember = $derived(members.find((member) => member.id === selectedMemberId) ?? members[0]);
@@ -82,25 +79,8 @@
 		return value.replace(/[-_]/g, ' ').replace(/\b\w/g, (letter) => letter.toUpperCase());
 	}
 
-	function categoryType(item: Course) {
-		const match = item.category.match(/(?:type|stress|growth)-(\d+)/);
-		return match ? Number(match[1]) : undefined;
-	}
-
 	function courseCategoryContext(item: Course) {
-		const pathwayLabel = pathwayLabels[item.pathway];
-		const typeNumber = categoryType(item);
-		if (typeNumber) return `${pathwayLabel} · Type ${typeNumber}`;
-		if (item.pathway === 'stress-growth') {
-			if (item.category.startsWith('stress-')) return `${pathwayLabel} · Pressure Practice`;
-			if (item.category.startsWith('growth-')) return `${pathwayLabel} · Growth Resource`;
-			return `${pathwayLabel} · Core Resilience`;
-		}
-		if (item.pathway === 'team') {
-			if (item.category.startsWith('center-')) return `${pathwayLabel} · ${titleCase(item.category.replace('center-', ''))} Center`;
-			return `${pathwayLabel} · General`;
-		}
-		return pathwayLabel;
+		return courseCategoryLabel(item, pathwayLabels);
 	}
 
 	function recommendationPriorityLabel(priority: Recommendation['priority']) {
@@ -156,7 +136,11 @@
 	}
 
 	function courseUrl(item: Course) {
-		return `/courses/${item.id}?learner=${selectedMember.id}`;
+		return `/courses/${item.id}`;
+	}
+
+	function selectMember(memberId: string) {
+		setSelectedDemoLearner(memberId);
 	}
 
 	function toggleCourseTray(tray: 'current' | 'recommended') {
@@ -184,22 +168,29 @@
 			<a class="about-link" href="/about">About This Demo</a>
 		</nav>
 
-		<MemberPicker members={members} teams={teams} bind:value={selectedMemberId} />
+		<MemberPicker members={members} teams={teams} value={selectedMemberId} onSelect={selectMember} />
 
 		<ThemeControls />
+
+		<form class="logout-form" method="POST" action="/logout">
+			<button class="logout-button" type="submit">Logout</button>
+		</form>
 
 		<details class="tablet-settings">
 			<summary aria-label="Open display settings"><span class="settings-glyph" aria-hidden="true"></span></summary>
 			<div class="tablet-settings-panel">
-				<MemberPicker members={members} teams={teams} bind:value={selectedMemberId} />
+				<MemberPicker members={members} teams={teams} value={selectedMemberId} onSelect={selectMember} />
 				<ThemeControls />
+				<form class="logout-form" method="POST" action="/logout">
+					<button class="logout-button" type="submit">Logout</button>
+				</form>
 			</div>
 		</details>
 	</header>
 
 	<main>
 		<div class="course-context-actions">
-			<a class="context-outline-button" href={`/pathways?learner=${selectedMember.id}`}>Back to Pathways</a>
+			<a class="context-outline-button" href="/pathways">Back to Pathways</a>
 			<button class:active={activeCourseTray === 'current'} class="context-outline-button" type="button" onclick={() => toggleCourseTray('current')}>Current Courses</button>
 			<button class:active={activeCourseTray === 'recommended'} class="context-outline-button" type="button" onclick={() => toggleCourseTray('recommended')}>Recommended Courses</button>
 		</div>

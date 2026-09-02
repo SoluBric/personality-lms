@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import MemberPicker from '$lib/MemberPicker.svelte';
 	import ThemeControls from '$lib/ThemeControls.svelte';
+	import { selectedDemoLearner, setSelectedDemoLearner } from '$lib/demo-routing.svelte';
 	import { members, teams } from '$lib/demo-data';
 	import { themeState, themeStyle } from '$lib/theme.svelte';
 
@@ -11,9 +12,13 @@
 		{ id: 'content-context', label: 'Content context' }
 	];
 
-	let selectedMemberId = $state('emily');
+	let selectedMemberId = $derived(selectedDemoLearner.id);
 	let activeSection = $state(sections[0].id);
 	const selectedMember = $derived(members.find((member) => member.id === selectedMemberId) ?? members[0]);
+
+	function selectMember(memberId: string) {
+		setSelectedDemoLearner(memberId);
+	}
 
 	onMount(() => {
 		const observer = new IntersectionObserver(
@@ -55,15 +60,22 @@
 			<a class="about-link active" href="/about">About This Demo</a>
 		</nav>
 
-		<MemberPicker members={members} teams={teams} bind:value={selectedMemberId} />
+		<MemberPicker members={members} teams={teams} value={selectedMemberId} onSelect={selectMember} />
 
 		<ThemeControls />
+
+		<form class="logout-form" method="POST" action="/logout">
+			<button class="logout-button" type="submit">Logout</button>
+		</form>
 
 		<details class="tablet-settings">
 			<summary aria-label="Open display settings"><span class="settings-glyph" aria-hidden="true"></span></summary>
 			<div class="tablet-settings-panel">
-				<MemberPicker members={members} teams={teams} bind:value={selectedMemberId} />
+				<MemberPicker members={members} teams={teams} value={selectedMemberId} onSelect={selectMember} />
 				<ThemeControls />
+				<form class="logout-form" method="POST" action="/logout">
+					<button class="logout-button" type="submit">Logout</button>
+				</form>
 			</div>
 		</details>
 	</header>

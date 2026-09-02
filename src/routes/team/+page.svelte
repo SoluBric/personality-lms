@@ -1,6 +1,7 @@
 <script lang="ts">
 	import MemberPicker from '$lib/MemberPicker.svelte';
 	import ThemeControls from '$lib/ThemeControls.svelte';
+	import { selectedDemoLearner, setSelectedDemoLearner } from '$lib/demo-routing.svelte';
 	import {
 		courses,
 		enneagramTypes,
@@ -97,7 +98,7 @@
 		}
 	};
 
-	let selectedMemberId = $state('emily');
+	let selectedMemberId = $derived(selectedDemoLearner.id);
 	let selectedColleagueId = $state('james');
 	let perspectiveMemberId = $state('emily');
 	let lens = $state<Lens>('relationships');
@@ -201,7 +202,7 @@
 	}
 
 	function courseUrl(course: Course) {
-		return `/courses/${course.id}?learner=${selectedMember.id}`;
+		return `/courses/${course.id}`;
 	}
 
 	function getRelationship(firstId: string, secondId: string, teamId: string) {
@@ -209,8 +210,8 @@
 	}
 
 	function selectMember(memberId: string) {
-		selectedMemberId = memberId;
-		const nextMember = members.find((member) => member.id === memberId) ?? members[0];
+		const nextMemberId = setSelectedDemoLearner(memberId);
+		const nextMember = members.find((member) => member.id === nextMemberId) ?? members[0];
 		const nextTeam = getTeam(nextMember.teamId);
 		const nextColleague = nextTeam.memberIds.find((id) => id !== nextMember.id) ?? nextMember.id;
 		selectedColleagueId = nextColleague;
@@ -282,15 +283,22 @@
 			<a class="about-link" href="/about">About This Demo</a>
 		</nav>
 
-		<MemberPicker members={members} teams={teams} bind:value={selectedMemberId} onSelect={selectMember} />
+		<MemberPicker members={members} teams={teams} value={selectedMemberId} onSelect={selectMember} />
 
 		<ThemeControls />
+
+		<form class="logout-form" method="POST" action="/logout">
+			<button class="logout-button" type="submit">Logout</button>
+		</form>
 
 		<details class="tablet-settings">
 			<summary aria-label="Open display settings"><span class="settings-glyph" aria-hidden="true"></span></summary>
 			<div class="tablet-settings-panel">
-				<MemberPicker members={members} teams={teams} bind:value={selectedMemberId} onSelect={selectMember} />
+				<MemberPicker members={members} teams={teams} value={selectedMemberId} onSelect={selectMember} />
 				<ThemeControls />
+				<form class="logout-form" method="POST" action="/logout">
+					<button class="logout-button" type="submit">Logout</button>
+				</form>
 			</div>
 		</details>
 	</header>

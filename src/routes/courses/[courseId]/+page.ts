@@ -1,7 +1,7 @@
 import { error } from '@sveltejs/kit';
-import { courses, members } from '$lib/demo-data';
+import { courses } from '$lib/demo-data';
 
-export function load({ params, url }) {
+export function load({ params }) {
 	const course = courses.find((item) => item.id === params.courseId);
 	if (!course) {
 		error(404, {
@@ -9,11 +9,7 @@ export function load({ params, url }) {
 		});
 	}
 
-	const requestedLearner = url.searchParams.get('learner');
-	const initialLearnerId = requestedLearner && members.some((member) => member.id === requestedLearner) ? requestedLearner : members[0].id;
-
 	return {
-		courseId: course.id,
-		initialLearnerId
+		courseId: course.id
 	};
 }

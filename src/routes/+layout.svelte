@@ -1,9 +1,14 @@
 <script lang="ts">
 	import './layout.css';
 	import favicon from '$lib/assets/favicon.svg';
+	import { restoreSelectedDemoLearner } from '$lib/demo-routing.svelte';
 
 	let { children } = $props();
 	let showWidthNotice = $state(true);
+
+	$effect(() => {
+		restoreSelectedDemoLearner();
+	});
 </script>
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
