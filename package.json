@@ -9,7 +9,7 @@
 		"validate:courses": "node scripts/validate-course-system.mjs",
 		"build": "vite build",
 		"build:cloudflare": "WRANGLER_LOG_PATH=.wrangler/logs WRANGLER_WRITE_LOGS=false wrangler types && vite build",
-		"preview": "wrangler pages dev .svelte-kit/cloudflare --port 4173",
+		"preview": "wrangler dev --port 4173",
 		"prepare": "svelte-kit sync || echo ''",
 		"check": "WRANGLER_LOG_PATH=.wrangler/logs WRANGLER_WRITE_LOGS=false wrangler types --check && svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
