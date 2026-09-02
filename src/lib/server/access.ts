@@ -36,6 +36,15 @@ export function sameOriginSubmission(request: Request, requestUrl: URL) {
 	return request.headers.get('sec-fetch-site') === 'same-origin';
 }
 
+export function revokeAccess(cookies: Cookies, requestUrl: URL) {
+	cookies.delete(accessCookieName, {
+		path: '/',
+		httpOnly: true,
+		sameSite: 'lax',
+		secure: requestUrl.protocol === 'https:'
+	});
+}
+
 export async function grantAccess(cookies: Cookies, requestUrl: URL, submittedPassword: string) {
 	const password = accessPassword();
 	if (!password) {

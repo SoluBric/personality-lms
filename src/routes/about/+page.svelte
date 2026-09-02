@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import LogoutButton from '$lib/LogoutButton.svelte';
 	import MemberPicker from '$lib/MemberPicker.svelte';
 	import ThemeControls from '$lib/ThemeControls.svelte';
 	import { selectedDemoLearner, setSelectedDemoLearner } from '$lib/demo-routing.svelte';
@@ -64,18 +65,14 @@
 
 		<ThemeControls />
 
-		<form class="logout-form" method="POST" action="/logout">
-			<button class="logout-button" type="submit">Logout</button>
-		</form>
+		<div class="logout-form"><LogoutButton /></div>
 
 		<details class="tablet-settings">
 			<summary aria-label="Open display settings"><span class="settings-glyph" aria-hidden="true"></span></summary>
 			<div class="tablet-settings-panel">
 				<MemberPicker members={members} teams={teams} value={selectedMemberId} onSelect={selectMember} />
 				<ThemeControls />
-				<form class="logout-form" method="POST" action="/logout">
-					<button class="logout-button" type="submit">Logout</button>
-				</form>
+				<div class="logout-form"><LogoutButton /></div>
 			</div>
 		</details>
 	</header>
