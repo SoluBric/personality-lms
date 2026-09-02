@@ -1,61 +1,28 @@
 import { fail, redirect } from '@sveltejs/kit';
-import { accessCookieMaxAge, accessCookieName, accessPassword, accessProtectionRequired, accessToken } from '$lib/server/access';
+import { accessCookieName, accessPassword, accessProtectionRequired, accessToken, grantAccess, safeNextUrl } from '$lib/server/access';
 import type { Actions, PageServerLoad } from './$types';
-
-function nextUrl(value: string | null, requestUrl: URL) {
-	if (!value || value === '/') return '/about';
-
-	if (!value.startsWith('/') || value.startsWith('//') || value.includes('\\')) {
-		return '/about';
-	}
-
-	try {
-		const target = new URL(value, requestUrl.origin);
-		if (target.origin !== requestUrl.origin) return '/about';
-		return `${target.pathname}${target.search}${target.hash}`;
-	} catch {
-		return '/about';
-	}
-}
 
 export const load: PageServerLoad = async ({ cookies, url }) => {
 	const password = accessPassword();
 	if (password && cookies.get(accessCookieName) === (await accessToken(password))) {
-		throw redirect(303, nextUrl(url.searchParams.get('next'), url));
+		throw redirect(303, safeNextUrl(url.searchParams.get('next'), url));
 	}
 
 	return {
 		protectionEnabled: Boolean(password),
-		configurationRequired: accessProtectionRequired() && !password
+		configurationRequired: accessProtectionRequired() && !password,
+		next: safeNextUrl(url.searchParams.get('next'), url)
 	};
 };
 
 export const actions: Actions = {
 	default: async ({ cookies, request, url }) => {
-		const password = accessPassword();
 		const data = await request.formData();
 		const submittedPassword = String(data.get('password') ?? '');
+		const result = await grantAccess(cookies, url, submittedPassword);
 
-		if (!password) {
-			return fail(400, {
-				message: 'Access protection has not been configured yet.'
-			});
-		}
+		if (!result.granted) return fail(result.status, { message: result.message });
 
-		if (submittedPassword !== password) {
-			return fail(401, {
-				message: 'That access code is not correct.'
-			});
-		}
-
-		cookies.set(accessCookieName, await accessToken(password), {
-			path: '/',
-			httpOnly: true,
-			sameSite: 'lax',
-			secure: url.protocol === 'https:',
-			maxAge: accessCookieMaxAge
-		});
-
-		throw redirect(303, nextUrl(url.searchParams.get('next'), url));
+		throw redirect(303, safeNextUrl(url.searchParams.get('next'), url));
 	}
 };

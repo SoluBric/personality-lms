@@ -1,7 +1,7 @@
 import type { Handle } from '@sveltejs/kit';
 import { accessCookieName, accessPassword, accessProtectionRequired, accessToken } from '$lib/server/access';
 
-const publicPaths = new Set(['/login', '/robots.txt']);
+const publicPaths = new Set(['/login', '/login/access', '/robots.txt']);
 const securityHeaders = {
 	'content-security-policy': "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests",
 	'permissions-policy': 'camera=(), microphone=(), geolocation=(), payment=(), usb=()',
