@@ -1853,8 +1853,7 @@
 									{/if}
 									<div class="course-footer">
 										<span>{courseDurationMeta(item.course)}</span>
-										<button type="button" onclick={() => selectNode(`course-${item.course.id}`)}>Inspect</button>
-										<a href={courseUrl(item.course.id)}>Start</a>
+										<a href={courseUrl(item.course.id)}>Inspect</a>
 									</div>
 								</article>
 							{:else}
